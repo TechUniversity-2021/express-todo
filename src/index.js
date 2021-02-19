@@ -1,10 +1,12 @@
 const express = require('express');
 const env = require('dotenv');
-const { DEFAULT_PORT } = require('./constants/config');
 
 const { todoRouter } = require('./routes');
 
 const app = express();
 env.config();
-const port = process.env.PORT || DEFAULT_PORT;
+
 app.use('/todo', todoRouter);
+app.listen(666, () => {
+  console.log(`Server listening at http://localhost:666`);
+});
