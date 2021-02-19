@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fileOps = require('./PromisifyFileRead');
+const fileOps = require('../promisifyReadFile');
 
 test('Should return the content of files', async () => {
   jest.spyOn(fs, 'readFile')

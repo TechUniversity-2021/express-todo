@@ -1,17 +1,17 @@
-const fileRead = require('../utils/PromisifyFileRead');
+const fileRead = require('../utilities/PromisifyFileRead');
 
-const getTodos = async () => { 
-    const fileContent = await fileRead.promisifyFs('src/resources/todo.txt')
-    let todos = fileContent.toString().split('\n')
-   const todoObjects = todos.map(function (todo) {
-       let tempTodoObj = todo.split('|')
-       return {
-           id: tempTodoObj[0],
-           todo: tempTodoObj[1],
-           status: tempTodoObj[2]
-       }
-   })
-    return todoObjects;
-}
+const getTodos = async () => {
+  const fileContent = await fileRead.promisifyFs('src/resources/todo.txt');
+  const todos = fileContent.toString().split('\n');
+  const todoObjects = todos.map((todo) => {
+    const tempTodoObj = todo.split('|');
+    return {
+      id: tempTodoObj[0],
+      todo: tempTodoObj[1],
+      status: tempTodoObj[2],
+    };
+  });
+  return todoObjects;
+};
 
 module.exports = { getTodos };

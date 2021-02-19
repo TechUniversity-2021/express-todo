@@ -7,6 +7,6 @@ const app = express();
 env.config();
 
 app.use('/todo', todoRouter);
-app.listen(666, () => {
-  console.log(`Server listening at http://localhost:666`);
+app.listen(8080, () => {
+  console.log('Server listening at http://localhost:8080');
 });
