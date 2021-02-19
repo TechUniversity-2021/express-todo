@@ -1,14 +1,12 @@
 const express = require('express');
-const env = require('dotenv');
-const { DEFAULT_PORT } = require('./constants/config');
+// const env = require('dotenv');
+// const { DEFAULT_PORT } = require('./constants/config');
+const { taskRouter } = require('./routes/task.route');
 
 const app = express();
-env.config();
-const port = process.env.PORT || DEFAULT_PORT;
+// env.config();
+const port = 8080;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 app.use(express.json());
 
