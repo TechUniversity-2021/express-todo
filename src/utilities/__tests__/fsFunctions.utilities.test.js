@@ -74,7 +74,7 @@ describe('Promisified Append File function', () => {
       .mockImplementation((file, data, option, callback) => {
         callback(MOCK_ERROR);
       });
-    return expect(readFile('MOCK_FILE')).rejects.toEqual(
+    return expect(appendFile('MOCK_FILE')).rejects.toEqual(
       MOCK_ERROR,
     );
   });
