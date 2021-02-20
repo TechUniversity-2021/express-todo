@@ -21,6 +21,6 @@ const promisifyReadDir = (dirPath) => new Promise((resolve, reject) => {
 });
 
 module.exports = {
-  promisifyReadFile,
-  promisifyReadDir,
+  readFile: promisifyReadFile,
+  readDir: promisifyReadDir,
 };
