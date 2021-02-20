@@ -1,11 +1,34 @@
-const { readData , convertTodo} = require('../services/task.service');
+const {getTodosService}= require('../services/task.service');
 
-const taskHandler = async (req, res) => {
-    const todo=await readData('./src/resources/file.txt')
-    const objRet= convertTodo(todo);
-    res.status(200).send(objRet);
+const getTodosHandler = async (req, res) => {
+  const todoList = await getTodosService();
+    res.status(200).send(todoList);
 };
 
+const getTodoByIdHandler = async (req,res) => {
+  const todos = await getTodosService();
+  const todoList=[{}];
+  
+  todos.forEach((todo) => {
+    if(req.params.id === todo.id)
+    {
+      
+      todoList[0].id = todo.id;
+      todoList[0].todo = todo.todo;
+      todoList[0].status = todo.status;
+        
+    }
+    })
+  todoList[0].id= req.params.id
+  res.status(200).send(todoList);
+}
+
+
+const postTodoHandler = async (req, res) => {
+  
+}
+
+
 module.exports = {
-  taskHandler,
+  getTodosHandler, getTodoByIdHandler
 };
