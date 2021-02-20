@@ -16,7 +16,7 @@ const getAllTodo = async () => {
     });
     return todoList;
   } catch (error) {
-    return [];
+    throw new Error('Error reading file data');
   }
 };
 

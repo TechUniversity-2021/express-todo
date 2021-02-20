@@ -1,5 +1,5 @@
-const fileOps = require('../utilities/fsFunctions.utilities');
-const { getAllTodo } = require('./todo.service');
+const fileOps = require('../../utilities/fsFunctions.utilities');
+const { getAllTodo } = require('../todo.service');
 
 describe('getAllTodo Function', () => {
   it('should parse file contents to return a json object of todos', async () => {
@@ -23,10 +23,14 @@ describe('getAllTodo Function', () => {
   });
   it('should return empty array if an error occurs during reading file', async () => {
     const spyOnReadFile = jest.spyOn(fileOps, 'readFile');
-    const MOCK_REJECT = new Error('Error in file reading');
+    const MOCK_REJECT = new Error('Error in file read');
     spyOnReadFile.mockRejectedValue(MOCK_REJECT);
     const MOCK_EXPECTED_VALUE = [];
-    const receivedData = await getAllTodo();
-    expect(receivedData).toEqual(MOCK_EXPECTED_VALUE);
+    try {
+      const receivedData = await getAllTodo();
+      expect(receivedData).toEqual(MOCK_EXPECTED_VALUE);
+    } catch (error) {
+      expect(error.message).toBe('Error reading file data');
+    }
   });
 });
