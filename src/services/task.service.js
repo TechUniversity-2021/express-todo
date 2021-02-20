@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const fileOps = require('../utils/task.util')
 
 const getTodosService = async () =>
@@ -33,3 +34,16 @@ const deleteTodoService = async ( givenId) => {
 }
 
 module.exports = { getTodosService , postTodoService, putTodoService, deleteTodoService};
+=======
+const {readData, convertTodo} = require('../utils/task.util')
+
+const getTodosService = async () =>
+{
+  const todo = await readData('./src/resources/file.txt')
+  const todos = convertTodo(todo);
+
+  return todos;
+}
+
+module.exports = { getTodosService };
+>>>>>>> ec137be... feat: add getTodoById function

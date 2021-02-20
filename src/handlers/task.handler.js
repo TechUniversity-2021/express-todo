@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 const {getTodosService, postTodoService, putTodoService, deleteTodoService}= require('../services/task.service');
 const {writeData}=require('../utils/task.util')
 const Joi=require('joi')
+=======
+const {getTodosService}= require('../services/task.service');
+>>>>>>> ec137be... feat: add getTodoById function
 
 const getTodosHandler = async (req, res) => {
   const todoList = await getTodosService();
@@ -10,6 +14,7 @@ const getTodosHandler = async (req, res) => {
 const getTodoByIdHandler = async (req,res) => {
   const todos = await getTodosService();
   const todoList=[{}];
+<<<<<<< HEAD
   const id=req.params.id;
 
   // const getTodoByIdSchema = Joi.object().keys({
@@ -22,6 +27,11 @@ const getTodoByIdHandler = async (req,res) => {
   // }
   todos.forEach((todo) => {
     if(id === todo.id)
+=======
+  
+  todos.forEach((todo) => {
+    if(req.params.id === todo.id)
+>>>>>>> ec137be... feat: add getTodoById function
     {
       
       todoList[0].id = todo.id;
@@ -30,12 +40,17 @@ const getTodoByIdHandler = async (req,res) => {
         
     }
     })
+<<<<<<< HEAD
   todoList[0].id= id;
+=======
+  todoList[0].id= req.params.id
+>>>>>>> ec137be... feat: add getTodoById function
   res.status(200).send(todoList);
 }
 
 
 const postTodoHandler = async (req, res) => {
+<<<<<<< HEAD
     const {body} = req;
     
       const postTodoSchema = Joi.object().keys({
@@ -98,4 +113,12 @@ const deleteTodoHandler = async (req, res) => {
 
 module.exports = {
   getTodosHandler, getTodoByIdHandler, postTodoHandler , putTodoHandler, deleteTodoHandler
+=======
+  
+}
+
+
+module.exports = {
+  getTodosHandler, getTodoByIdHandler
+>>>>>>> ec137be... feat: add getTodoById function
 };

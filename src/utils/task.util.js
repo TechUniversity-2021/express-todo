@@ -1,5 +1,9 @@
 const fs = require('fs');
+<<<<<<< HEAD
 var no=0;
+=======
+
+>>>>>>> ec137be... feat: add getTodoById function
 function readData(filePath) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -15,7 +19,10 @@ function convertTodo(data)
     const todos = data.toString().split('\n');
     const todoObj= todos.map((todo) =>{
         const newTodo = todo.split('|');
+<<<<<<< HEAD
         
+=======
+>>>>>>> ec137be... feat: add getTodoById function
         return {id : newTodo[0], todo: newTodo[1], status: newTodo[2]};
     })
         return todoObj;
@@ -23,6 +30,7 @@ function convertTodo(data)
    
 }
 
+<<<<<<< HEAD
 function writeData(filePath, content) {
     return new Promise((resolve, request) => {
         fs.appendFile(filePath, content, err => {
@@ -132,3 +140,13 @@ async function changeDeleteData(todos,givenId)
 
 
 module.exports={readData, convertTodo, writeData, convertTodoByUser, changeData, changeDeleteData };
+=======
+// function fetchTodoById(data) {
+//     const todos = data.toString().split('\n');
+//     const todoObj= todos.map((todo) =>{
+//         return  todo.split('|')});
+
+// }
+
+module.exports={readData, convertTodo};
+>>>>>>> ec137be... feat: add getTodoById function
