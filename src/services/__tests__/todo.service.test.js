@@ -33,6 +33,18 @@ describe('getAllTodo Function', () => {
       expect(error.message).toBe('Error reading file data');
     }
   });
+  it('should return empty array if no task present', async () => {
+    const spyOnReadFile = jest.spyOn(fileOps, 'readFile');
+    const MOCK_RESOLVE = '';
+    spyOnReadFile.mockResolvedValue(MOCK_RESOLVE);
+    const MOCK_EXPECTED_VALUE = [];
+    try {
+      const receivedData = await getAllTodo();
+      expect(receivedData).toEqual(MOCK_EXPECTED_VALUE);
+    } catch (error) {
+      expect(error.message).toBe('Error reading file data');
+    }
+  });
 });
 
 describe('postTodo Function', () => {

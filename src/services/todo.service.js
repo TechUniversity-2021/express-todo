@@ -4,6 +4,9 @@ const { TODO_FILE_PATH } = require('../constants/configure');
 const getAllTodo = async () => {
   try {
     const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
+    if (rawFileData.length === 0) {
+      return [];
+    }
     const todoRawList = rawFileData.split('\n');
     const todoList = todoRawList.map((todo) => {
       const elements = todo.split('|');
