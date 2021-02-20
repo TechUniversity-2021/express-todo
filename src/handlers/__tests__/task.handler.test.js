@@ -1,7 +1,7 @@
 const fileOps = require('../task.handler');
 
 
-describe('task Handler', () => {
+describe('Get todos handler', () => {
   const mockSend = jest.fn();
   const mockResponse = {
     status: jest.fn(() => ({ send: mockSend })),
@@ -10,8 +10,27 @@ describe('task Handler', () => {
   const mockRequest = null;
 
   it('should set status code to 200',async () => {
-   await fileOps.taskHandler(mockRequest, mockResponse);
+   await fileOps.getTodosHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
   });
   
 });
+
+
+describe('get Todo by id handler', () => {
+  const mockSend = jest.fn();
+  const mockResponse = {
+    status: jest.fn(() => ({ send: mockSend })),
+
+  };
+  const mockRequest ={ 
+    params: jest.fn()}
+  
+
+  it('should set status code to 200',async () => {
+   await fileOps.getTodoByIdHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+  });
+  
+});
+
