@@ -5,6 +5,13 @@ const todoGetHandler = async (req, res) => {
   res.status(200).send(todoList);
 };
 
+const todoGetByIdHandler = async (req, res) => {
+  const { body } = req;
+  const todoList = await todoServices.getTodos();
+  const todoById = todoList.filter((todo) => (todo.id === body.id ? todo : null));
+  res.status(200).send(todoById[0]);
+};
+
 const todoPostHandler = async (req, res) => {
   const { body } = req;
   const todoList = await todoServices.getTodos();
@@ -25,6 +32,7 @@ const todoPutHandler = async (req, res) => {
     }
     return todoObj;
   });
+
   const todoFileList = todoListUpdated.map((todoObj) => {
     const temp = `${todoObj.id}|${todoObj.todo}|${todoObj.status}`;
     return temp;
@@ -33,6 +41,7 @@ const todoPutHandler = async (req, res) => {
   await todoServices.putTodos(todoPutUpdated);
   res.status(200).send('Successfully updated!');
 };
+
 module.exports = {
-  todoGetHandler, todoPostHandler, todoPutHandler,
+  todoGetHandler, todoPostHandler, todoPutHandler, todoGetByIdHandler,
 };
