@@ -1,8 +1,8 @@
 const fs = require('fs');
 const promisifyFs = require('../readFile');
 
-describe('Todo Service ', () => {
-  it("fread should resolve with value 'this is async'", () => {
+describe('Fread Util', () => {
+  it("should resolve with value 'this is async'", () => {
     jest.spyOn(fs, 'readFile')
       .mockImplementation((path, options, callback) => {
         callback(null, 'this is async');
@@ -10,7 +10,7 @@ describe('Todo Service ', () => {
     return expect(promisifyFs.fread()).resolves.toBe('this is async');
   });
 
-  it("fread should reject with error message 'error' ", () => {
+  it("should reject with error message 'error' ", () => {
     jest.spyOn(fs, 'readFile')
       .mockImplementation((path, options, callback) => {
         callback(new Error('error'), null);
