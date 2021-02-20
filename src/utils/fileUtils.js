@@ -12,6 +12,17 @@ const readAfile = (filePath) => {
   });
 };
 
+const writeToAfile = (filePath, data) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(filePath, '\n'+data, "utf-8", (err) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
 const appendToAfile = (filePath, data) => {
   return new Promise((resolve, reject) => {
     fs.appendFile(filePath, '\n'+data, "utf-8", (err) => {
@@ -23,4 +34,4 @@ const appendToAfile = (filePath, data) => {
   });
 };
 
-module.exports = { readAfile, appendToAfile };
+module.exports = { readAfile, appendToAfile, writeToAfile };
