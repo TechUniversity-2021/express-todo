@@ -20,6 +20,16 @@ const getAllTodo = async () => {
   }
 };
 
+const postTodo = async (todo) => {
+  try {
+    const todoRawData = `${todo.id}|${todo.description}|${todo.status}\n`;
+    const message = await fileOps.appendFile(TODO_FILE_PATH, todoRawData);
+    return message;
+  } catch (error) {
+    throw new Error('Error appending data');
+  }
+};
 module.exports = {
   getAllTodo,
+  postTodo,
 };
