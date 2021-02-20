@@ -1,9 +1,11 @@
 const express = require('express');
+const handlers = require('../handlers');
 
-const router = express.router();
-const { getAllTodoHandler } = require('../handlers');
+const router = express.Router();
 
-router.get('', getAllTodoHandler);
+// console.log(getAllTodoHandler);
+router.get('', handlers.getAllTodoHandler);
+router.post('', handlers.postTodoHandler);
 
 module.exports = {
   router,

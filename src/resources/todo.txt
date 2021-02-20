@@ -1,2 +1,2 @@
-1|Pick up groceries|complete
-2|Make coffee|incomplete
+1|Eat vegetables|incomplete
+2|Pick up dry cleaning|incomplete
