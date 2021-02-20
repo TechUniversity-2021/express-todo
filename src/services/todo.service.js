@@ -8,7 +8,7 @@ const getAllTodo = async () => {
       return [];
     }
     const todoRawList = rawFileData.split('\n');
-    const todoList = todoRawList.map((todo) => {
+    const todoList = todoRawList.filter((todo) => todo !== '').map((todo) => {
       const elements = todo.split('|');
       const todoObject = {
         id: elements[0],
