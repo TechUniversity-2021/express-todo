@@ -1,4 +1,4 @@
-const fileRead = require('../utilities/PromisifyFileRead');
+const fileRead = require('../utilities/promisifyReadFile');
 
 const getTodos = async () => {
   const fileContent = await fileRead.promisifyFs('src/resources/todo.txt');
