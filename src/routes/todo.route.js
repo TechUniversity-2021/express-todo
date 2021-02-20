@@ -1,8 +1,7 @@
 const express = require('express');
-const { todoHandler } = require('../handlers/todo.handler');
+const { todoGetHandler, todoPostHandler } = require('../handlers/todo.handler');
 
 const router = express.Router();
-
-router.get('', todoHandler);
-
+router.get('', todoGetHandler);
+router.post('', todoPostHandler);
 module.exports = { router };

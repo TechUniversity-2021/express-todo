@@ -5,7 +5,7 @@ const { todoRouter, healthRouter } = require('./routes');
 
 const app = express();
 env.config();
-// app.use(express.json());
+app.use(express.json());
 app.use('', healthRouter);
 app.use('/todo', todoRouter);
 app.listen(8080, () => {

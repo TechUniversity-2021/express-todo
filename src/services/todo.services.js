@@ -1,4 +1,5 @@
 const fileRead = require('../utilities/promisifyReadFile');
+const fileAppend = require('../utilities/promisifyAppendFile');
 
 const getTodos = async () => {
   const fileContent = await fileRead.promisifyFs('src/resources/todo.txt');
@@ -14,4 +15,8 @@ const getTodos = async () => {
   return todoObjects;
 };
 
-module.exports = { getTodos };
+const postTodos = async (todoPost) => {
+  await fileAppend.promisifyAppendFs('src/resources/todo.txt', todoPost);
+};
+
+module.exports = { getTodos, postTodos };
