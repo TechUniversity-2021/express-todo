@@ -5,11 +5,6 @@ const readAfile = (filePath) => {
     fs.readFile(filePath, "utf-8", (err, data) => {
       // console.log(err, data);
       if (err) {
-        if(err.message === 'file not found'){
-          reject(new Error('message'))
-        } else if (err.message === 'file'){
-          reject(new Error('message'))
-        }
         reject(err);
       }
       resolve(data);
@@ -17,6 +12,15 @@ const readAfile = (filePath) => {
   });
 };
 
-// console.log(readAfile('/Users/swetha_gumpena/TechUniv/node-fs-example/seed/fruits.txt').then(console.log))
+const appendToAfile = (filePath, data) => {
+  return new Promise((resolve, reject) => {
+    fs.appendFile(filePath, '\n'+data, "utf-8", (err) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
 
-module.exports = {readAfile}
+module.exports = { readAfile, appendToAfile };
