@@ -1,6 +1,7 @@
 const {
   getAllTodoHandler, postTodoHandler, getTodoHandler,
   updateTodoHandler, deleteTodoHandler, deleteAllTodoHandler,
+  deleteStatusTodoHandler,
 } = require('./todo.handler');
 const { healthHandler } = require('./health.handler');
 
@@ -12,4 +13,5 @@ module.exports = {
   updateTodoHandler,
   deleteTodoHandler,
   deleteAllTodoHandler,
+  deleteStatusTodoHandler,
 };

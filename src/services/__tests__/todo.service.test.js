@@ -10,6 +10,11 @@ describe('updateTodo function', () => {
     description: 'Update task 1',
     status: 'complete',
   };
+  const MOCK_UPDATE_TODO_WITH_ID = {
+    id: '1',
+    description: 'Update task 1',
+    status: 'complete',
+  };
   it('should return array of promises with values resolved to success', async () => {
     const MOCK_TODO_LIST = [
       {
@@ -30,6 +35,8 @@ describe('updateTodo function', () => {
     spyOnGetAllTodo.mockResolvedValue(MOCK_TODO_LIST);
     spyOnPostTodo.mockResolvedValue('Success');
     const returnedArray = await updateTodo(MOCK_TODO_ID, MOCK_UPDATE_TODO);
+    expect(spyOnPostTodo).toHaveBeenNthCalledWith(1, MOCK_UPDATE_TODO_WITH_ID);
+    expect(spyOnPostTodo).toHaveBeenNthCalledWith(2, MOCK_TODO_LIST[1]);
     expect(returnedArray).toEqual(EXPECTED_VALUE);
   });
   it('should throw an error object with status code 404 and todo not found message if todo is not found', async () => {
@@ -85,6 +92,7 @@ describe('deleteTodo function', () => {
     spyOnGetAllTodo.mockResolvedValue(MOCK_TODO_LIST);
     spyOnPostTodo.mockResolvedValue('Success');
     const returnedArray = await deleteTodo(MOCK_TODO_ID);
+    expect(spyOnPostTodo).toHaveBeenCalledWith(MOCK_TODO_LIST[1]);
     expect(returnedArray).toEqual(EXPECTED_VALUE);
   });
   it('should throw an error object with status code 404 and todo not found message if todo is not found', async () => {

@@ -57,6 +57,10 @@ const deleteAllTodoHandler = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
+const deleteStatusTodoHandler = () => {
+
+};
 module.exports = {
   getAllTodoHandler,
   postTodoHandler,
@@ -64,4 +68,5 @@ module.exports = {
   updateTodoHandler,
   deleteTodoHandler,
   deleteAllTodoHandler,
+  deleteStatusTodoHandler,
 };

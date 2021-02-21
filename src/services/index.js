@@ -1,7 +1,7 @@
 const {
   getAllTodo, postTodo, getTodo, deleteAllTodo,
 } = require('./todo.basic.service');
-const { updateTodo, deleteTodo } = require('./todo.service');
+const { updateTodo, deleteTodo, deleteStatusTodo } = require('./todo.service');
 
 module.exports = {
   getAllTodo,
@@ -10,4 +10,5 @@ module.exports = {
   updateTodo,
   deleteTodo,
   deleteAllTodo,
+  deleteStatusTodo,
 };

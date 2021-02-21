@@ -47,8 +47,30 @@ const deleteTodo = async (id) => {
     throw errorObject;
   }
 };
-
+const deleteStatusTodo = async (status) => {
+  try {
+    const allTodo = await todoBasiceServices.getAllTodo();
+    if (allTodo.length === 0) {
+      throw new Error('No todo found');
+    }
+    const updatedTodoList = allTodo.filter((todo) => todo.status !== status);
+    await fsUtilities.writeFile(TODO_FILE_PATH, '');
+    const writeAllTodoPromiseArr = updatedTodoList.map((todo) => todoBasiceServices.postTodo(todo));
+    return Promise.all(writeAllTodoPromiseArr);
+  } catch (error) {
+    const errorObject = {
+      status: 500,
+      message: 'Error accessing file',
+    };
+    if (error.message === 'No todo found') {
+      errorObject.status = 404;
+      errorObject.message = error.message;
+    }
+    return errorObject;
+  }
+};
 module.exports = {
   updateTodo,
   deleteTodo,
+  deleteStatusTodo,
 };

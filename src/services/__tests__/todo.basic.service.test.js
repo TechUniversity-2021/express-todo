@@ -2,6 +2,7 @@ const fileOps = require('../../utilities/fsFunctions.utilities');
 const {
   getAllTodo, postTodo, getTodo, deleteAllTodo,
 } = require('../todo.basic.service');
+const { TODO_FILE_PATH } = require('../../constants/configure');
 
 describe('getAllTodo Function', () => {
   it('should parse file contents to return a json object of todos', async () => {
@@ -50,24 +51,33 @@ describe('getAllTodo Function', () => {
 });
 
 describe('postTodo Function', () => {
-  const MOCK_TODO = {
+  const MOCK_TODO_1 = {
     id: '1',
     description: 'Task 1',
     status: 'complete',
   };
+  const MOCK_TODO_2 = {
+    description: 'Task 2',
+    status: 'incomplete',
+  };
   const spyOnAppendFile = jest.spyOn(fileOps, 'appendFile');
   const EXPECTED_VALUE = 'Success';
   const EXPECTED_ERROR_MESSAGE = 'Error appending data';
+  const MOCK_EXPECTED_ARGUMENT_1 = '1|Task 1|complete\n';
+  const MOCK_EXPECTED_ARGUMENT_2 = '1|Task 2|incomplete\n'; // since we initialised default id to 1
   it('should append data to file and return success message', async () => {
     spyOnAppendFile.mockResolvedValue('Success');
-    const receivedData = await postTodo(MOCK_TODO);
+    const receivedData = await postTodo(MOCK_TODO_1);
+    await postTodo(MOCK_TODO_2);
+    expect(spyOnAppendFile).toHaveBeenNthCalledWith(1, TODO_FILE_PATH, MOCK_EXPECTED_ARGUMENT_1);
+    expect(spyOnAppendFile).toHaveBeenNthCalledWith(2, TODO_FILE_PATH, MOCK_EXPECTED_ARGUMENT_2);
     expect(receivedData).toEqual(EXPECTED_VALUE);
   });
   it('should throw error if an error occurs during appending data to file', async () => {
     const MOCK_REJECT = new Error('Error in appending data');
     spyOnAppendFile.mockRejectedValue(MOCK_REJECT);
     try {
-      await postTodo(MOCK_TODO);
+      await postTodo(MOCK_TODO_2);
     } catch (error) {
       expect(error.message).toBe(EXPECTED_ERROR_MESSAGE);
     }

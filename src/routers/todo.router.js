@@ -10,6 +10,7 @@ router.get('/:id', handlers.getTodoHandler);
 router.put('/:id', handlers.updateTodoHandler);
 router.delete('/:id', handlers.deleteTodoHandler);
 router.delete('', handlers.deleteAllTodoHandler);
+router.delete('/:status', handlers.deleteStatusTodoHandler);
 module.exports = {
   router,
 };
