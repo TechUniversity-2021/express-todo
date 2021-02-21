@@ -80,6 +80,7 @@ const getTodo = async (id) => {
 const deleteAllTodo = async () => {
   try {
     const message = await fileOps.writeFile(TODO_FILE_PATH, '');
+    defaultId = 0;
     return message;
   } catch (error) {
     throw new Error('Error accessing file');
@@ -91,4 +92,5 @@ module.exports = {
   postTodo,
   getTodo,
   deleteAllTodo,
+  defaultId,
 };
