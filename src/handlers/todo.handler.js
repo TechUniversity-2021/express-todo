@@ -49,10 +49,19 @@ const deleteTodoHandler = async (req, res) => {
     res.status(error.status).send(error.message);
   }
 };
+const deleteAllTodoHandler = async (req, res) => {
+  try {
+    const message = await todoServices.deleteAllTodo();
+    res.status(200).send(message);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
 module.exports = {
   getAllTodoHandler,
   postTodoHandler,
   getTodoHandler,
   updateTodoHandler,
   deleteTodoHandler,
+  deleteAllTodoHandler,
 };

@@ -1,5 +1,0 @@
-1|Bring updated chocolate|complete
-2|Collect rent|complete
-3|Go shopping|complete
-4|Go swimming|complete
-5|Bring flowers|complete

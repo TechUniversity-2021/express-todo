@@ -9,7 +9,7 @@ router.post('', handlers.postTodoHandler);
 router.get('/:id', handlers.getTodoHandler);
 router.put('/:id', handlers.updateTodoHandler);
 router.delete('/:id', handlers.deleteTodoHandler);
-
+router.delete('', handlers.deleteAllTodoHandler);
 module.exports = {
   router,
 };
