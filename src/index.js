@@ -6,7 +6,7 @@ const { todoRouter } = require('./routes');
 const app = express();
 env.config();
 const port = process.env.PORT || DEFAULT_PORT;
-
+app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Todo App!');
 });
