@@ -3,7 +3,6 @@ const uuid = require("uuid");
 
 const getTodo = async () => {
   const fileData = await fileUtils.readAfile("./resources/todos.txt");
-  //console.log(fileData)
   const entry = fileData.split("\n");
   return entry.map((item) => {
     const todoData = item.split("|");
@@ -22,11 +21,21 @@ const getTodoWithId = async (id) => {
   });
 };
 
+const getTodoByQuery = async (todo) => {
+  const getdata = await getTodo();
+  return getdata.filter((item) => {
+    return item.todo == todo;
+  });
+};
+
 const postTodo = async (data) => {
   const title = JSON.stringify(data.todo); //will be "todo". converts object to string
-  const status = JSON.stringify(data.status || "Active"); 
+  const status = JSON.stringify(data.status || "Active");
   const entry = `${uuid.v4()}|${JSON.parse(title)}|${JSON.parse(status)}`; //JSON.parse coverts it to: todo. convert string to json object
-  const response = await fileUtils.appendToAfile("./resources/todos.txt",entry);
+  const response = await fileUtils.appendToAfile(
+    "./resources/todos.txt",
+    entry
+  );
   return response;
 };
 
@@ -39,7 +48,7 @@ const updateTodo = async (id, data) => {
     .map((item) => {
       const todo = item.split("|");
       if (id == todo[0]) {
-        todo[1] = JSON.parse(title) || todo[1] ;
+        todo[1] = JSON.parse(title) || todo[1];
         todo[2] = JSON.parse(status);
       }
       return todo.join("|");
@@ -48,7 +57,7 @@ const updateTodo = async (id, data) => {
   await fileUtils.writeToAfile("./resources/todos.txt", updateTodo);
 };
 
-const deleteTodoById = async (id) => {
+const deleteTodoWithId = async (id) => {
   const data = await fileUtils.readAfile("./resources/todos.txt");
   const removeTodo = data
     .split("\n")
@@ -60,10 +69,29 @@ const deleteTodoById = async (id) => {
   await fileUtils.writeToAfile("./resources/todos.txt", removeTodo);
 };
 
+const deleteTodoWithStatus = async (status) => {
+  const data = await fileUtils.readAfile("./resources/todos.txt");
+  console.log(status);
+  const removeTodo = data
+    .split("\n")
+    .filter((item) => {
+      const todo = item.split("|");
+      return status != todo[2];
+    })
+    .join("\n");
+  await fileUtils.writeToAfile("./resources/todos.txt", removeTodo);
+};
+
+const deleteAllTodos = async () => {
+  await fileUtils.writeToAfile("./resources/todos.txt", "");
+};
 module.exports = {
   getTodo,
   postTodo,
   updateTodo,
   getTodoWithId,
-  deleteTodoById,
+  deleteTodoWithId,
+  getTodoByQuery,
+  deleteTodoWithStatus,
+  deleteAllTodos,
 };
