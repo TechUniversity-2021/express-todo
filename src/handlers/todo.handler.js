@@ -8,7 +8,7 @@ const getTodos = async(req, res) => {
 
 const getTodoById = async(req,res) => {
     const content =  await todoService.getTodoWithId(req.params.id)
-    console.log(content)
+    console.log(req)
     res.status(200).send(content)
 }
 
@@ -29,8 +29,8 @@ const updateTodo = async(req,res) => {
 
 const deleteTodo  = async(req,res) => {
     await todoService.deleteTodoById(req.params.id)
-    console.log(req)
-    //res.status(204).send(`todo successfully deleted`)
+    res.send('todo successfully deleted')
+    // res.status(204).send('todo successfully deleted')
 }
 
 module.exports = { getTodos,createTodo, updateTodo, getTodoById, deleteTodo };

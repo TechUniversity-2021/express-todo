@@ -1,11 +1,11 @@
-const { TestScheduler } = require("jest");
-const { expression } = require("joi");
+const uuid = require("uuid");
 const fileUtils = require("../utils/fileUtils");
 const todoService = require("./todo.service");
+
 //anything which has await before it mock
 
 describe("Todo service", () => {
-  it("should return a list of todos when file read is successful", async () => {
+  xit("should return a list of todos when file read is successful", async () => {
     jest
       .spyOn(fileUtils, "readAfile")
       .mockResolvedValue("1|break|active\n2|break|active");
@@ -16,7 +16,8 @@ describe("Todo service", () => {
     ]);
   });
 
-  it("should return a todo of the respective id", async () => {
+
+  xit("should return a todo of the respective id", async () => {
     jest
       .spyOn(fileUtils, "readAfile")
       .mockResolvedValue("1|Take a break|Active\n2|Make tea|Active\n3|Buy 1kg rice|Active\n4|Follow tdd|Active");
@@ -28,8 +29,10 @@ describe("Todo service", () => {
 
   //TODO
   it("should add a new todo", async () => {
-    jest.spyOn(fileUtils, "appendToAfile").mockResolvedValue();
-    await todoService.postTodo();
-    expect().toHaveBeenCalledWith();
+    jest.spyOn(fileUtils, "appendToAfile").mockResolvedValue("1|break|active\n2|break|active\n123|Do work|active");
+    jest.spyOn(uuid, "v4").mockImplementation(()=>"123");
+    const response =  await todoService.postTodo({ todo: 'Do work' });
+    console.log(response)
+    expect(response).toBe('1|break|active\n2|break|active\n123|Do work|active');
   });
 });

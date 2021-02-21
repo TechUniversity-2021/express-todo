@@ -14,7 +14,7 @@ const readAfile = (filePath) => {
 
 const writeToAfile = (filePath, data) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filePath, '\n'+data, "utf-8", (err) => {
+    fs.writeFile(filePath,data, "utf-8", (err) => {
       if (err) {
         reject(err);
       }
