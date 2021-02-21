@@ -1,5 +1,7 @@
 const fileOps = require('../../utilities/fsFunctions.utilities');
-const { getAllTodo, postTodo, getTodo } = require('../todo.basic.service');
+const {
+  getAllTodo, postTodo, getTodo, deleteAllTodo,
+} = require('../todo.basic.service');
 
 describe('getAllTodo Function', () => {
   it('should parse file contents to return a json object of todos', async () => {
@@ -120,6 +122,28 @@ describe('getTodo Function', () => {
     } catch (error) {
       expect(error.message).toBe(MOCK_EXPECTED_ERROR_MESSAGE);
       expect(error.status).toBe(EXPECTED_ERROR_STATUS);
+    }
+  });
+});
+
+describe('deleteAllTodo Function', () => {
+  it('should replace all todos with an empty string and return success message', async () => {
+    const spyOnWriteFile = jest.spyOn(fileOps, 'writeFile');
+    spyOnWriteFile.mockResolvedValue('Success');
+    const EXPECTED_VALUE = 'Success';
+    const receivedData = await deleteAllTodo();
+    expect(receivedData).toEqual(EXPECTED_VALUE);
+  });
+  it('should throw error object if an error occurs during deletion of todos', async () => {
+    const spyOnWriteFile = jest.spyOn(fileOps, 'writeFile');
+    const MOCK_REJECT = new Error('Error in file write');
+    spyOnWriteFile.mockRejectedValue(MOCK_REJECT);
+    const MOCK_EXPECTED_VALUE = [];
+    try {
+      const receivedData = await deleteAllTodo();
+      expect(receivedData).toEqual(MOCK_EXPECTED_VALUE);
+    } catch (error) {
+      expect(error.message).toBe('Error accessing file');
     }
   });
 });
