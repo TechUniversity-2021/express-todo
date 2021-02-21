@@ -1,5 +1,7 @@
-1|Take a break|Completed
-2|Make Tea|Active
-3|Buy 1kg rice|Active
+1|First|Active
+2|Seconnd|Completed
+3|Buy 3kg rice|Completed
 4|Follow tdd|Active
 258bc3e2-5d0f-43c6-bc17-8cb1c2bd7a98|Do work|active
+ea3bc258-d3fe-4200-bbf8-10daa61b82d7|Bye|Active
+03ca5ee3-a60b-4cfe-ba06-59b29cb5e469|Hi|Completed

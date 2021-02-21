@@ -23,22 +23,24 @@ const getTodoWithId = async (id) => {
 };
 
 const postTodo = async (data) => {
-  //console.log(data)
-  const body = JSON.stringify(data.todo); //will be "todo"
-  const entry = `${uuid.v4()}|${JSON.parse(body)}|active`; //JSON.parse coverts it to: todo
-  const response  =  await fileUtils.appendToAfile("./resources/todos.txt", entry);
-  return response
+  const title = JSON.stringify(data.todo); //will be "todo". converts object to string
+  const status = JSON.stringify(data.status || "Active"); 
+  const entry = `${uuid.v4()}|${JSON.parse(title)}|${JSON.parse(status)}`; //JSON.parse coverts it to: todo. convert string to json object
+  const response = await fileUtils.appendToAfile("./resources/todos.txt",entry);
+  return response;
 };
 
 const updateTodo = async (id, data) => {
   const fileData = await fileUtils.readAfile("./resources/todos.txt");
-  const body = JSON.stringify(data.status);
+  const title = JSON.stringify(data.todo || "");
+  const status = JSON.stringify(data.status);
   const updateTodo = fileData
     .split("\n")
     .map((item) => {
       const todo = item.split("|");
       if (id == todo[0]) {
-        todo[2] = JSON.parse(body);
+        todo[1] = JSON.parse(title) || todo[1] ;
+        todo[2] = JSON.parse(status);
       }
       return todo.join("|");
     })
