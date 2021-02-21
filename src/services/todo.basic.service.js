@@ -1,6 +1,7 @@
 const fileOps = require('../utilities/fsFunctions.utilities');
 const { TODO_FILE_PATH } = require('../constants/configure');
 
+let defaultId = 1;
 const getAllTodo = async () => {
   try {
     const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
@@ -25,7 +26,13 @@ const getAllTodo = async () => {
 
 const postTodo = async (todo) => {
   try {
-    const todoRawData = `${todo.id}|${todo.description}|${todo.status}\n`;
+    let id = defaultId;
+    if (todo.id) {
+      id = todo.id;
+    } else {
+      defaultId += 1;
+    }
+    const todoRawData = `${id}|${todo.description}|${todo.status}\n`;
     const message = await fileOps.appendFile(TODO_FILE_PATH, todoRawData);
     return message;
   } catch (error) {
