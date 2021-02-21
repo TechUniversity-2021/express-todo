@@ -32,7 +32,46 @@ const postTodo = async (todo) => {
     throw new Error('Error appending data');
   }
 };
+
+const getTodo = async (id) => {
+  const TODO_NOT_FOUND_ERROR = new Error('Todo not found');
+  try {
+    const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
+    if (rawFileData.length === 0) {
+      throw TODO_NOT_FOUND_ERROR;
+    }
+    const todoRawList = rawFileData.split('\n');
+    const todoList = todoRawList.filter((todo) => todo !== '').map((todo) => {
+      const elements = todo.split('|');
+      const todoObject = {
+        id: elements[0],
+        description: elements[1],
+        status: elements[2],
+      };
+      return todoObject;
+    });
+    const requiredTodo = todoList.filter((todoObject) => todoObject.id === id)[0];
+    if (!requiredTodo) {
+      throw TODO_NOT_FOUND_ERROR;
+    }
+    return requiredTodo;
+  } catch (error) {
+    let errorObject = {
+      message: error.message,
+      status: 404,
+    };
+    if (error.message !== 'Todo not found') {
+      errorObject = {
+        message: error.message,
+        status: 500,
+      };
+    }
+    throw errorObject;
+  }
+};
+
 module.exports = {
   getAllTodo,
   postTodo,
+  getTodo,
 };
