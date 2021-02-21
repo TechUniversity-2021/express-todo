@@ -1,4 +1,6 @@
-const { getAllTodoHandler, postTodoHandler, getTodoHandler } = require('../todo.handler');
+const {
+  getAllTodoHandler, postTodoHandler, getTodoHandler, updateTodoHandler,
+} = require('../todo.handler');
 const todoServices = require('../../services');
 
 describe('get(/todo) Handler', () => {
@@ -116,6 +118,49 @@ describe('get(/todo/id) Handler', () => {
     };
     spyOnGetTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
     await getTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
+  });
+});
+
+describe('put(/todo/id) Handler', () => {
+  const mockSend = jest.fn();
+  const mockResponseObject = {
+    status: jest.fn(() => ({ send: mockSend })),
+  };
+  const mockRequestObject = {
+    params: {
+
+    },
+    body: {
+
+    },
+  };
+  const spyOnUpdateTodo = jest.spyOn(todoServices, 'updateTodo');
+  it('should set response status code to 200 and return success message on successful updation', async () => {
+    const EXPECTED_VALUE = 'Success';
+    spyOnUpdateTodo.mockResolvedValue('Success');
+    await updateTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(200);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(EXPECTED_VALUE);
+  });
+  it('should return todo not found error and set status code to 404 if todo not found', async () => {
+    const REJECTED_ERROR_OBJECT = {
+      message: 'Todo not found',
+      status: 404,
+    };
+    spyOnUpdateTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
+    await updateTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(404);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
+  });
+  it('should return error aceessing file and set response status code to 500 incase of error in reading or appending file', async () => {
+    const REJECTED_ERROR_OBJECT = {
+      message: 'Error in accessing file',
+      status: 500,
+    };
+    spyOnUpdateTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
+    await updateTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(500);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
   });

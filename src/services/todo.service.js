@@ -1,4 +1,6 @@
 const todoBasiceServices = require('./todo.basic.service');
+const fsUtilities = require('../utilities/fsFunctions.utilities');
+const { TODO_FILE_PATH } = require('../constants/configure');
 
 const updateTodo = async (id, updateData) => {
   try {
@@ -12,6 +14,7 @@ const updateTodo = async (id, updateData) => {
       }
       return todo;
     });
+    await fsUtilities.writeFile(TODO_FILE_PATH, ''); // empty the file first
     const writeAllTodoPromiseArr = updatedTodoList.map((todo) => todoBasiceServices.postTodo(todo));
     return Promise.all(writeAllTodoPromiseArr);
   } catch (error) {

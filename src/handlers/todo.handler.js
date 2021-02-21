@@ -28,8 +28,15 @@ const getTodoHandler = async (req, res) => {
   }
 };
 
-const updateTodoHandler = () => {
-
+const updateTodoHandler = async (req, res) => {
+  try {
+    const { params, body } = req;
+    const requiredTodoId = params.id;
+    await todoServices.updateTodo(requiredTodoId, body);
+    res.status(200).send('Success');
+  } catch (error) {
+    res.status(error.status).send(error.message);
+  }
 };
 module.exports = {
   getAllTodoHandler,
