@@ -15,7 +15,6 @@ const getTodoById = async(req,res) => {
 const createTodo = async(req,res) => {
     await todoService.postTodo(req.body)
     res.send(`todo ${JSON.stringify(req.body.todo)} added`)
-
     // The 204 status code is usually sent out in response to a PUT, POST, or DELETE request when the 
     // REST API declines to send back any status message or representation in the response message’s body.
 }
@@ -28,4 +27,10 @@ const updateTodo = async(req,res) => {
     res.send()
 }
 
-module.exports = { getTodos,createTodo, updateTodo, getTodoById };
+const deleteTodo  = async(req,res) => {
+    await todoService.deleteTodoById(req.params.id)
+    console.log(req)
+    //res.status(204).send(`todo successfully deleted`)
+}
+
+module.exports = { getTodos,createTodo, updateTodo, getTodoById, deleteTodo };
