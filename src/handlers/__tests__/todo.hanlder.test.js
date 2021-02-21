@@ -1,5 +1,5 @@
 const {
-  getAllTodoHandler, postTodoHandler, getTodoHandler, updateTodoHandler,
+  getAllTodoHandler, postTodoHandler, getTodoHandler, updateTodoHandler, deleteTodoHandler,
 } = require('../todo.handler');
 const todoServices = require('../../services');
 
@@ -161,6 +161,47 @@ describe('put(/todo/id) Handler', () => {
     };
     spyOnUpdateTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
     await updateTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
+  });
+});
+
+describe('delete(/todo/id) Handler', () => {
+  const mockSend = jest.fn();
+  const mockResponseObject = {
+    status: jest.fn(() => ({ send: mockSend })),
+  };
+  const mockRequestObject = {
+    params: {
+
+    },
+
+  };
+  const spyOnDeleteTodo = jest.spyOn(todoServices, 'deleteTodo');
+  it('should set response status code to 200 and return success message on successful deletion', async () => {
+    const EXPECTED_VALUE = 'Success';
+    spyOnDeleteTodo.mockResolvedValue('Success');
+    await deleteTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(200);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(EXPECTED_VALUE);
+  });
+  it('should return todo not found error and set status code to 404 if todo not found', async () => {
+    const REJECTED_ERROR_OBJECT = {
+      message: 'Todo not found',
+      status: 404,
+    };
+    spyOnDeleteTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
+    await deleteTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(404);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
+  });
+  it('should return error aceessing file and set response status code to 500 incase of error in reading or appending file', async () => {
+    const REJECTED_ERROR_OBJECT = {
+      message: 'Error in accessing file',
+      status: 500,
+    };
+    spyOnDeleteTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
+    await deleteTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(500);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
   });

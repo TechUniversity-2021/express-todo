@@ -8,6 +8,7 @@ router.get('', handlers.getAllTodoHandler);
 router.post('', handlers.postTodoHandler);
 router.get('/:id', handlers.getTodoHandler);
 router.put('/:id', handlers.updateTodoHandler);
+router.delete('/:id', handlers.deleteTodoHandler);
 
 module.exports = {
   router,
