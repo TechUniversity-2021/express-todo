@@ -1,4 +1,4 @@
-const todoServices = require('../services/todo.service');
+const todoServices = require('../services');
 
 const getAllTodoHandler = async (req, res) => {
   try {
@@ -27,8 +27,13 @@ const getTodoHandler = async (req, res) => {
     res.status(error.status).send(error.message);
   }
 };
+
+const updateTodoHandler = () => {
+
+};
 module.exports = {
   getAllTodoHandler,
   postTodoHandler,
   getTodoHandler,
+  updateTodoHandler,
 };

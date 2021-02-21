@@ -1,69 +1,25 @@
-const fileOps = require('../utilities/fsFunctions.utilities');
-const { TODO_FILE_PATH } = require('../constants/configure');
+const todoBasiceServices = require('./todo.basic.service');
 
-const getAllTodo = async () => {
+const updateTodo = async (id, updateData) => {
   try {
-    const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
-    if (rawFileData.length === 0) {
-      return [];
-    }
-    const todoRawList = rawFileData.split('\n');
-    const todoList = todoRawList.filter((todo) => todo !== '').map((todo) => {
-      const elements = todo.split('|');
-      const todoObject = {
-        id: elements[0],
-        description: elements[1],
-        status: elements[2],
-      };
-      return todoObject;
+    await todoBasiceServices.getTodo(id);
+    const allTodo = await todoBasiceServices.getAllTodo();
+    const updatedTodoList = allTodo.map((todo) => {
+      const todoCopy = todo;
+      if (todoCopy.id === id) {
+        todoCopy.description = updateData.description;
+        todoCopy.status = updateData.status;
+      }
+      return todo;
     });
-    return todoList;
+    const writeAllTodoPromiseArr = updatedTodoList.map((todo) => todoBasiceServices.postTodo(todo));
+    return Promise.all(writeAllTodoPromiseArr);
   } catch (error) {
-    throw new Error('Error reading file data');
-  }
-};
-
-const postTodo = async (todo) => {
-  try {
-    const todoRawData = `${todo.id}|${todo.description}|${todo.status}\n`;
-    const message = await fileOps.appendFile(TODO_FILE_PATH, todoRawData);
-    return message;
-  } catch (error) {
-    throw new Error('Error appending data');
-  }
-};
-
-const getTodo = async (id) => {
-  const TODO_NOT_FOUND_ERROR = new Error('Todo not found');
-  try {
-    const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
-    if (rawFileData.length === 0) {
-      throw TODO_NOT_FOUND_ERROR;
-    }
-    const todoRawList = rawFileData.split('\n');
-    const todoList = todoRawList.filter((todo) => todo !== '').map((todo) => {
-      const elements = todo.split('|');
-      const todoObject = {
-        id: elements[0],
-        description: elements[1],
-        status: elements[2],
-      };
-      return todoObject;
-    });
-    const requiredTodo = todoList.filter((todoObject) => todoObject.id === id)[0];
-    if (!requiredTodo) {
-      throw TODO_NOT_FOUND_ERROR;
-    }
-    return requiredTodo;
-  } catch (error) {
-    let errorObject = {
-      message: error.message,
-      status: 404,
-    };
-    if (error.message !== 'Todo not found') {
+    let errorObject = error;
+    if (!errorObject.status) {
       errorObject = {
-        message: error.message,
         status: 500,
+        message: 'Error in accessing file',
       };
     }
     throw errorObject;
@@ -71,7 +27,5 @@ const getTodo = async (id) => {
 };
 
 module.exports = {
-  getAllTodo,
-  postTodo,
-  getTodo,
+  updateTodo,
 };

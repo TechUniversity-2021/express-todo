@@ -1,5 +1,5 @@
 const { getAllTodoHandler, postTodoHandler, getTodoHandler } = require('../todo.handler');
-const todoServices = require('../../services/todo.service');
+const todoServices = require('../../services');
 
 describe('get(/todo) Handler', () => {
   const mockSend = jest.fn();

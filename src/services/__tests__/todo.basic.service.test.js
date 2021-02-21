@@ -1,5 +1,5 @@
 const fileOps = require('../../utilities/fsFunctions.utilities');
-const { getAllTodo, postTodo, getTodo } = require('../todo.service');
+const { getAllTodo, postTodo, getTodo } = require('../todo.basic.service');
 
 describe('getAllTodo Function', () => {
   it('should parse file contents to return a json object of todos', async () => {

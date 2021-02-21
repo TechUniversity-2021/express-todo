@@ -1,3 +1,4 @@
 1|Bring choclate|incomplete
 2|Collect rent|complete
 3|Go shopping|complete
+4|Go swimming|complete
