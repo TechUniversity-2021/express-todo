@@ -1,5 +1,27 @@
-1|Take a break
-2|Make tea
-3|Buy 1kg rice
-4|Follow tdd
+1|Take a break|active
 
+2|Make tea|active
+
+3|Buy 1kg rice|active
+
+4|drint some cooffeeeeee|active
+
+140fc47c-f76b-40f8-96a6-a575f967b4ab|walk the dog|inactive
+
+f9d7901a-fde5-4c4d-bbe8-903d9ad133b9|walk the cat|inactive
+
+c17ce80e-11c5-4205-bd70-5489446b980b|do coding exercise|inactive
+
+4d053075-f20d-44fe-8a6c-2091a848cc52|do coding exercise|inactive
+
+8bc5ade1-d7af-452d-90f5-b0f750d52c32|do coding exercise|inactive
+
+b4c5179f-ce63-49e3-a1dd-aada160cd37d|do coding exercise|inactive
+
+9e8f0879-39eb-4f03-bb04-1056b1edad33|do coding exercise|inactive
+
+e2ced77e-67cd-449d-93af-bc8d5e967ba6|do coding exercise|inactive
+
+1ec139d0-f6fd-41e1-be55-9a7b80ba989d|do coding exercise|inactive
+
+79efe500-b166-4bc7-81a3-3d467743e1f4|go for cycling|inactive
