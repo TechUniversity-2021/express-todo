@@ -1,10 +1,13 @@
+/* eslint-disable no-use-before-define */
 const fileUtil = require('../utils/fileUtil');
 
+const path = './resources/todos.txt';
 const createNewTodo = async (reqBody) => {
-  const createNewTodoStatus = await fileUtil.writeFile('./resources/todos.txt', reqBody);
+  const createNewTodoStatus = await fileUtil.writeFile(path, reqBody);
   return createNewTodoStatus;
 };
 
+// return array of todo objects
 const getTodos = (fileData) => {
   let todosArray = fileData.toString().split('\n');
   todosArray = todosArray.filter((todo) => todo !== '');
@@ -19,13 +22,12 @@ const getTodos = (fileData) => {
   });
 };
 
-const updateExistingTodo = async (todoId, newTodo) => {
-// in service:  "todo_id_of_pushya" , new Todo:  { todo: 'walk the dog', status: 'active' }
-//  console.log("in service: " , todoId, ", new Todo: " ,newTodo);
-  const todoFileData = await fileUtil.readFile('./resources/todos.txt');
+const updateTodo = async (todoId, newTodo) => {
+  // in service:  "todo_id_of_pushya" , new Todo:  { todo: 'walk the dog', status: 'active' }
+  //  console.log("in service: " , todoId, ", new Todo: " ,newTodo);
+  const todoFileData = await fileUtil.readFile(path);
   const parsedTodos = getTodos(todoFileData);
-  // let index;
-  const existingTodo = parsedTodos.filter((x) => x.id === JSON.parse(todoId));
+  const existingTodo = parsedTodos.filter((todo) => todo.id === JSON.parse(todoId));
   const existingTodoObject = existingTodo[0];
   // console.log("existing todo: " + JSON.stringify(existingTodo));
   existingTodoObject.todo = newTodo.todo;
@@ -34,7 +36,25 @@ const updateExistingTodo = async (todoId, newTodo) => {
     if (parsedTodo.id === JSON.parse(todoId)) return existingTodoObject;
     return parsedTodo;
   });
-  const finalTodoArray = newTodoList.map((eachTodo) => {
+  const finalTodoArray = convertTodoToString(newTodoList);
+  const finalTodoData = finalTodoArray.join('\n');
+  const updateFileStatus = await fileUtil.updateFile(path, finalTodoData);
+  return updateFileStatus;
+};
+const deleteTodo = async (todoId) => {
+  const todoFileData = await fileUtil.readFile(path);
+  const parsedTodos = getTodos(todoFileData);
+  const filteredTodos = parsedTodos.filter((todo) => todo.id !== todoId);
+  // console.log(filteredTodos);
+  const finalTodoArray = convertTodoToString(filteredTodos);
+  const finalTodoData = finalTodoArray.join('\n');
+  const updateFileStatus = await fileUtil.updateFile(path, finalTodoData);
+  return updateFileStatus;
+};
+
+// converts todo array of objects to string with | and \n for new line
+const convertTodoToString = (todos) => {
+  const finalTodoArray = todos.map((eachTodo) => {
     const eachTodoArray = [];
     eachTodoArray.push(eachTodo.id);
     eachTodoArray.push(eachTodo.todo);
@@ -42,13 +62,11 @@ const updateExistingTodo = async (todoId, newTodo) => {
     const eachTodoString = `${eachTodoArray.join('|')}\n`;
     return eachTodoString;
   });
-  const finalTodoData = finalTodoArray.join('\n');
-  const updateFileStatus = await fileUtil.updateFile('./resources/todos.txt', finalTodoData);
-  return updateFileStatus;
+  return finalTodoArray;
 };
-
 module.exports = {
   getTodos,
   createNewTodo,
-  updateExistingTodo,
+  updateTodo,
+  deleteTodo,
 };

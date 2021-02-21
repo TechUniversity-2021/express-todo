@@ -17,16 +17,23 @@ const createTodo = async (req, res) => {
   }
 };
 
-const updateTodo = (req, res) => {
+const updateTodo = async (req, res) => {
   // console.log(`my request : ${JSON.stringify(req.params.id)}`);
   const todoId = JSON.stringify(req.params.id);
   // console.log("update : " ,req.body);
-  const updateStatus = todosService.updateExistingTodo(todoId, req.body);
-  res.send(updateStatus);
+  const updateStatus = await todosService.updateTodo(todoId, req.body);
+  res.status(200).send(updateStatus);
+};
+
+const deleteTodo = async (req, res) => {
+// console.log(req.params);
+  const deleteTodoStatus = await todosService.deleteTodo(req.params.id);
+  res.status(200).send(deleteTodoStatus);
 };
 
 module.exports = {
   getTodos,
   createTodo,
   updateTodo,
+  deleteTodo,
 };
