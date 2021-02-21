@@ -1,4 +1,4 @@
-const { getAllTodoHandler, postTodoHandler } = require('../todo.handler');
+const { getAllTodoHandler, postTodoHandler, getTodoHandler } = require('../todo.handler');
 const todoServices = require('../../services/todo.service');
 
 describe('get(/todo) Handler', () => {
@@ -74,5 +74,49 @@ describe('post(/todo) Handler', () => {
     spyOnPostTodo.mockRejectedValue(MOCK_ERROR);
     await postTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR.message);
+  });
+});
+
+describe('get(/todo/id) Handler', () => {
+  const mockSend = jest.fn();
+  const mockResponseObject = {
+    status: jest.fn(() => ({ send: mockSend })),
+  };
+  const mockRequestObject = {
+    params: {
+
+    },
+  };
+  const spyOnGetTodo = jest.spyOn(todoServices, 'getTodo');
+  it('should set response status code to 200 and return todo object on successfull fetch of todo', async () => {
+    const MOCK_TODO_OBJECT = {
+      id: '1',
+      description: 'Task 1',
+      status: 'incomplete',
+    };
+    spyOnGetTodo.mockResolvedValue(MOCK_TODO_OBJECT);
+    await getTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(200);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_TODO_OBJECT);
+  });
+  it('should return todo not found error and set status code to 404 if todo not found', async () => {
+    const REJECTED_ERROR_OBJECT = {
+      message: 'Todo not found',
+      status: 404,
+    };
+    spyOnGetTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
+    await getTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(404);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
+  });
+  it('should return error reading data and set response status code to 500 incase of error in reading file', async () => {
+    const REJECTED_ERROR_OBJECT = {
+      message: 'Error in reading file',
+      status: 500,
+    };
+    spyOnGetTodo.mockRejectedValue(REJECTED_ERROR_OBJECT);
+    await getTodoHandler(mockRequestObject, mockResponseObject);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(REJECTED_ERROR_OBJECT.message);
   });
 });

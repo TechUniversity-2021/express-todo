@@ -17,8 +17,18 @@ const postTodoHandler = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
-
+const getTodoHandler = async (req, res) => {
+  try {
+    const { params } = req;
+    const requiredTodoId = params.id;
+    const todo = await todoServices.getTodo(requiredTodoId);
+    res.status(200).send(todo);
+  } catch (error) {
+    res.status(error.status).send(error.message);
+  }
+};
 module.exports = {
   getAllTodoHandler,
   postTodoHandler,
+  getTodoHandler,
 };
