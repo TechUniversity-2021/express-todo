@@ -1,5 +1,7 @@
 const fs = require('fs');
-const { readFile, readDir, appendFile } = require('../fsFunctions.utilities');
+const {
+  readFile, readDir, appendFile, writeFile,
+} = require('../fsFunctions.utilities');
 
 describe('Promisified Read File function', () => {
   it('should resolve with file contents', () => {
@@ -67,7 +69,7 @@ describe('Promisified Append File function', () => {
       });
     return expect(appendFile('MOCK_FILE', 'MOCK_DATA')).resolves.toBe('Success');
   });
-  test('should reject with an error object incase an error occures during appending data', () => {
+  it('should reject with an error object incase an error occures during appending data', () => {
     const MOCK_ERROR = new Error('An error occured');
     jest
       .spyOn(fs, 'appendFile')
@@ -75,6 +77,28 @@ describe('Promisified Append File function', () => {
         callback(MOCK_ERROR);
       });
     return expect(appendFile('MOCK_FILE')).rejects.toEqual(
+      MOCK_ERROR,
+    );
+  });
+});
+
+describe('Promisified Write File function', () => {
+  it('should write data and resolve with success message', () => {
+    jest
+      .spyOn(fs, 'writeFile')
+      .mockImplementation((file, data, option, callback) => {
+        callback(null);
+      });
+    return expect(writeFile('MOCK_FILE', 'MOCK_DATA')).resolves.toBe('Success');
+  });
+  it('should reject with an error object incase an error occures during appending data', () => {
+    const MOCK_ERROR = new Error('An error occured');
+    jest
+      .spyOn(fs, 'writeFile')
+      .mockImplementation((file, data, option, callback) => {
+        callback(MOCK_ERROR);
+      });
+    return expect(writeFile('MOCK_FILE')).rejects.toEqual(
       MOCK_ERROR,
     );
   });
