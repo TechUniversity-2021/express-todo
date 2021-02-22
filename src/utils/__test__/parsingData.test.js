@@ -2,7 +2,7 @@ const { parsingData } = require('../parsingData');
 
 describe('Parsing Data', () => {
   it('should parse data', () => {
-    const tasks = 'a\nb\nc';
+    const tasks = 'a\nb\nc\n';
     expect(parsingData(tasks)).toEqual(['a', 'b', 'c']);
   });
   it('should return [] with empty data ', () => {

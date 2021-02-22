@@ -3,6 +3,7 @@ const parsingData = (data) => {
     return [];
   }
   const tasks = data.toString().split('\n');
+  if (tasks.length > 0) tasks.pop();
   return tasks;
 };
 
