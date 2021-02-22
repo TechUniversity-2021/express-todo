@@ -1,12 +1,12 @@
 const fs = require('fs');
-const { getFileData, getDirectoryFiles } = require('./file-utils');
+const fileUtils = require('./file-utils');
 
 describe('File Utils', () => {
   it('promisified read file should resolve with file content', (done) => {
     jest.spyOn(fs, 'readFile').mockImplementation((file, option, cb) => {
       cb(null, 'hello');
     });
-    getFileData('dummy.txt').then((data) => {
+    fileUtils.getFileData('dummy.txt').then((data) => {
       expect(data).toBe('hello');
       done();
     });
@@ -16,7 +16,7 @@ describe('File Utils', () => {
     jest.spyOn(fs, 'readFile').mockImplementation((file, option, cb) => {
       cb(Error('Error'), null);
     });
-    getFileData('dummy.txt').catch((err) => {
+    fileUtils.getFileData('dummy.txt').catch((err) => {
       expect(err).toStrictEqual(Error('Error'));
       done();
     });
@@ -26,7 +26,7 @@ describe('File Utils', () => {
     jest.spyOn(fs, 'readdir').mockImplementation((dir, option, callback) => {
       callback(null, ['file.txt']);
     });
-    getDirectoryFiles('dummyDir').then((data) => {
+    fileUtils.getDirectoryFiles('dummyDir').then((data) => {
       expect(data).toStrictEqual(['file.txt']);
       done();
     });
@@ -37,7 +37,23 @@ describe('File Utils', () => {
     jest.spyOn(fs, 'readdir').mockImplementation((dir, option, cb) => {
       cb(Error('Error'), null);
     });
-    expect(getDirectoryFiles('dummyDir')).rejects.toStrictEqual(Error('Error'));
+    expect(fileUtils.getDirectoryFiles('dummyDir')).rejects.toStrictEqual(Error('Error'));
+    done();
+  });
+
+  it('promisified append file should resolve with appended Data', (done) => {
+    jest.spyOn(fs, 'appendFile').mockImplementation((file, option, cb) => {
+      cb(null, 'Updated');
+    });
+    expect(fileUtils.appendFile('dummyFile', '1|lala|Active')).resolves.toBe('Updated');
+    done();
+  });
+
+  it('promisified update file should resolve with updated Data', (done) => {
+    jest.spyOn(fs, 'writeFile').mockImplementation((file, option, cb) => {
+      cb(null, 'Updated');
+    });
+    expect(fileUtils.appendFile('dummyFile', '1|lala|Active')).resolves.toBe('Updated');
     done();
   });
 });
