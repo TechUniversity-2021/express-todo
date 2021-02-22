@@ -2,6 +2,7 @@ const todoService = require('../services/todo.service');
 
 const getTodos = async (req, res) => {
   const content = await todoService.getTodo();
+  console.log(req);
   res.status(200).send(content);
 };
 

@@ -14,9 +14,9 @@ const {
 
 const todoRouter = express.Router();
 
+todoRouter.get('/', getTodoByQuery);
 todoRouter.get('/', getTodos);
 todoRouter.get('/:id', getTodoById);
-todoRouter.get('/', getTodoByQuery);
 // todoRouter.post('/', todoValidator, createTodo);
 todoRouter.post('/', createTodo);
 todoRouter.put('/:id', updateTodo);
