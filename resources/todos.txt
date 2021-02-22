@@ -1,4 +1,0 @@
-1|Take a break|Active
-2|Make tea|Active
-3|Buy 1kg rice|Active
-4|Follow tdd|Active
