@@ -1,4 +1,6 @@
-1|Take a break|Active
-2|Make tea|Active
+1|Take Rest|Done
+2|Check Working|Done
 3|Buy 1kg rice|Active
 4|Follow tdd|Active
+4c88e62a-d040-4e3e-97b8-09593044dbc5|Complete work|Active
+6b89deef-ec66-4d70-9a77-e41c12758f8e|Take Rest|Active

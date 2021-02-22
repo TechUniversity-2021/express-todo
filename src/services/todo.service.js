@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const { v4: uuid } = require('uuid');
 
 const fileUtils = require('../utils/file-utils');
@@ -16,6 +17,24 @@ const getTodos = async () => {
     return object;
   });
   return todosObject;
+};
+
+const getTodo = async (id) => {
+  const text = await fileUtils.getFileData('resources/todos.txt');
+  const todosLines = text.split('\n');
+  let idFound = `Todo with id ${id} not found`;
+  todosLines.forEach((line) => {
+    if (line.startsWith(id)) {
+      const items = line.split('|');
+      const object = {
+        id: items[0],
+        todo: items[1],
+        status: items[2],
+      };
+      idFound = object;
+    }
+  });
+  return idFound;
 };
 
 const createTodo = async (content) => {
@@ -40,4 +59,6 @@ const updateTodo = async (id, content) => {
   return 'Todo not found';
 };
 
-module.exports = { getTodos, createTodo, updateTodo };
+module.exports = {
+  getTodos, createTodo, updateTodo, getTodo,
+};
