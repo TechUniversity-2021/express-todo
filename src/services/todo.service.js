@@ -51,7 +51,6 @@ const updateTodo = async (id, content) => {
     if (line.startsWith(id)) {
       flag = 1;
       result = text.replace(line, `${id}|${content.todo}|${content.status}`);
-      console.log(result);
       fileUtils.updateFile('resources/todos.txt', result);
     }
   });
