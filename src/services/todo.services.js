@@ -1,9 +1,10 @@
 const fileRead = require('../utilities/promisifyReadFile');
 const fileAppend = require('../utilities/promisifyAppendFile');
 const fileWrite = require('../utilities/promisifyWriteFile');
+const constFilePath = require('../constants/filePath');
 
 const getTodos = async () => {
-  const fileContent = await fileRead.promisifyFs('src/resources/todo.txt');
+  const fileContent = await fileRead.promisifyFs(constFilePath.filePath());
   const todos = fileContent.toString().split('\n');
   const todoObjects = todos.map((todo) => {
     const tempTodoObj = todo.split('|');
@@ -17,10 +18,10 @@ const getTodos = async () => {
 };
 
 const postTodos = async (todoPost) => {
-  await fileAppend.promisifyAppendFs('src/resources/todo.txt', todoPost);
+  await fileAppend.promisifyAppendFs(constFilePath.filePath(), todoPost);
 };
 
 const putTodos = async (updateTodoPut) => {
-  await fileWrite.promisifyWriteFs('src/resources/todo.txt', updateTodoPut);
+  await fileWrite.promisifyWriteFs(constFilePath.filePath(), updateTodoPut);
 };
 module.exports = { getTodos, postTodos, putTodos };

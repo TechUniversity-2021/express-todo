@@ -29,7 +29,7 @@ const todoPostHandler = async (req, res) => {
   const { body } = req;
   const todoList = await todoServices.getTodos();
   const todoPost = `\n${parseInt(todoList[todoList.length - 1].id, 10) + 1}|${body.todo}|${body.status}`;
-  await todoServices.postTodos(todoPost);
+  todoServices.postTodos(todoPost);
   res.status(200).send('Successfully posted!');
 };
 
