@@ -1,2 +1,6 @@
-1|make tdd|completed
-2|get to work|not completed
+1|make tdd|Completed
+2|make coffee|Completed
+6|make coffee|Completed
+4|make breakfast|Completed
+5|have breakfast|Completed
+
