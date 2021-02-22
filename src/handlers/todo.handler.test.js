@@ -1,4 +1,4 @@
-const fileUtils = require('../utils/file-utils');
+const fileUtils = require('../utils/file.utils');
 const todoHandler = require('./todo.handler');
 
 describe('Todo handler', () => {
