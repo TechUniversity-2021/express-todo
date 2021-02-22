@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 const { v4: uuid } = require('uuid');
-
-const fileUtils = require('../utils/file-utils');
+const fileUtils = require('../utils/file.utils');
 
 const getTodos = async () => {
   const text = await fileUtils.getFileData('resources/todos.txt');
@@ -22,7 +21,7 @@ const getTodos = async () => {
 const getTodo = async (id) => {
   const text = await fileUtils.getFileData('resources/todos.txt');
   const todosLines = text.split('\n');
-  let idFound = `Todo with id ${id} not found`;
+  let idFound = 'Todo with given id not found';
   todosLines.forEach((line) => {
     if (line.startsWith(id)) {
       const items = line.split('|');
@@ -52,11 +51,12 @@ const updateTodo = async (id, content) => {
     if (line.startsWith(id)) {
       flag = 1;
       result = text.replace(line, `${id}|${content.todo}|${content.status}`);
+      console.log(result);
       fileUtils.updateFile('resources/todos.txt', result);
     }
   });
   if (flag === 1) return 'Updated';
-  return `Todo with id ${id} not found`;
+  return 'Todo with given id not found';
 };
 
 const deleteTodo = async (id) => {
@@ -67,13 +67,12 @@ const deleteTodo = async (id) => {
   todosLines.forEach((line) => {
     if (line.startsWith(id)) {
       flag = 1;
-      console.log(line);
       result = text.replace(line, '');
       fileUtils.updateFile('resources/todos.txt', result);
     }
   });
   if (flag === 1) return 'Deleted';
-  return `Todo with id ${id} not found`;
+  return 'Todo with given id not found';
 };
 
 module.exports = {
