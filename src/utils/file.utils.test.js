@@ -1,5 +1,5 @@
 const fs = require('fs');
-const fileUtils = require('./file-utils');
+const fileUtils = require('./file.utils');
 
 describe('File Utils', () => {
   it('promisified read file should resolve with file content', (done) => {
