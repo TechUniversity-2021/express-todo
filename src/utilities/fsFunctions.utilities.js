@@ -1,9 +1,10 @@
 const fs = require('fs');
+const FileOperationError = require('../errors/fileOperation.errors');
 
 const promisifyReadFile = (filePath) => new Promise((resolve, reject) => {
   fs.readFile(filePath, 'utf-8', (err, data) => {
     if (err) {
-      reject(err);
+      reject(new FileOperationError('Error reading file'));
     } else {
       resolve(data);
     }
@@ -13,7 +14,7 @@ const promisifyReadFile = (filePath) => new Promise((resolve, reject) => {
 const promisifyReadDir = (dirPath) => new Promise((resolve, reject) => {
   fs.readdir(dirPath, 'utf-8', (err, files) => {
     if (err) {
-      reject(err);
+      reject(new FileOperationError('Error reading directory'));
     } else {
       resolve(files);
     }
@@ -23,7 +24,7 @@ const promisifyReadDir = (dirPath) => new Promise((resolve, reject) => {
 const promisifyAppendFile = (filePath, data) => new Promise((resolve, reject) => {
   fs.appendFile(filePath, data, 'utf-8', (err) => {
     if (err) {
-      reject(err);
+      reject(new FileOperationError('Error appending data to file'));
     } else {
       resolve('Success');
     }
@@ -33,7 +34,7 @@ const promisifyAppendFile = (filePath, data) => new Promise((resolve, reject) =>
 const promisifyWriteFile = (filePath, data) => new Promise((resolve, reject) => {
   fs.writeFile(filePath, data, 'utf-8', (err) => {
     if (err) {
-      reject(err);
+      reject(new FileOperationError('Error writing data to file'));
     } else {
       resolve('Success');
     }

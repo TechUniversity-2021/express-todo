@@ -2,6 +2,7 @@ const fs = require('fs');
 const {
   readFile, readDir, appendFile, writeFile,
 } = require('../fsFunctions.utilities');
+const FileOperationError = require('../../errors/fileOperation.errors');
 
 describe('Promisified Read File function', () => {
   it('should resolve with file contents', () => {
@@ -21,7 +22,7 @@ describe('Promisified Read File function', () => {
         callback(new Error('An error occured'), null);
       });
     return expect(readFile('MOCK_FILE')).rejects.toEqual(
-      new Error('An error occured'),
+      new FileOperationError('Error reading file'),
     );
   });
 });
@@ -55,7 +56,7 @@ describe('Promisified Read Directory function', () => {
         callback(new Error('Directory not found!'), null);
       });
     return expect(readDir('MOCK_DIRECTORY')).rejects.toEqual(
-      new Error('Directory not found!'),
+      new FileOperationError('Error reading directory'),
     );
   });
 });
@@ -77,7 +78,7 @@ describe('Promisified Append File function', () => {
         callback(MOCK_ERROR);
       });
     return expect(appendFile('MOCK_FILE')).rejects.toEqual(
-      MOCK_ERROR,
+      new FileOperationError('Error appending data to file'),
     );
   });
 });
@@ -99,7 +100,7 @@ describe('Promisified Write File function', () => {
         callback(MOCK_ERROR);
       });
     return expect(writeFile('MOCK_FILE')).rejects.toEqual(
-      MOCK_ERROR,
+      new FileOperationError('Error writing data to file'),
     );
   });
 });
