@@ -8,9 +8,6 @@ const postValidator = (req, res, next) => {
     res.status(400).send('Bad Request!');
     return;
   }
-  if (!body.status) {
-    req.body.status = 'incomplete';
-  }
   next();
 };
 const updateValidator = (req, res, next) => {
