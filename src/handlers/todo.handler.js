@@ -2,7 +2,8 @@ const todoServices = require('../services');
 
 const getAllTodoHandler = async (req, res) => {
   try {
-    const allTodos = await todoServices.getAllTodo();
+    const { db } = req.app.locals;
+    const allTodos = await todoServices.getAllTodo(db);
     res.status(200).send(allTodos);
   } catch (error) {
     res.status(500).send(error.message);
@@ -11,7 +12,7 @@ const getAllTodoHandler = async (req, res) => {
 const postTodoHandler = async (req, res) => {
   const { body } = req;
   try {
-    const message = await todoServices.postTodo(body);
+    const message = await todoServices.createTodo(body);
     res.status(201).send(message);
   } catch (error) {
     res.status(500).send(error.message);
@@ -58,8 +59,14 @@ const deleteAllTodoHandler = async (req, res) => {
   }
 };
 
-const deleteStatusTodoHandler = () => {
-
+const deleteStatusTodoHandler = async (req, res) => {
+  try {
+    const { query } = req;
+    const message = await todoServices.deleteStatusTodo(query.status);
+    res.status(200).send(message);
+  } catch (error) {
+    res.status(error.status).send(error.message);
+  }
 };
 module.exports = {
   getAllTodoHandler,

@@ -2,39 +2,14 @@ const todoBasiceServices = require('./todo.basic.service');
 const fsUtilities = require('../utilities/fsFunctions.utilities');
 const { TODO_FILE_PATH } = require('../constants/configure');
 
-const updateTodo = async (id, updateData) => {
-  try {
-    await todoBasiceServices.getTodo(id);
-    const allTodo = await todoBasiceServices.getAllTodo();
-    const updatedTodoList = allTodo.map((todo) => {
-      const todoCopy = todo;
-      if (todoCopy.id === id) {
-        todoCopy.description = updateData.description;
-        todoCopy.status = updateData.status;
-      }
-      return todo;
-    });
-    await fsUtilities.writeFile(TODO_FILE_PATH, ''); // empty the file first
-    const writeAllTodoPromiseArr = updatedTodoList.map((todo) => todoBasiceServices.postTodo(todo));
-    return Promise.all(writeAllTodoPromiseArr);
-  } catch (error) {
-    let errorObject = error;
-    if (!errorObject.status) {
-      errorObject = {
-        status: 500,
-        message: 'Error in accessing file',
-      };
-    }
-    throw errorObject;
-  }
-};
 const deleteTodo = async (id) => {
   try {
     await todoBasiceServices.getTodo(id);
     const allTodo = await todoBasiceServices.getAllTodo();
     const updatedTodoList = allTodo.filter((todo) => todo.id !== id);
     await fsUtilities.writeFile(TODO_FILE_PATH, ''); // empty the file first
-    const writeAllTodoPromiseArr = updatedTodoList.map((todo) => todoBasiceServices.postTodo(todo));
+    const writeAllTodoPromiseArr = updatedTodoList
+      .map((todo) => todoBasiceServices.createTodo(todo));
     return Promise.all(writeAllTodoPromiseArr);
   } catch (error) {
     let errorObject = error;
@@ -53,10 +28,16 @@ const deleteStatusTodo = async (status) => {
     if (allTodo.length === 0) {
       throw new Error('No todo found');
     }
+    const todoToBeDeleted = allTodo.filter((todo) => todo.status === status);
     const updatedTodoList = allTodo.filter((todo) => todo.status !== status);
+    if (todoToBeDeleted.length === 0) {
+      throw new Error('No todo found');
+    }
     await fsUtilities.writeFile(TODO_FILE_PATH, '');
-    const writeAllTodoPromiseArr = updatedTodoList.map((todo) => todoBasiceServices.postTodo(todo));
-    return Promise.all(writeAllTodoPromiseArr);
+    const writeAllTodoPromiseArr = updatedTodoList
+      .map((todo) => todoBasiceServices.createTodo(todo));
+    await Promise.all(writeAllTodoPromiseArr);
+    return 'Success';
   } catch (error) {
     const errorObject = {
       status: 500,
@@ -66,11 +47,10 @@ const deleteStatusTodo = async (status) => {
       errorObject.status = 404;
       errorObject.message = error.message;
     }
-    return errorObject;
+    throw errorObject;
   }
 };
 module.exports = {
-  updateTodo,
   deleteTodo,
   deleteStatusTodo,
 };

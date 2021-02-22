@@ -1,12 +1,12 @@
 const {
-  getAllTodo, postTodo, getTodo, deleteAllTodo,
+  getAllTodo, createTodo, getTodo, deleteAllTodo, updateTodo,
 } = require('./todo.basic.service');
-const { updateTodo, deleteTodo, deleteStatusTodo } = require('./todo.service');
+const { deleteTodo, deleteStatusTodo } = require('./todo.service');
 
 module.exports = {
   getAllTodo,
   getTodo,
-  postTodo,
+  createTodo,
   updateTodo,
   deleteTodo,
   deleteAllTodo,
