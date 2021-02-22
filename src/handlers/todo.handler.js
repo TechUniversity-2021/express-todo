@@ -1,48 +1,41 @@
-const { default: axios } = require('axios');
-const joi = require('joi');// validation
-const quoteServices = require('../services/quotes.service');
-// const allQuotesData;
-// const { default: axios } = require('axios');
+const toDoServices = require('../services/todo.service');
 
-// const httpGet = async (path) => {
-//   const response = await axios.get(path);
-//   return response.data;
-// };
-
-const quoteHandler = async (req, res) => {
-//   const quotesList = await httpGet('https://type.fit/api/quotes');
-//   const filteredList = quotesList.slice(0, 5);
-  // const formattedQuotes = await quoteServices.getQuotes();
-  const allQuotesData = await quoteServices.getQuotes();
-  const first5Quotes = allQuotesData.slice(0, 5);
-  res.status(200).send(first5Quotes);
-  // console.log(req);
-}; 
-
-const getQuoteById = async (req, res) => {
-  const { body } = req;
-  const quotesSchema = joi.object().keys({
-    id: joi.number().required(),
-  });
-
-  const { value, error } = quotesSchema.validate(body);
-
-  if (error) {
-    return res.status(400).send('Bad Request');
-  }
-
-  //   if (!body.id) {
-  //     return res.status(400).send('Bad');
-  //   }
-
-
-  const allQuotesDataa = await quoteServices.getQuotes();
-//   console.log(body);
-//   console.log(body.id);
-//   console.log(allQuotesDataa)
-
-  // console.log(allQuotes[10])
-  res.status(200).send(allQuotesDataa[body.id]);
+const getToDoHandler = async (req, res) => {
+  // console.log(req.app.locals.db);
+  const { db } = req.app.locals;
+  const allTodos = await toDoServices.getToDos(db);
+  res.status(200).send(allTodos);
 };
 
-module.exports = { quoteHandler, getQuoteById };
+const postToDoHandler = async (req, res) => {
+  // const { body } = req;
+  const postedTodo = await toDoServices.postFileData(req, res);
+  res.status(200).send(postedTodo);
+};
+
+const putToDoHandler = async (req, res) => {
+  const updatedToDo = await toDoServices.updateFileData(req, res);
+  res.status(200).send(updatedToDo);
+};
+
+const getByIdToDoHandler = async (req, res) => {
+  const { db } = req.app.locals;
+  const fetchedToDo = await toDoServices.dbFetchToDo(db, req, res);
+  // const fetchedToDo = await toDoServices.fetchToDo(req, res);
+  res.status(200).send(fetchedToDo);
+};
+
+const deleteByIdToDoHandler = async (req, res) => {
+  // console.log("here");
+  const deletedToDo = await toDoServices.deleteById(req, res);
+  res.status(200).send(deletedToDo);
+};
+
+const deleteByStatusToDoHandler = async (req, res) => {
+  const deletedToDoList = await toDoServices.deleteByStatus(req, res);
+  res.status(200).send(deletedToDo);
+};
+
+module.exports = {
+  getToDoHandler, postToDoHandler, putToDoHandler, getByIdToDoHandler, deleteByIdToDoHandler, deleteByStatusToDoHandler,
+};
