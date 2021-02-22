@@ -1,39 +1,16 @@
 /* eslint-disable consistent-return */
 const { v4: uuid } = require('uuid');
 const fileUtils = require('../utils/file.utils');
+const todoRepository = require('../repository/todo.repository');
 
-const getTodos = async () => {
-  const text = await fileUtils.getFileData('resources/todos.txt');
-  const todosLines = text.split('\n');
-  //   console.log(todosLines);
-  const todosObject = todosLines.map((todo) => {
-    const items = todo.split('|');
-    const object = {
-      id: items[0],
-      todo: items[1],
-      status: items[2],
-    };
-    return object;
-  });
-  return todosObject;
+const getTodos = async (db) => {
+  const todos = await todoRepository.getTodos(db);
+  return todos;
 };
 
-const getTodo = async (id) => {
-  const text = await fileUtils.getFileData('resources/todos.txt');
-  const todosLines = text.split('\n');
-  let idFound = 'Todo with given id not found';
-  todosLines.forEach((line) => {
-    if (line.startsWith(id)) {
-      const items = line.split('|');
-      const object = {
-        id: items[0],
-        todo: items[1],
-        status: items[2],
-      };
-      idFound = object;
-    }
-  });
-  return idFound;
+const getTodo = async (db, id) => {
+  const todo = await todoRepository.getTodo(db, id);
+  return todo;
 };
 
 const createTodo = async (content) => {

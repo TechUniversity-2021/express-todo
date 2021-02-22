@@ -1,17 +1,14 @@
 const todoService = require('../services/todo.service');
 
 const getTodos = async (req, res) => {
-  const todos = await todoService.getTodos();
+  const todos = await todoService.getTodos(req.app.locals.db);
   res.status(200).send(todos);
 };
 
 const getTodo = async (req, res) => {
   const { id } = req.params;
-  const todo = await todoService.getTodo(id);
-  if (todo === 'Todo with given id not found') {
-    return res.status(404).send(todo);
-  }
-  return res.status(200).send(todo);
+  const todo = await todoService.getTodo(req.app.locals.db, id);
+  res.status(200).send(todo);
 };
 
 const createTodo = async (req, res) => {
