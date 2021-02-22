@@ -53,17 +53,18 @@ describe('post(/todo) Handler', () => {
   };
   const mockRequestObject = {
     body: {
-
+      description: 'Task 1',
+      status: 'complete',
     },
   };
   const MOCK_ERROR = new Error('Error in adding todo');
   const spyOnPostTodo = jest.spyOn(todoServices, 'postTodo');
-  it('should set response status code to 200 on successfull append of todo', async () => {
+  it('should set response status code to 201 on successfull append of todo', async () => {
     spyOnPostTodo.mockResolvedValue('MOCK_MESSAGE');
     await postTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status).toHaveBeenCalledWith(200);
+    expect(mockResponseObject.status).toHaveBeenCalledWith(201);
   });
-  it('should return message on successfull append of todo', async () => {
+  it('should return the message on successfull append', async () => {
     spyOnPostTodo.mockResolvedValue('MOCK_MESSAGE');
     await postTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith('MOCK_MESSAGE');
@@ -134,16 +135,17 @@ describe('put(/todo/id) Handler', () => {
 
     },
     body: {
-
+      id: '1',
+      description: 'Update Task 1',
+      status: 'complete',
     },
   };
   const spyOnUpdateTodo = jest.spyOn(todoServices, 'updateTodo');
-  it('should set response status code to 200 and return success message on successful updation', async () => {
-    const EXPECTED_VALUE = 'Success';
+  it('should set response status code to 200 and return message on successful updation', async () => {
     spyOnUpdateTodo.mockResolvedValue('Success');
     await updateTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(200);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(EXPECTED_VALUE);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith('Success');
   });
   it('should return todo not found error and set status code to 404 if todo not found', async () => {
     const REJECTED_ERROR_OBJECT = {
