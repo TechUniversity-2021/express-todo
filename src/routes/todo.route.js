@@ -4,6 +4,7 @@ const {
   createTodo,
   updateTodo,
   getTodoById,
+  getTodoByQuery,
   deleteTodoById,
   deleteTodos,
   deleteTodoByStatus,
@@ -13,6 +14,7 @@ const todoRouter = express.Router();
 
 todoRouter.get('/', getTodos);
 todoRouter.get('/:id', getTodoById);
+todoRouter.get('/', getTodoByQuery);
 todoRouter.post('/', createTodo);
 todoRouter.put('/:id', updateTodo);
 todoRouter.delete('/:id', deleteTodoById);
