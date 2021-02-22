@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const todoServices = require('../services/todo.services');
 
 const todoGetHandler = async (req, res) => {
@@ -7,13 +8,27 @@ const todoGetHandler = async (req, res) => {
 
 const todoGetByIdHandler = async (req, res) => {
   const { body } = req;
+  const todoSchema = Joi.object().keys({
+    id: Joi.number().required(),
+  });
+  const { value, error } = todoSchema.validate(body);
+  if (error) {
+    return res.status(400).send('Bad Request');
+  }
   const todoList = await todoServices.getTodos();
   const todoById = todoList.filter((todo) => (todo.id === body.id ? todo : null));
-  res.status(200).send(todoById[0]);
+  return res.status(200).send(todoById[0]);
 };
 
 const todoDeleteByIdHandler = async (req, res) => {
   const { body } = req;
+  const todoSchema = Joi.object().keys({
+    id: Joi.number().required(),
+  });
+  const { value, error } = todoSchema.validate(body);
+  if (error) {
+    return res.status(400).send('Bad Request');
+  }
   const todoList = await todoServices.getTodos();
   const updatedListOfTodos = todoList.filter((todo) => (todo.id === body.id ? null : todo));
   const todoFileList = updatedListOfTodos.map((todoObj) => {
@@ -22,7 +37,7 @@ const todoDeleteByIdHandler = async (req, res) => {
   });
   const todoUpdated = todoFileList.toString().replaceAll(',', '\n');
   await todoServices.putTodos(todoUpdated);
-  res.status(200).send('Deleted todo successfully');
+  return res.status(200).send('Deleted todo successfully');
 };
 
 const todoPostHandler = async (req, res) => {
