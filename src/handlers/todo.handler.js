@@ -22,9 +22,16 @@ const updateTodo = async (req, res) => {
   res.status(200).send(ack);
 };
 
+const deleteTodo = async (req, res) => {
+  const { id } = req.params;
+  const ack = await todoService.deleteTodo(id);
+  res.status(200).send(ack);
+};
+
 module.exports = {
   getTodos,
   createTodo,
   updateTodo,
   getTodo,
+  deleteTodo,
 };

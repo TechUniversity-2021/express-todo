@@ -56,9 +56,26 @@ const updateTodo = async (id, content) => {
     }
   });
   if (flag === 1) return 'Updated';
-  return 'Todo not found';
+  return `Todo with id ${id} not found`;
+};
+
+const deleteTodo = async (id) => {
+  const text = await fileUtils.getFileData('resources/todos.txt');
+  const todosLines = text.split('\n');
+  let result;
+  let flag = 0;
+  todosLines.forEach((line) => {
+    if (line.startsWith(id)) {
+      flag = 1;
+      console.log(line);
+      result = text.replace(line, '');
+      fileUtils.updateFile('resources/todos.txt', result);
+    }
+  });
+  if (flag === 1) return 'Deleted';
+  return `Todo with id ${id} not found`;
 };
 
 module.exports = {
-  getTodos, createTodo, updateTodo, getTodo,
+  getTodos, createTodo, updateTodo, getTodo, deleteTodo,
 };
