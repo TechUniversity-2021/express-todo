@@ -18,5 +18,25 @@ function getDirectoryFiles(dirName) {
   });
 }
 
+function appendFile(fileName, data) {
+  return new Promise((resolve, reject) => {
+    fs.appendFile(fileName, data, (err) => {
+      if (err) reject(err);
+      resolve('Updated');
+    });
+  });
+}
+
+function updateFile(fileName, data) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(fileName, data, (err) => {
+      if (err) reject(err);
+      resolve('Updated');
+    });
+  });
+}
+
 // getFileData("./test.txt").then(console.log, console.log);
-module.exports = { getFileData, getDirectoryFiles };
+module.exports = {
+  getFileData, getDirectoryFiles, appendFile, updateFile,
+};
