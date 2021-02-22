@@ -9,5 +9,6 @@ app.use(express.json());
 app.use('/todo', routes.todoRouter);
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server listening at port: ${port}`);
 });
