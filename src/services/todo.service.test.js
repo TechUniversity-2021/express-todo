@@ -1,38 +1,94 @@
-const uuid = require("uuid");
-const fileUtils = require("../utils/fileUtils");
-const todoService = require("./todo.service");
+const { v4: uuidv4 } = require('uuid');
+const fileUtils = require('../utils/fileUtils');
+const todoRepository = require('../repository/todo.repository');
+const todoService = require('./todo.service');
 
-//anything which has await before it mock
+// anything which has await before it mock
 
-describe("Todo service", () => {
-  xit("should return a list of todos when file read is successful", async () => {
-    jest
-      .spyOn(fileUtils, "readAfile")
-      .mockResolvedValue("1|break|active\n2|break|active");
-    const response = await todoService.getTodo();
-    expect(response).toStrictEqual([
-      { id: "1", todo: "break", status: "active" },
-      { id: "2", todo: "break", status: "active" },
-    ]);
+describe('Todo service', () => {
+  // xit('should return a list of todos when file read is successful', async () => {
+  //   jest
+  //     .spyOn(fileUtils, 'readAfile')
+  //     .mockResolvedValue('1|break|active\n2|break|active');
+  //   const response = await todoService.getTodo();
+  //   expect(response).toStrictEqual([
+  //     { id: '1', todo: 'break', status: 'active' },
+  //     { id: '2', todo: 'break', status: 'active' },
+  //   ]);
+  // });
+
+  it('should get a list of todos', async () => {
+    const mockResponse = [
+      {
+        id: 1,
+        title: 'Take xerox',
+        status: 'active',
+        created_at: '2021-02-22T10:24:28.027Z',
+        updated_at: null,
+      },
+    ];
+    const spyOnTodoRepo = jest
+      .spyOn(todoRepository, 'getTodos')
+      .mockResolvedValue(mockResponse);
+    const response = await todoService.getTodo('dbObject');
+    expect(response).toStrictEqual(mockResponse);
+    expect(spyOnTodoRepo).toHaveBeenCalledWith('dbObject');
   });
 
-
-  xit("should return a todo of the respective id", async () => {
-    jest
-      .spyOn(fileUtils, "readAfile")
-      .mockResolvedValue("1|Take a break|Active\n2|Make tea|Active\n3|Buy 1kg rice|Active\n4|Follow tdd|Active");
-    const response = await todoService.getTodoWithId(3);
-    expect(response).toStrictEqual([
-      { id: "3", todo: "Buy 1kg rice", status: "Active" },
-    ]);
+  it('should get a list of todos based on id', async () => {
+    const mockResponse = [
+      {
+        id: 1,
+        title: 'Take xerox',
+        status: 'active',
+        created_at: '2021-02-22T10:24:28.027Z',
+        updated_at: null,
+      },
+    ];
+    const spyOnTodoByIdRepo = jest
+      .spyOn(todoRepository, 'getTodoByID')
+      .mockResolvedValue(mockResponse);
+    const response = await todoService.getTodoWithId('dbObject', '1');
+    expect(response).toStrictEqual(mockResponse);
+    expect(spyOnTodoByIdRepo).toHaveBeenCalledWith('dbObject', '1');
   });
 
-  //TODO
-  it("should add a new todo", async () => {
-    jest.spyOn(fileUtils, "appendToAfile").mockResolvedValue("1|break|active\n2|break|active\n123|Do work|active");
-    jest.spyOn(uuid, "v4").mockImplementation(()=>"123");
-    const response =  await todoService.postTodo({ todo: 'Do work' });
-    console.log(response)
+  // jest.mock(todoService.getTodo)
+  xit('should return a todo of the respective id', async () => {
+    // jest
+    //   .spyOn(todoService, 'getTodo')
+    //   .mockResolvedValue(
+    //     '1|Take a break|Active\n2|Make tea|Active\n3|Buy 1kg rice|Active\n4|Follow tdd|Active',
+    //   );
+    // const response = await todoService.getTodoWithId(3);
+    // expect(response).toStrictEqual([
+    //   { id: '3', todo: 'Buy 1kg rice', status: 'Active' },
+    // ]);
+  });
+
+  // TODO - uuid mock
+  // jest.mock('uuid');
+  xit('should add a new todo', async () => {
+    jest
+      .spyOn(fileUtils, 'appendToAfile')
+      .mockResolvedValue('1|break|active\n2|break|active\n123|Do work|active');
+    // uuidv4.mockImplementation(() => '123');
+    const response = await todoService.postTodo({ todo: 'Do work' });
+    console.log(response);
     expect(response).toBe('1|break|active\n2|break|active\n123|Do work|active');
+  });
+
+  xit('should update a todo and write to file', async () => {
+    jest
+      .spyOn(fileUtils, 'readAfile')
+      .mockResolvedValue('1|break|active\n2|break|active');
+    jest
+      .spyOn(fileUtils, 'writeToAfile')
+      .mockResolvedValue('1|break|active\n2|break|completed');
+    const response = await todoService.updateTodo(2, { status: 'completed' });
+    expect(response).toStrictEqual([
+      { id: '1', todo: 'break', status: 'active' },
+      { id: '2', todo: 'break', status: 'completed' },
+    ]);
   });
 });

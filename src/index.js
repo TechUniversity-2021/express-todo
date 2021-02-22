@@ -1,20 +1,16 @@
-const express = require("express");
+const express = require('express');
+const { Pool } = require('pg');
+const { dbConfig } = require('./config/db.config');
+const routes = require('./routes');
 
 const app = express();
+const pool = new Pool(dbConfig);
 const port = process.env.PORT || 8080;
 
-const routes = require("./routes");
-
-const logPostRequest = (req, res, next) => {
-  if (req.method === 'POST'){
-    console.log(req.body)
-  }
-  next();
-};
-
 app.use(express.json());
-app.use(logPostRequest)
-app.use("/todo", routes.todoRouter);
+// app.use(logPostRequest);
+app.locals.db = pool;
+app.use('/todo', routes.todoRouter);
 
 app.listen(port, () => {
   console.log(`Server listening at port: ${port}`);
