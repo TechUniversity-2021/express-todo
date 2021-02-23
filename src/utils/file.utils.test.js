@@ -49,11 +49,27 @@ describe('File Utils', () => {
     done();
   });
 
+  it("promisified append file should reject with 'Error'", (done) => {
+    jest.spyOn(fs, 'appendFile').mockImplementation((file, option, cb) => {
+      cb(Error('Error'), null);
+    });
+    expect(fileUtils.appendFile('dummyFile', '1|lala|Active')).rejects.toStrictEqual(Error('Error'));
+    done();
+  });
+
   it('promisified update file should resolve with updated Data', (done) => {
     jest.spyOn(fs, 'writeFile').mockImplementation((file, option, cb) => {
       cb(null, 'Updated');
     });
     expect(fileUtils.updateFile('dummyFile', '1|lala|Active')).resolves.toBe('Updated');
+    done();
+  });
+
+  it("promisified update file should reject with 'Error'", (done) => {
+    jest.spyOn(fs, 'writeFile').mockImplementation((file, option, cb) => {
+      cb(Error('Error'), null);
+    });
+    expect(fileUtils.updateFile('dummyFile', '1|lala|Active')).rejects.toStrictEqual(Error('Error'));
     done();
   });
 });
