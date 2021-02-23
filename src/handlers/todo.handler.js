@@ -8,7 +8,8 @@ const getTodos = async (req, res) => {
 const getTodo = async (req, res) => {
   const { id } = req.params;
   const todo = await todoService.getTodo(req.app.locals.db, id);
-  res.status(200).send(todo);
+  if (todo.length === 0) return res.status(404).send(todo);
+  return res.status(200).send(todo);
 };
 
 const createTodo = async (req, res) => {
