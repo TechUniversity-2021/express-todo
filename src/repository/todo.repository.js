@@ -3,10 +3,9 @@ const getTodos = async (db) => {
   return result.rows;
 };
 const createTodo = async (db, task) => {
-  await db.query(`INSERT INTO todos (title, status) VALUES ('${task}', 'Incomplete')`);
-  // console.log(7, idk);//Result.rowCount: 1
-  const result = await db.query('SELECT * FROM todos;');
-  return result.rows;
+  const result = await db.query(`INSERT INTO todos (title, status) VALUES ('${task}', 'Incomplete')`);// RETURNING * for returning the updated
+  // const result = await db.query('SELECT * FROM todos;');
+  return result.rowCount;
 };
 const updateTodo = async (db, id, body) => {
   const result = await db.query(`UPDATE todos SET title='${body.todo}', status='${body.status}' where id=${id};`);

@@ -1,9 +1,9 @@
 const {
-  todoHandler: getTodo, createTodo, getTodoById, updateTodo, deleteTodo,
+  getAllTodo, createTodo, getTodoById, updateTodo, deleteTodo,
 } = require('./todo.handler');
 
 module.exports = {
-  getTodo,
+  getAllTodo,
   createTodo,
   getTodoById,
   updateTodo,
