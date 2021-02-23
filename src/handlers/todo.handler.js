@@ -23,7 +23,8 @@ const getTodoHandler = async (req, res) => {
   try {
     const { params } = req;
     const requiredTodoId = params.id;
-    const todo = await todoServices.getTodo(requiredTodoId);
+    const { db } = req.app.locals;
+    const todo = await todoServices.getTodo(requiredTodoId, db);
     res.status(200).send(todo);
   } catch (error) {
     if (error instanceof NonExistentError) res.status(404).send(error.message);

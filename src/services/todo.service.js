@@ -29,26 +29,9 @@ const createTodo = async (todo) => {
   return todoObject;
 };
 
-const getTodo = async (id) => {
-  const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
-  if (rawFileData.length === 0) {
-    throw new NonExistentError('Todo not found');
-  }
-  const todoRawList = rawFileData.split('\n');
-  const todoList = todoRawList.filter((todo) => todo !== '').map((todo) => {
-    const elements = todo.split('|');
-    const todoObject = {
-      id: elements[0],
-      description: elements[1],
-      status: elements[2],
-    };
-    return todoObject;
-  });
-  const requiredTodo = todoList.filter((todoObject) => todoObject.id === id)[0];
-  if (!requiredTodo) {
-    throw new NonExistentError('Todo not found');
-  }
-  return requiredTodo;
+const getTodo = async (id, db) => {
+  const todo = await repoOperations.getTodo(id, db);
+  return todo;
 };
 
 const deleteAllTodo = async () => {
