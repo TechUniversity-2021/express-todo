@@ -1,52 +1,6 @@
 const service = require('../todo.service');
-const readUtil = require('../../utils/readFile');
-const appendUtil = require('../../utils/appendFile');
-const writeUtil = require('../../utils/writeFile');
-const parser = require('../../utils/parsingData');
+
 const todoRepository = require('../../repository/todo.repository');
-
-// describe('deleteTodoByID Service', () => {
-//   it('should return nothing with success', async () => {
-//     const mockID = '1';
-//     jest.spyOn(writeUtil, 'writeFile').mockResolvedValue();
-//     const response = await service.deleteTodoByID(mockID);
-//     expect(response).toEqual(undefined);
-//   });
-
-//   it('should go to catch block', async () => {
-//     const mockResponse = {
-//       status: 500,
-//       message: 'invalid file path',
-//     };
-//     jest.spyOn(writeUtil, 'writeFile').mockImplementation(() => { throw new Error(mockResponse.message); });
-//     try {
-//       const response = await service.deleteTodoByID();
-//     } catch (err) {
-//       expect(err).toEqual(Error(mockResponse.message));
-//     }
-//   });
-// });
-
-// describe('updateTodo Service', () => {
-//   it('should return nothing with success', async () => {
-//     jest.spyOn(writeUtil, 'writeFile').mockResolvedValue();
-//     const response = await service.updateTodo();
-//     expect(response).toEqual(undefined);
-//   });
-
-//   it('should go to catch block', async () => {
-//     const mockResponse = {
-//       status: 500,
-//       message: 'invalid file path',
-//     };
-//     jest.spyOn(writeUtil, 'writeFile').mockImplementation(() => { throw new Error(mockResponse.message); });
-//     try {
-//       await service.updateTodo();
-//     } catch (err) {
-//       expect(err).toEqual(Error(mockResponse.message));
-//     }
-//   });
-// });
 
 describe('getAllTodos Service', () => {
   it('should return tasks array', async () => {
@@ -119,6 +73,24 @@ describe('createTodo Service', () => {
     jest.spyOn(todoRepository, 'insertTodo').mockImplementation(() => { throw new Error('error'); });
     try {
       const response = await service.createTodo();
+    } catch (error) {
+      expect(error).toEqual(Error('error'));
+    }
+  });
+});
+
+describe('updateTodo Service', () => {
+  it('should successfully execute', async () => {
+    jest.spyOn(todoRepository, 'updateTodo').mockResolvedValue();
+
+    const response = await service.updateTodo();
+    expect(response).toEqual(undefined);
+  });
+
+  it('should go to catch block', async () => {
+    jest.spyOn(todoRepository, 'updateTodo').mockImplementation(() => { throw new Error('error'); });
+    try {
+      const response = await service.updateTodo();
     } catch (error) {
       expect(error).toEqual(Error('error'));
     }

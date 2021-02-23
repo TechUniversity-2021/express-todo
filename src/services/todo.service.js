@@ -35,13 +35,6 @@ const updateTodo = async (db, id, title, status) => {
   }
 };
 
-const deleteTodoByID = async (db, id) => {
-  try {
-    await todoRepository.deleteTodoByID(db, id);
-  } catch (error) {
-    throw error;
-  }
-};
 module.exports = {
-  getAllTodos, createTodo, deleteTodoByID, updateTodo, getTodoByID,
+  getAllTodos, createTodo, updateTodo, getTodoByID,
 };
