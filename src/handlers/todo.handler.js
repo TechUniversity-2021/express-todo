@@ -17,17 +17,22 @@ const getAllTodosHandler = async (req, res) => {
 };
 
 const createTodoHandler = async (req, res) => {
-  const { body } = req;
-
-  const response = await service.createTodo(body.title, body.status);
-  res.status(response.status).send(response.message);
+  try {
+    const { body } = req;
+    const { db } = req.app.locals;
+    await service.createTodo(db, body.title, body.status);
+    res.status(200).send('Todo created Succcessfully');
+  } catch (error) {
+    res.status(500).send();
+  }
 };
 
 const updateTodoHandler = async (req, res) => {
   const { body } = req;
   try {
-    await service.updateTodo(req.query.id, body.title, body.status);
-    res.status(200).send('todo updated Successfully');
+    const { db } = req.app.locals;
+    await service.updateTodo(db, req.query.id, body.title, body.status);
+    res.status(200).send('Todo updated Successfully');
   } catch (error) {
     res.status(500).send();
   }
@@ -36,8 +41,9 @@ const updateTodoHandler = async (req, res) => {
 const deleteTodoHandler = async (req, res) => {
   try {
     const { query } = req;
-    await service.deleteTodoByID(query.id);
-    res.status(200).send('todo deleted Successfully');
+    const { db } = req.app.locals;
+    await service.deleteTodoByID(db, query.id);
+    res.status(200).send('Todo deleted Successfully');
   } catch (err) {
     res.status(500).send();
   }
