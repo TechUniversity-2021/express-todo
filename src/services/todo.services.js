@@ -1,44 +1,40 @@
-const fileUtils = require("../utils/fileUtils")
-
-
-const todoRepository = require("../repository/todo.repository")
+/* eslint-disable no-console */
+const todoRepository = require('../repository/todo.repository');
 
 const getTodos = async (db) => {
   const todos = await todoRepository.getTodosDb(db);
   return todos;
-}
+};
 const getTodosById = async (db, id) => {
-
   const todos = await todoRepository.getTodosByIdDb(db, id);
-  console.log(todos)
+  console.log(todos);
   return todos;
-}
+};
 const deleteById = async (db, id) => {
   const todos = await todoRepository.deletedToDoByDb(db, id);
-  console.log(todos)
+  console.log(todos);
   return todos;
-}
+};
 const deleteAll = async (db) => {
   const todos = await todoRepository.deleteAllToDoByDb(db);
-  console.log(todos)
+  console.log(todos);
   return todos;
-}
+};
 const deleteByStatus = async (db, status) => {
   const todos = await todoRepository.deleteByStatusDb(db, status);
-  console.log(todos)
+  console.log(todos);
   return todos;
-}
+};
 const createTodo = async (db, title, status) => {
-
-  const todos = await todoRepository.createTodoDb(db, title, status)
-  console.log(todos)
+  const todos = await todoRepository.createTodoDb(db, title, status);
+  console.log(todos);
   return todos;
-}
+};
 const updateTodo = async (db, title, status, id) => {
-  const todos = await todoRepository.updateTodoDb(db, title, status, id)
-  console.log(todos)
+  const todos = await todoRepository.updateTodoDb(db, title, status, id);
+  console.log(todos);
   return todos;
-}
+};
 
 // const deleteById = async (req, res) => {
 //   const fileData = await fileUtils.getFileData('../resources/todos.txt');
@@ -55,17 +51,13 @@ const updateTodo = async (db, title, status, id) => {
 //   })
 //   console.log("formated", formattedText)
 
-
 //   const done = await fileUtils.writeFile('../resources/todos.txt', formattedText)
 //   return done;
 // };
 
-
 // const getTodosById = async (id) => {
 //   const fileData = await fileUtils.getFileData('../resources/todos.txt');
 //   const todosLines = fileData.split('\n');
-
-
 
 //   todosLines.forEach((line) => {
 //     //console.log(line,id.id);
@@ -74,7 +66,6 @@ const updateTodo = async (db, title, status, id) => {
 //       return "got";
 //     }
 //     return 'id not found'
-
 
 //   })
 // }
@@ -101,7 +92,6 @@ const updateTodo = async (db, title, status, id) => {
 //   })
 //   console.log("formated", formattedText)
 
-
 //   const done = await fileUtils.writeFile('../resources/todos.txt', formattedText)
 //   return done;
 // }
@@ -123,6 +113,6 @@ const updateTodo = async (db, title, status, id) => {
 //   return todosObject;
 // };
 
-
-
-module.exports = { getTodos, createTodo, updateTodo, getTodosById, deleteById, deleteAll, deleteByStatus };
+module.exports = {
+  getTodos, createTodo, updateTodo, getTodosById, deleteById, deleteAll, deleteByStatus,
+};
