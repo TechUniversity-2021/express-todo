@@ -1,20 +1,38 @@
-const fs = require('fs');
-const readOp = require('./__test__/todo.service');
+const todoService = require('../todo.service');
+const todoRepository = require('../../repository/todo.repository');
 
-describe('should Read files', () => {
-  it('should return files content', () => {
-    jest
-      .spyOn(fs, 'readFile')
-      .mockImplementation((file, option, callback) => {
-        callback(null, 'read File content');
-      });
-    return expect(readOp.readFileData('../seed/')).resolves.toBe('read File content');
+describe('should get todos from db', () => {
+  it('should get all todos', async () => {
+    const mockResult = [{
+      id: 1,
+      title: 'Fake Task',
+      status: 'Incomplete',
+      created_at: '2021-02-22T10:30:42.990Z',
+      updated_at: null,
+    }];
+    jest.spyOn(todoRepository, 'getTodos').mockResolvedValue(mockResult);
+    const result = await todoService.structureFileContent(null);
+    expect(result).toEqual(mockResult);
   });
-  it('should reject file data read request', () => {
-    jest.spyOn(fs, 'readFile')
-      .mockImplementation((file, option, cb) => {
-        cb('reject read file content request', null);
-      });
-    return expect(readOp.readFileData('../seed1/')).rejects.toEqual('reject read file content request');
+});
+
+describe('get todo by ID', () => {
+  it('should get todo', async () => {
+    const mockResult = [{
+      id: 1,
+      title: 'Fake Task',
+      status: 'Incomplete',
+      created_at: '2021-02-22T10:30:42.990Z',
+      updated_at: null,
+    }, {
+      id: 2,
+      title: 'Another Fake Task',
+      status: 'Complete',
+      created_at: '2021-02-22T11:59:18.848Z',
+      updated_at: null,
+    }];
+    jest.spyOn(todoRepository, 'getTodos').mockResolvedValue(mockResult);
+    const result = await todoService.getTodoById(2, null);
+    expect(result).toEqual(mockResult[1]);
   });
 });
