@@ -5,9 +5,9 @@ const {
 
 const router = express.Router();
 router.get('', todoGetHandler);
-router.get('/id', todoGetByIdHandler);
+router.get('/:id', todoGetByIdHandler);
 router.post('', todoPostHandler);
-router.put('/id', todoPutHandler);
-router.delete('/id', todoDeleteByIdHandler);
+router.put('/:id', todoPutHandler);
+router.delete('/:id', todoDeleteByIdHandler);
 
 module.exports = { router };
