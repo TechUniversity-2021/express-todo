@@ -1,6 +1,6 @@
 const fileUtils = require("../utils/fileUtils")
 const fs = require("fs")
-
+const { v4: uuidv4 } = require('uuid');
 
 
 const deleteById = async (req, res) => {
@@ -43,8 +43,8 @@ const getTodosById = async (id) => {
 }
 
 const createTodo = async (content) => {
-  const newTodo = `\n${uuid()}|${content.todo}|Active`
-
+  const newTodo = `\n${uuidv4()}|${content.todo}|Active`
+  console.log(newTodo)
   const done = await fileUtils.appendFile('../resources/todos.txt', newTodo)
   return done;
 
