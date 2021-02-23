@@ -53,7 +53,7 @@ describe('File Utils', () => {
     jest.spyOn(fs, 'writeFile').mockImplementation((file, option, cb) => {
       cb(null, 'Updated');
     });
-    expect(fileUtils.appendFile('dummyFile', '1|lala|Active')).resolves.toBe('Updated');
+    expect(fileUtils.updateFile('dummyFile', '1|lala|Active')).resolves.toBe('Updated');
     done();
   });
 });
