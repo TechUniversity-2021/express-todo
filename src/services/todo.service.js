@@ -5,27 +5,17 @@ const readUtil = require('../utils/readFile');
 const appendUtil = require('../utils/appendFile');
 const writeUtil = require('../utils/writeFile');
 const { parsingData } = require('../utils/parsingData');
+const todoRepository = require('../repository/todo.repository');
 
 const filePath = './src/resources/todo.txt';
 
-const getAllTodos = async () => {
-  let data;
+const getAllTodos = async (db) => {
   try {
-    data = await readUtil.fread(filePath);
+    const todos = await todoRepository.getAllTodos(db);
+    return todos;
   } catch (error) {
     throw error;
   }
-  const tasks = parsingData(data);
-  const tasksObjectArray = tasks.map((task) => {
-    const taskDetails = task.split('|');
-    const taskObject = {
-      id: taskDetails[0],
-      title: taskDetails[1],
-      status: taskDetails[2],
-    };
-    return taskObject;
-  });
-  return tasksObjectArray;
 };
 
 const createTodo = async (title, status) => {
