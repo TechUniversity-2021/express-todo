@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
-const fileOps = require('../utilities/fsFunctions.utilities');
 const repoOperations = require('../repository/todo.repository');
-const { TODO_FILE_PATH } = require('../constants/configure');
 const NonExistentError = require('../errors/nonExistent.errors');
 
 const getAllTodo = async (db) => {
@@ -31,26 +29,15 @@ const deleteTodo = async (id, db) => {
   return message;
 };
 
-const deleteAllTodo = async () => {
-  const message = await fileOps.writeFile(TODO_FILE_PATH, '');
+const deleteAllTodo = async (db) => {
+  const message = await repoOperations.deleteAllTodo(db);
   return message;
 };
 
-const deleteStatusTodo = async (status) => {
-  const allTodo = await getAllTodo();
-  if (allTodo.length === 0) {
-    throw new NonExistentError('Todo not found');
-  }
-  const todoToBeDeleted = allTodo.filter((todo) => todo.status === status);
-  const updatedTodoList = allTodo.filter((todo) => todo.status !== status);
-  if (todoToBeDeleted.length === 0) {
-    throw new NonExistentError('Todo not found');
-  }
-  await fileOps.writeFile(TODO_FILE_PATH, '');
-  const writeAllTodoPromiseArr = updatedTodoList
-    .map((todo) => createTodo(todo));
-  await Promise.all(writeAllTodoPromiseArr);
-  return 'Success';
+const deleteStatusTodo = async (status, db) => {
+  const message = await repoOperations.deleteStatusTodo(status, db);
+  if (message !== 'Success') throw new NonExistentError('Todo not found');
+  return message;
 };
 
 module.exports = {

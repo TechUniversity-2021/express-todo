@@ -3,7 +3,6 @@ const repoOperations = require('../../repository/todo.repository');
 const {
   getAllTodo, createTodo, getTodo, deleteAllTodo, updateTodo, deleteStatusTodo, deleteTodo,
 } = require('../todo.service');
-const { TODO_FILE_PATH } = require('../../constants/configure');
 
 describe('getAllTodo Function', () => {
   afterAll(() => {
@@ -75,10 +74,10 @@ describe('getTodo Function', () => {
   });
 });
 
-xdescribe('deleteAllTodo Function', () => {
-  it('should replace all todos with an empty string and return success message', async () => {
-    const spyOnWriteFile = jest.spyOn(fileOps, 'writeFile');
-    spyOnWriteFile.mockResolvedValue('Success');
+describe('deleteAllTodo Function', () => {
+  it('should delete all todos and return success message', async () => {
+    const spyOnDeleteAllTodo = jest.spyOn(repoOperations, 'deleteAllTodo');
+    spyOnDeleteAllTodo.mockResolvedValue('Success');
     const EXPECTED_VALUE = 'Success';
     const receivedData = await deleteAllTodo();
     expect(receivedData).toEqual(EXPECTED_VALUE);
@@ -136,33 +135,23 @@ describe('deleteTodo function', () => {
   });
 });
 
-xdescribe('deleteStatusTodo function', () => {
+describe('deleteStatusTodo function', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
-  const spyOnReadFile = jest.spyOn(fileOps, 'readFile');
-  const spyOnAppendFile = jest.spyOn(fileOps, 'appendFile');
-  const spyOnWriteFile = jest.spyOn(fileOps, 'writeFile');
-  const MOCK_TODO_STATUS = 'complete';
-  it('should return success message on deletion of todos with status complete', async () => {
-    const MOCK_TODO_DATA = '1|First Task|complete\n2|Second Task|incomplete\n';
-    const EXPECTED_VALUE = 'Success'; // only one task is written back
-    const MOCK_EXPECTED_ARGUMENT = '2|Second Task|incomplete\n';
-    spyOnWriteFile.mockResolvedValue('Success');
-    spyOnAppendFile.mockResolvedValue('Success');
-    spyOnReadFile.mockResolvedValue(MOCK_TODO_DATA);
-    const receivedMessage = await deleteStatusTodo(MOCK_TODO_STATUS);
-    expect(spyOnWriteFile).toHaveBeenCalledWith(TODO_FILE_PATH, '');
-    expect(spyOnAppendFile).toHaveBeenCalledWith(TODO_FILE_PATH, MOCK_EXPECTED_ARGUMENT);
-    expect(receivedMessage).toEqual(EXPECTED_VALUE);
+  const spyOnDeleteStatusTodo = jest.spyOn(repoOperations, 'deleteStatusTodo');
+  const MOCK_TODO_ID = '1';
+  it('should return success message on successful updation', async () => {
+    spyOnDeleteStatusTodo.mockResolvedValue('Success');
+    const returnedMessage = await deleteStatusTodo(MOCK_TODO_ID);
+    expect(returnedMessage).toEqual('Success');
   });
-  it('should throw an error with todo not found message if required todo is not found', async () => {
-    const MOCK_TODO_DATA = '2|Second Task|incomplete\n';
-    spyOnReadFile.mockResolvedValue(MOCK_TODO_DATA);
+  it('should throw todo not found error if todo does not exist', async () => {
+    spyOnDeleteStatusTodo.mockResolvedValue('Todo not found');
     try {
-      await deleteStatusTodo(MOCK_TODO_STATUS);
+      await deleteStatusTodo(MOCK_TODO_ID);
     } catch (error) {
-      expect(error.message).toBe('Todo not found');
+      expect(error.message).toEqual('Todo not found');
     }
   });
 });

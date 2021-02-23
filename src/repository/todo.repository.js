@@ -31,10 +31,23 @@ const deleteTodo = async (reqId, db) => {
   }
   return 'Success';
 };
+const deleteStatusTodo = async (status, db) => {
+  const message = await db.query(`DELETE FROM todos WHERE status = ${status}`);
+  if (message.rowCount === 0) {
+    return 'Todo not found';
+  }
+  return 'Success';
+};
+const deleteAllTodo = async (db) => {
+  await db.query('DELETE FROM todos');
+  return 'Success';
+};
 module.exports = {
   getAllTodo,
   getTodo,
   createTodo,
   updateTodo,
   deleteTodo,
+  deleteStatusTodo,
+  deleteAllTodo,
 };
