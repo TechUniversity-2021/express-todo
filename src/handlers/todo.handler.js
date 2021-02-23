@@ -26,7 +26,7 @@ const createTodoHandler = async (req, res) => {
     const { body } = req;
     const { db } = req.app.locals;
     await service.createTodo(db, body.title, body.status);
-    res.status(200).send('Todo created Succcessfully');
+    res.status(201).send('Todo created Succcessfully');
   } catch (error) {
     res.status(500).send();
   }
@@ -36,7 +36,8 @@ const updateTodoHandler = async (req, res) => {
   const { body } = req;
   try {
     const { db } = req.app.locals;
-    await service.updateTodo(db, req.query.id, body.title, body.status);
+    const { params } = req;
+    await service.updateTodo(db, params.id, body.title, body.status);
     res.status(200).send('Todo updated Successfully');
   } catch (error) {
     res.status(500).send();
@@ -45,9 +46,9 @@ const updateTodoHandler = async (req, res) => {
 
 const deleteTodoHandler = async (req, res) => {
   try {
-    const { query } = req;
     const { db } = req.app.locals;
-    await service.deleteTodo(db, query.id);
+    const { params } = req;
+    await service.deleteTodo(db, params.id);
     res.status(200).send('Todo deleted Successfully');
   } catch (err) {
     console.log(err);

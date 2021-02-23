@@ -173,7 +173,7 @@ describe('createTodoHandler ', () => {
     jest.spyOn(service, 'createTodo').mockResolvedValue();
 
     await createTodoHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockSend).toHaveBeenCalledWith('Todo created Succcessfully');
   });
 
@@ -212,8 +212,6 @@ describe('createTodoHandler ', () => {
       status: jest.fn(() => ({ send: mockSend })),
     };
 
-    jest.spyOn(service, 'createTodo').mockImplementation(() => { throw new Error('error'); });
-
     await createTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
@@ -223,6 +221,14 @@ describe('createTodoHandler ', () => {
 // -------------------- UPDATE TODO HANDLER------------
 
 describe('updateTodoHandler ', () => {
+  let mockSend;
+  let mockResponse;
+  beforeEach(() => {
+    mockSend = jest.fn();
+    mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+  });
   it('should return response with status 200 and success message', async () => {
     const mockRequest = {
       app: {
@@ -230,15 +236,8 @@ describe('updateTodoHandler ', () => {
           db: {},
         },
       },
-      body: {
-      },
-      query: {
-
-      },
-    };
-    const mockSend = jest.fn();
-    const mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
+      body: {},
+      params: {},
     };
     jest.spyOn(service, 'updateTodo').mockResolvedValue();
 
@@ -254,17 +253,9 @@ describe('updateTodoHandler ', () => {
           db: {},
         },
       },
-      body: {
-      },
-      query: {
-
-      },
+      body: {},
+      params: {},
     };
-    const mockSend = jest.fn();
-    const mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
-    };
-
     jest.spyOn(service, 'updateTodo').mockImplementation(() => { throw new Error('error'); });
 
     await updateTodoHandler(mockRequest, mockResponse);
@@ -274,22 +265,11 @@ describe('updateTodoHandler ', () => {
   it('should go to catch block when db is undefined', async () => {
     const mockRequest = {
       app: {
-        locals: {
-        },
+        locals: {},
       },
-      body: {
-      },
-      query: {
-
-      },
+      body: {},
+      params: {},
     };
-    const mockSend = jest.fn();
-    const mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
-    };
-
-    jest.spyOn(service, 'updateTodo').mockImplementation(() => { throw new Error('error'); });
-
     await updateTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
@@ -299,6 +279,14 @@ describe('updateTodoHandler ', () => {
 // -------------------- DELETE TODO HANDLER------------
 
 describe('deleteTodoHandler ', () => {
+  let mockSend;
+  let mockResponse;
+  beforeEach(() => {
+    mockSend = jest.fn();
+    mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+  });
   it('should return response with status 200 and success message', async () => {
     const mockRequest = {
       app: {
@@ -306,12 +294,9 @@ describe('deleteTodoHandler ', () => {
           db: {},
         },
       },
-      query: {
+      params: {
+        id: 1,
       },
-    };
-    const mockSend = jest.fn();
-    const mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
     };
     jest.spyOn(service, 'deleteTodo').mockResolvedValue();
 
@@ -327,15 +312,10 @@ describe('deleteTodoHandler ', () => {
           db: {},
         },
       },
-      query: {
-
+      params: {
+        id: 1,
       },
     };
-    const mockSend = jest.fn();
-    const mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
-    };
-
     jest.spyOn(service, 'deleteTodo').mockImplementation(() => { throw new Error('error'); });
 
     await updateTodoHandler(mockRequest, mockResponse);
@@ -348,17 +328,10 @@ describe('deleteTodoHandler ', () => {
         locals: {
         },
       },
-      query: {
-
+      params: {
+        id: 1,
       },
     };
-    const mockSend = jest.fn();
-    const mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
-    };
-
-    jest.spyOn(service, 'deleteTodo').mockImplementation(() => { throw new Error('error'); });
-
     await updateTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
