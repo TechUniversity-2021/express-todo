@@ -107,28 +107,20 @@ describe('getTodoByID Service', () => {
   });
 });
 
-// describe('createTodo Service', () => {
-//   it('should return status and  message', async () => {
-//     const mockTitle = 'cook';
-//     const mockStatus = 'active';
-//     const mockResponse = {
-//       status: 201,
-//       message: 'task successfully created',
-//     };
+describe('createTodo Service', () => {
+  it('should successfully execute', async () => {
+    jest.spyOn(todoRepository, 'insertTodo').mockResolvedValue();
 
-//     jest.spyOn(appendUtil, 'appendFile').mockReturnValue();
+    const response = await service.createTodo();
+    expect(response).toEqual(undefined);
+  });
 
-//     const response = await service.createTodo(mockTitle, mockStatus);
-//     expect(response).toEqual(mockResponse);
-//   });
-
-//   it('should go to catch block', async () => {
-//     const mockResponse = {
-//       status: 404,
-//       message: 'invalid file path',
-//     };
-//     jest.spyOn(appendUtil, 'appendFile').mockImplementation(() => { throw new Error(mockResponse.message); });
-//     const response = await service.createTodo();
-//     expect(response).toEqual(mockResponse);
-//   });
-// });
+  it('should go to catch block', async () => {
+    jest.spyOn(todoRepository, 'insertTodo').mockImplementation(() => { throw new Error('error'); });
+    try {
+      const response = await service.createTodo();
+    } catch (error) {
+      expect(error).toEqual(Error('error'));
+    }
+  });
+});
