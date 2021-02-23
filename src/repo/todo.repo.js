@@ -1,47 +1,49 @@
 const getAllTodo = async (db) => {
-  const todos = await db.query('SELECT * FROM todos');
+  const selectAllQuery = 'SELECT * FROM todos';
+  const todos = await db.query(selectAllQuery);
   return todos.rows;
 };
 
 const getTodo = async (reqId, db) => {
-  const todo = await db.query('SELECT * FROM todos WHERE id = $1', [reqId]);
+  const selectByIdQuery = `SELECT * FROM todos WHERE id = ${reqId}`;
+  const todo = await db.query(selectByIdQuery);
   return todo.rows;
 };
 
 const createTodo = async (body, db) => {
-  const description = `'${body.description}'`;
-  const status = `'${body.status}'`;
-  const todo = await db.query(`INSERT INTO todos(description,status) VALUES(${description},${status}) RETURNING *`);
-  return todo.rows;
+  const insertionQuery = `INSERT INTO todos(description,status) VALUES('${body.description}','${body.status}') RETURNING *`;
+  const insertedTodo = await db.query(insertionQuery);
+  return insertedTodo.rows;
 };
 
 const updateTodo = async (reqId, body, db) => {
-  const description = `'${body.description}'`;
-  const status = `'${body.status}'`;
-  const todo = await db.query(`UPDATE todos SET description = ${description}, status = ${status} WHERE id = ${reqId} RETURNING *`);
-  if (todo.rowCount === 0) {
+  const updationQuery = `UPDATE todos SET description = '${body.description}', status = '${body.status}' WHERE id = ${reqId} RETURNING *`;
+  const updatedTodo = await db.query(updationQuery);
+  if (updatedTodo.rowCount === 0) {
     return 'Todo not found';
   }
-  return todo.rows;
+  return updatedTodo.rows;
 };
 
 const deleteTodo = async (reqId, db) => {
-  const message = await db.query(`DELETE FROM todos WHERE id = ${reqId}`);
-  if (message.rowCount === 0) {
+  const deleteByIdQuery = `DELETE FROM todos WHERE id = ${reqId}`;
+  const deletedTodo = await db.query(deleteByIdQuery);
+  if (deletedTodo.rowCount === 0) {
     return 'Todo not found';
   }
   return 'Success';
 };
 const deleteStatusTodo = async (status, db) => {
-  const statusReq = `'${status}'`;
-  const message = await db.query(`DELETE FROM todos WHERE status = ${statusReq}`);
-  if (message.rowCount === 0) {
+  const deleteByStatusQuery = `DELETE FROM todos WHERE status = '${status}'`;
+  const deletedTodos = await db.query(deleteByStatusQuery);
+  if (deletedTodos.rowCount === 0) {
     return 'Todo not found';
   }
   return 'Success';
 };
 const deleteAllTodo = async (db) => {
-  await db.query('DELETE FROM todos');
+  const deleteAllQuery = 'DELETE FROM todos';
+  await db.query(deleteAllQuery);
   return 'Success';
 };
 module.exports = {
