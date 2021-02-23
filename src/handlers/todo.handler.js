@@ -18,7 +18,7 @@ const createTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
   const { id } = req.params;
-  const ack = await todoService.updateTodo(id, req.body);
+  const ack = await todoService.updateTodo(req.app.locals.db, id, req.body);
   if (ack === 'Todo with given id not found') {
     return res.status(404).send(ack);
   }
