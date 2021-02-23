@@ -18,6 +18,11 @@ const updateTodo = async (db, id, todo, status) => {
   return updatedTodo.rows;
 };
 
+const deleteTodo = async (db, id) => {
+  const deletedTodo = await db.query(`DELETE FROM todos WHERE id=${id} RETURNING id`);
+  return deletedTodo.rows;
+};
+
 module.exports = {
-  getTodos, getTodo, createTodo, updateTodo,
+  getTodos, getTodo, createTodo, updateTodo, deleteTodo,
 };

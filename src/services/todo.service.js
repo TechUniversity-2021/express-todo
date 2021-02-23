@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const fileUtils = require('../utils/file.utils');
 const todoRepository = require('../repository/todo.repository');
 
 const getTodos = async (db) => {
@@ -22,20 +21,9 @@ const updateTodo = async (db, id, content) => {
   return ack;
 };
 
-const deleteTodo = async (id) => {
-  const text = await fileUtils.getFileData('resources/todos.txt');
-  const todosLines = text.split('\n');
-  let result;
-  let flag = 0;
-  todosLines.forEach((line) => {
-    if (line.startsWith(id)) {
-      flag = 1;
-      result = text.replace(line, '');
-      fileUtils.updateFile('resources/todos.txt', result);
-    }
-  });
-  if (flag === 1) return 'Deleted';
-  return 'Todo with given id not found';
+const deleteTodo = async (db, id) => {
+  const ack = await todoRepository.deleteTodo(db, id);
+  return ack;
 };
 
 module.exports = {
