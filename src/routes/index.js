@@ -1,4 +1,3 @@
-const { router : taskRouter } = require('./task.route');
-
+const { router: taskRouter } = require('./task.route');
 
 module.exports = { taskRouter };
