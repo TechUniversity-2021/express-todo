@@ -21,10 +21,16 @@ const createTodo = async (req, res) => {
   }
 };
 
+// const getTodoById = async (req, res) => {
+//   const { db } = req.app.locals;
+//   const reqTodo = await todoService.getTodoById(db, parseInt(req.params.id));
+//   // console.log(27, reqTodo);
+//   res.status(200).send(reqTodo);
+// };
 const getTodoById = async (req, res) => {
   const { db } = req.app.locals;
-  const reqTodo = await todoService.getTodoById(db, parseInt(req.params.id));
-  // console.log(27, reqTodo);
+  const { id } = req.params;
+  const reqTodo = await todoService.getTodoById(db, parseInt(id));
   res.status(200).send(reqTodo);
 };
 

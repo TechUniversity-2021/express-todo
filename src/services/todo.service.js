@@ -4,11 +4,15 @@ const getAllTodo = async (db) => {
   const result = await todoRepository.getTodos(db);
   return result;
 };
+// const getTodoById = async (db, id) => {
+//   const fileData = await todoRepository.getTodos(db);
+//   let reqTodo = fileData.find((todo) => todo.id === id);
+//   if (!reqTodo) reqTodo = 'No Such ID';
+//   return reqTodo;
+// };
 const getTodoById = async (db, id) => {
-  const fileData = await todoRepository.getTodos(db);
-  let reqTodo = fileData.find((todo) => todo.id === id);
-  if (!reqTodo) reqTodo = 'No Such ID';
-  return reqTodo;
+  const result = await todoRepository.getTodoById(db, id);
+  return result;
 };
 const addTodo = async (task, db) => {
   const fileData = await todoRepository.createTodo(db, task);
