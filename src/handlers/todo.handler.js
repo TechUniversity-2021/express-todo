@@ -18,8 +18,12 @@ const createTodoHandler = async (req, res) => {
 
 const updateTodoHandler = async (req, res) => {
   const { body } = req;
-  const response = await service.updateTodo(req.query.id, body.title, body.status);
-  res.status(response.status).send(response.message);
+  try {
+    await service.updateTodo(req.query.id, body.title, body.status);
+    res.status(200).send('todo updated Successfully');
+  } catch (error) {
+    res.status(500).send();
+  }
 };
 
 const deleteTodoHandler = async (req, res) => {
@@ -28,7 +32,6 @@ const deleteTodoHandler = async (req, res) => {
     await service.deleteTodoByID(query.id);
     res.status(200).send('todo deleted Successfully');
   } catch (err) {
-    console.log(err);
     res.status(500).send();
   }
 };
