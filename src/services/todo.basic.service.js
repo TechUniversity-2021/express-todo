@@ -31,7 +31,6 @@ const createTodo = async (todo) => {
     id = todo.id;
   }
   const todoRawData = `${id}|${todo.description}|${todo.status}\n`;
-  console.log(todoRawData);
   const todoObject = {
     id,
     description: todo.description,
@@ -76,17 +75,17 @@ const updateTodo = async (id, updateData) => {
     throw new NonExistentError('Todo not found');
   }
   const updatedTodoList = allTodo.map((todo) => {
-    const todoCopy = todo;
+    const todoCopy = { ...todo };
     if (todoCopy.id === id) {
       todoCopy.description = updateData.description;
       todoCopy.status = updateData.status;
     }
-    return todo;
+    return todoCopy;
   });
-  console.log(updatedTodoList);
   await fileOps.writeFile(TODO_FILE_PATH, ''); // empty the file first
+  // eslint-disable-next-line arrow-body-style
   const writeAllTodoPromiseArr = updatedTodoList.map((todo) => {
-    console.log(todo);
+    // console.log(todo);
     return createTodo(todo);
   });
   await Promise.all(writeAllTodoPromiseArr);

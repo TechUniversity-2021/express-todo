@@ -39,6 +39,9 @@ describe('getAllTodo Function', () => {
 });
 
 describe('createTodo Function', () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
   const MOCK_TODO_1 = {
     id: '1',
     description: 'Task 1',
@@ -130,7 +133,7 @@ describe('updateTodo function', () => {
   const MOCK_CHANGED_TODO_DATA = '1|Update task 1|complete\n';
   spyOnWriteFile.mockResolvedValue('Success');
   spyOnAppendFile.mockResolvedValue('Success');
-  xit('should return updated todo on successful updation', async () => {
+  it('should return updated todo on successful updation', async () => {
     spyOnReadFile.mockResolvedValue(MOCK_FILE_DATA);
     const returnedTodo = await updateTodo(MOCK_TODO_ID, MOCK_UPDATE_TODO);
     expect(spyOnWriteFile).toHaveBeenCalledWith(TODO_FILE_PATH, '');
@@ -139,7 +142,7 @@ describe('updateTodo function', () => {
     expect(returnedTodo).toEqual(MOCK_UPDATED_TODO);
   });
   it('should throw an error object with todo not found message if there are no todos', async () => {
-    spyOnReadFile.mockRejectedValue('');
+    spyOnReadFile.mockResolvedValue('');
     try {
       await updateTodo(MOCK_TODO_ID, MOCK_UPDATE_TODO);
     } catch (error) {
