@@ -38,6 +38,18 @@ const updateTodoHandler = async (req, res) => {
   }
 };
 
+const deleteTodoHandler = async (req, res) => {
+  try {
+    const { query } = req;
+    const { db } = req.app.locals;
+    await service.deleteTodo(db, query.id);
+    res.status(200).send('Todo deleted Successfully');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
+};
+
 module.exports = {
-  getAllTodosHandler, createTodoHandler, updateTodoHandler,
+  getAllTodosHandler, createTodoHandler, updateTodoHandler, deleteTodoHandler,
 };
