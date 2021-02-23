@@ -3,14 +3,19 @@ const service = require('../services/todo.service');
 const getAllTodosHandler = async (req, res) => {
   try {
     const { db } = req.app.locals;
-    const { query } = req;
-    if (query.id === undefined) {
-      const todos = await service.getAllTodos(db);
-      res.status(200).send(todos);
-    } else {
-      const todo = await service.getTodoByID(db, query.id);
-      res.status(200).send(todo);
-    }
+    const todos = await service.getAllTodos(db);
+    res.status(200).send(todos);
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
+const getTodoByIDHandler = async (req, res) => {
+  try {
+    const { db } = req.app.locals;
+    const { params } = req;
+    const todo = await service.getTodoByID(db, params.id);
+    res.status(200).send(todo);
   } catch (error) {
     res.status(500).send();
   }
@@ -51,5 +56,5 @@ const deleteTodoHandler = async (req, res) => {
 };
 
 module.exports = {
-  getAllTodosHandler, createTodoHandler, updateTodoHandler, deleteTodoHandler,
+  getAllTodosHandler, createTodoHandler, updateTodoHandler, deleteTodoHandler, getTodoByIDHandler,
 };

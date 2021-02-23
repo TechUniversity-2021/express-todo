@@ -1,5 +1,5 @@
 const {
-  getAllTodosHandler, createTodoHandler, updateTodoHandler, deleteTodoHandler,
+  getAllTodosHandler, getTodoByIDHandler, createTodoHandler, updateTodoHandler, deleteTodoHandler,
 } = require('../todo.handler');
 const service = require('../../services/todo.service');
 
@@ -12,9 +12,6 @@ describe('getAllTodos Handler', () => {
         locals: {
           db: {},
         },
-      },
-      query: {
-
       },
     };
     const mockSend = jest.fn();
@@ -42,9 +39,6 @@ describe('getAllTodos Handler', () => {
           db: {},
         },
       },
-      query: {
-
-      },
     };
     const mockSend = jest.fn();
     const mockResponse = {
@@ -59,6 +53,31 @@ describe('getAllTodos Handler', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
+  it('should go to catch block due to db undefined', async () => {
+    const mockRequestObject = {
+      app: {
+        locals: {
+        },
+      },
+      params: {
+        id: 1,
+      },
+    };
+    const mockSend = jest.fn();
+    const mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+
+    await getAllTodosHandler(mockRequestObject, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockSend).toHaveBeenCalledWith();
+  });
+});
+
+// -------------------- GET TODO BY ID HANDLER------------
+
+describe(' getTodoByID Handler', () => {
   it('should go to getTodoByID service return response with todo data', async () => {
     const mockRequestObject = {
       app: {
@@ -66,7 +85,7 @@ describe('getAllTodos Handler', () => {
           db: {},
         },
       },
-      query: {
+      params: {
         id: 1,
       },
     };
@@ -82,7 +101,7 @@ describe('getAllTodos Handler', () => {
 
     jest.spyOn(service, 'getTodoByID').mockResolvedValue(mockReturnObject);
 
-    await getAllTodosHandler(mockRequestObject, mockResponse);
+    await getTodoByIDHandler(mockRequestObject, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
@@ -95,7 +114,7 @@ describe('getAllTodos Handler', () => {
           db: {},
         },
       },
-      query: {
+      params: {
         id: 1,
       },
     };
@@ -106,19 +125,20 @@ describe('getAllTodos Handler', () => {
 
     jest.spyOn(service, 'getTodoByID').mockImplementation(() => { throw new Error('error'); });
 
-    await getAllTodosHandler(mockRequestObject, mockResponse);
+    await getTodoByIDHandler(mockRequestObject, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
+
   it('should go to catch block due to db undefined', async () => {
     const mockRequestObject = {
       app: {
         locals: {
         },
       },
-      query: {
-
+      params: {
+        id: 1,
       },
     };
     const mockSend = jest.fn();
@@ -126,7 +146,7 @@ describe('getAllTodos Handler', () => {
       status: jest.fn(() => ({ send: mockSend })),
     };
 
-    await getAllTodosHandler(mockRequestObject, mockResponse);
+    await getTodoByIDHandler(mockRequestObject, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
@@ -135,7 +155,7 @@ describe('getAllTodos Handler', () => {
 
 // -------------------- CREATE TODO HANDLER------------
 
-describe('createTodoHandler Handler', () => {
+describe('createTodoHandler ', () => {
   it('should return response with status 200 and success message', async () => {
     const mockRequest = {
       app: {
