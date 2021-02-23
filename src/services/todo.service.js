@@ -1,7 +1,9 @@
-// const path = require('path');
+/* eslint-disable no-useless-catch */
 const { v4: uuidv4 } = require('uuid');
-const readUtils = require('../utils/readFile');
-const appendUtils = require('../utils/appendFile');
+const { Connection } = require('pg');
+const readUtil = require('../utils/readFile');
+const appendUtil = require('../utils/appendFile');
+const writeUtil = require('../utils/writeFile');
 const { parsingData } = require('../utils/parsingData');
 
 const filePath = './src/resources/todo.txt';
@@ -9,16 +11,16 @@ const filePath = './src/resources/todo.txt';
 const getAllTodos = async () => {
   let data;
   try {
-    data = await readUtils.fread(filePath);
+    data = await readUtil.fread(filePath);
   } catch (error) {
-    return error.message;
+    throw error;
   }
   const tasks = parsingData(data);
   const tasksObjectArray = tasks.map((task) => {
     const taskDetails = task.split('|');
     const taskObject = {
       id: taskDetails[0],
-      name: taskDetails[1],
+      title: taskDetails[1],
       status: taskDetails[2],
     };
     return taskObject;
@@ -30,7 +32,7 @@ const createTodo = async (title, status) => {
   const id = uuidv4();
   const todoString = `${id}|${title}|${status}`;
   try {
-    await appendUtils.appendFile(filePath, todoString);
+    await appendUtil.appendFile(filePath, todoString);
     return {
       status: 201,
       message: 'task successfully created',
@@ -42,4 +44,19 @@ const createTodo = async (title, status) => {
     };
   }
 };
-module.exports = { getAllTodos, createTodo };
+
+const deleteTodoByID = async (id) => {
+  try {
+    let tasksObjectArray = await getAllTodos();
+    tasksObjectArray = tasksObjectArray.filter((taskObject) => {
+      if (taskObject.id === id) return false;
+      return true;
+    });
+
+    const newTasksString = tasksObjectArray.reduce((accumulator, taskObject) => accumulator += `${taskObject.id}|${taskObject.title}|${taskObject.status}\n`, '');
+    await writeUtil.writeFile(filePath, newTasksString);
+  } catch (error) {
+    throw error;
+  }
+};
+module.exports = { getAllTodos, createTodo, deleteTodoByID };
