@@ -1,7 +1,6 @@
 const {
-  getAllTodo, createTodo, getTodo, deleteAllTodo, updateTodo,
-} = require('./todo.basic.service');
-const { deleteTodo, deleteStatusTodo } = require('./todo.service');
+  getAllTodo, createTodo, getTodo, deleteAllTodo, updateTodo, deleteStatusTodo, deleteTodo,
+} = require('./todo.service');
 
 module.exports = {
   getAllTodo,
