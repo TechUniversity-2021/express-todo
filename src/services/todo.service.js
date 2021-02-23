@@ -8,6 +8,9 @@ const getAllTodo = async (db) => {
 };
 
 const createTodo = async (todo, db) => {
+  if (!todo.status) {
+    todo.status = 'incomplete';
+  }
   const createdTodo = await repoOperations.createTodo(todo, db);
   return createdTodo;
 };
