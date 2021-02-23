@@ -12,7 +12,6 @@ const getTodo = async (req, res) => {
 };
 
 const createTodo = async (req, res) => {
-  console.log(req.body);
   const ack = await todoService.createTodo(req.app.locals.db, req.body);
   res.status(201).send(ack);
 };
