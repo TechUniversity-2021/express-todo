@@ -31,7 +31,6 @@ const getTodoHandler = async (req, res) => {
     }
     return res.status(200).send(todo[0]);
   } catch (error) {
-    console.log('Here');
     return res.status(500).send();
   }
 };

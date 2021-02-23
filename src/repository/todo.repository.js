@@ -33,7 +33,8 @@ const deleteTodo = async (reqId, db) => {
   return 'Success';
 };
 const deleteStatusTodo = async (status, db) => {
-  const message = await db.query(`DELETE FROM todos WHERE status = ${status}`);
+  const statusReq = `'${status}'`;
+  const message = await db.query(`DELETE FROM todos WHERE status = ${statusReq}`);
   if (message.rowCount === 0) {
     return 'Todo not found';
   }
