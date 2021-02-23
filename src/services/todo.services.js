@@ -3,6 +3,7 @@ const todoRepository = require('../repository/todo.repository');
 
 const getTodos = async (db) => {
   const todos = await todoRepository.getTodosDb(db);
+
   return todos;
 };
 const getTodosById = async (db, id) => {
@@ -12,7 +13,6 @@ const getTodosById = async (db, id) => {
 };
 const deleteById = async (db, id) => {
   const todos = await todoRepository.deletedToDoByDb(db, id);
-  console.log(todos);
   return todos;
 };
 const deleteAll = async (db) => {

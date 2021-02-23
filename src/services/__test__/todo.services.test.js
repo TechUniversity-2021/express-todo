@@ -66,4 +66,3 @@ describe('delete ALL', () => {
     expect(response).toBe(mockResolved);
   });
 });
-
