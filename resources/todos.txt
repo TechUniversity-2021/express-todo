@@ -9,3 +9,6 @@
 f9d7901a-fde5-4c4d-bbe8-903d9ad133b9|walk the cat|inactive
 
 8bc5ade1-d7af-452d-90f5-b0f750d52c32|do coding exercise|inactive
+
+4aef65ad-1e3f-41d5-af20-cc5e2a3722af|clean the car|inactive
+6bd3b3e8-d0fe-4af0-9009-33bad29bea97|clean the car|inactive
