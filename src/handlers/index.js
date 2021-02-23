@@ -1,5 +1,5 @@
 const {
-  getTodos, createTodo, updateTodo, deleteTodo,
+  getTodos, createTodo, updateTodo, deleteTodo, getTodoById
 } = require('./todo.handler');
 
 module.exports = {
@@ -7,4 +7,5 @@ module.exports = {
   createTodo,
   updateTodo,
   deleteTodo,
+  getTodoById,
 };

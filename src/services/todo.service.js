@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 const fileUtil = require('../utils/fileUtil');
+const todoRepo = require('../repository/todo.repository');
 
 const path = './resources/todos.txt';
 const createNewTodo = async (reqBody) => {
@@ -8,38 +9,49 @@ const createNewTodo = async (reqBody) => {
 };
 
 // return array of todo objects
-const getTodos = (fileData) => {
-  let todosArray = fileData.toString().split('\n');
-  todosArray = todosArray.filter((todo) => todo !== '');
-  return todosArray.map((todo) => {
-    const todoData = todo.split('|');
-    return {
-      id: todoData[0],
-      todo: todoData[1],
-      status: todoData[2],
+const getTodos = async (db) => {
+  const todos = await todoRepo.getTodos(db);
+  return todos;
+  // let todosArray = fileData.toString().split('\n');
+  // todosArray = todosArray.filter((todo) => todo !== '');
+  // return todosArray.map((todo) => {
+  //   const todoData = todo.split('|');
+  //   return {
+  //     id: todoData[0],
+  //     todo: todoData[1],
+  //     status: todoData[2],
 
-    };
-  });
+  //   };
+  // });
 };
 
-const updateTodo = async (todoId, newTodo) => {
+const getTodoById = async (db, id) => {
+  const todos = await todoRepo.getTodosbyId(db, id);
+  return todos;
+};
+
+const updateTodo = async (db, todoId, newTodo) => {
+  console.log('db result: ', db);
+  console.log('db done');
   // in service:  "todo_id_of_pushya" , new Todo:  { todo: 'walk the dog', status: 'active' }
   //  console.log("in service: " , todoId, ", new Todo: " ,newTodo);
-  const todoFileData = await fileUtil.readFile(path);
-  const parsedTodos = getTodos(todoFileData);
-  const existingTodo = parsedTodos.filter((todo) => todo.id === JSON.parse(todoId));
-  const existingTodoObject = existingTodo[0];
-  // console.log("existing todo: " + JSON.stringify(existingTodo));
-  existingTodoObject.todo = newTodo.todo;
-  existingTodoObject.status = newTodo.status;
-  const newTodoList = parsedTodos.map((parsedTodo) => {
-    if (parsedTodo.id === JSON.parse(todoId)) return existingTodoObject;
-    return parsedTodo;
-  });
-  const finalTodoArray = convertTodoToString(newTodoList);
-  const finalTodoData = finalTodoArray.join('\n');
-  const updateFileStatus = await fileUtil.updateFile(path, finalTodoData);
-  return updateFileStatus;
+  const todos = await todoRepo.updateTodos(db, todoId, newTodo);
+  return todos;
+  // const todoFileData = await fileUtil.readFile(path);
+  // const parsedTodos = getTodos(todoFileData);
+  // const existingTodo = parsedTodos.filter((todo) => todo.id === JSON.parse(todoId));
+  // const existingTodoObject = existingTodo[0];
+  // // console.log("existing todo: " + JSON.stringify(existingTodo));
+  // existingTodoObject.todo = newTodo.todo;
+  // existingTodoObject.status = newTodo.status;
+  // const newTodoList = parsedTodos.map((parsedTodo) => {
+  //   if (parsedTodo.id === JSON.parse(todoId)) return existingTodoObject;
+  //   return parsedTodo;
+  // });
+  // const finalTodoArray = convertTodoToString(newTodoList);
+  // const finalTodoData = finalTodoArray.join('\n');
+  // const updateFileStatus = await fileUtil.updateFile(path, finalTodoData);
+  // return updateFileStatus;
 };
 const deleteTodo = async (todoId) => {
   const todoFileData = await fileUtil.readFile(path);
@@ -69,4 +81,5 @@ module.exports = {
   createNewTodo,
   updateTodo,
   deleteTodo,
+  getTodoById,
 };

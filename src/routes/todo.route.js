@@ -4,6 +4,7 @@ const todoHandler = require('../handlers/index');
 const todoRouter = express.Router();
 
 todoRouter.get('/', todoHandler.getTodos);
+todoRouter.get('/:id', todoHandler.getTodoById);
 todoRouter.post('/', todoHandler.createTodo);
 todoRouter.put('/:id', todoHandler.updateTodo);
 todoRouter.delete('/:id', todoHandler.deleteTodo);
