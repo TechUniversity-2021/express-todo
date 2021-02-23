@@ -3,7 +3,7 @@ const getAllTodos = async (db) => {
   return todos.rows;
 };
 const getTodoByID = async (db, id) => {
-  const todos = await db.query(`SELECT * FROM todos where id=${id}`);
+  const todos = await db.query('SELECT * FROM todos where id=$1', [id]);
   return todos.rows;
 };
 const insertTodo = async (db, title, status) => {
