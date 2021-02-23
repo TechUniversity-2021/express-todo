@@ -1,5 +1,4 @@
 const todoRepository = require('../repository/todo.repository');
-const fileUtils = require('../utils/file.utils');
 const todoService = require('./todo.service');
 // mockImplementation callbacks
 // mockresolved promises
