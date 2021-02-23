@@ -14,8 +14,6 @@ const createTodo = async (db, todo, status) => {
 };
 
 const updateTodo = async (db, id, todo, status) => {
-  console.log('HELLO');
-  console.log(`UPDATE todos SET title='${todo}',status='${status}',updated_at=to_timestamp(${Date.now()} WHERE id=${id}`);
   const updatedTodo = await db.query(`UPDATE todos SET title='${todo}',status='${status}',updated_at=to_timestamp(${Date.now()} / 1000.0)WHERE id=${id} RETURNING id`);
   return updatedTodo.rows;
 };
