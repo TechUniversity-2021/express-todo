@@ -3,6 +3,8 @@ const {
 } = require('../todo.handler');
 const service = require('../../services/todo.service');
 
+// -------------------- GET TODO HANDLER------------
+
 describe('getAllTodos Handler', () => {
   it('should go to getAllTodos service return response with todo data', async () => {
     const mockRequestObject = {
@@ -109,7 +111,29 @@ describe('getAllTodos Handler', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
+  it('should go to catch block due to db undefined', async () => {
+    const mockRequestObject = {
+      app: {
+        locals: {
+        },
+      },
+      query: {
+
+      },
+    };
+    const mockSend = jest.fn();
+    const mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+
+    await getAllTodosHandler(mockRequestObject, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockSend).toHaveBeenCalledWith();
+  });
 });
+
+// -------------------- CREATE TODO HANDLER------------
 
 describe('createTodoHandler Handler', () => {
   it('should return response with status 200 and success message', async () => {
@@ -154,7 +178,29 @@ describe('createTodoHandler Handler', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
+  it('should go to catch block when db is undefined', async () => {
+    const mockRequest = {
+      app: {
+        locals: {
+        },
+      },
+      body: {
+      },
+    };
+    const mockSend = jest.fn();
+    const mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+
+    jest.spyOn(service, 'createTodo').mockImplementation(() => { throw new Error('error'); });
+
+    await createTodoHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockSend).toHaveBeenCalledWith();
+  });
 });
+
+// -------------------- UPDATE TODO HANDLER------------
 
 describe('updateTodoHandler ', () => {
   it('should return response with status 200 and success message', async () => {
@@ -205,7 +251,32 @@ describe('updateTodoHandler ', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
+  it('should go to catch block when db is undefined', async () => {
+    const mockRequest = {
+      app: {
+        locals: {
+        },
+      },
+      body: {
+      },
+      query: {
+
+      },
+    };
+    const mockSend = jest.fn();
+    const mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+
+    jest.spyOn(service, 'updateTodo').mockImplementation(() => { throw new Error('error'); });
+
+    await updateTodoHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockSend).toHaveBeenCalledWith();
+  });
 });
+
+// -------------------- DELETE TODO HANDLER------------
 
 describe('deleteTodoHandler ', () => {
   it('should return response with status 200 and success message', async () => {
@@ -234,6 +305,27 @@ describe('deleteTodoHandler ', () => {
       app: {
         locals: {
           db: {},
+        },
+      },
+      query: {
+
+      },
+    };
+    const mockSend = jest.fn();
+    const mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
+
+    jest.spyOn(service, 'deleteTodo').mockImplementation(() => { throw new Error('error'); });
+
+    await updateTodoHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockSend).toHaveBeenCalledWith();
+  });
+  it('should go to catch block due to db undefined', async () => {
+    const mockRequest = {
+      app: {
+        locals: {
         },
       },
       query: {
