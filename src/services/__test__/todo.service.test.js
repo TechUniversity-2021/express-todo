@@ -96,3 +96,21 @@ describe('updateTodo Service', () => {
     }
   });
 });
+
+describe('deleteTodo Service', () => {
+  it('should successfully execute', async () => {
+    jest.spyOn(todoRepository, 'deleteTodoByID').mockResolvedValue();
+
+    const response = await service.deleteTodo();
+    expect(response).toEqual(undefined);
+  });
+
+  it('should go to catch block', async () => {
+    jest.spyOn(todoRepository, 'deleteTodoByID').mockImplementation(() => { throw new Error('error'); });
+    try {
+      const response = await service.deleteTodo();
+    } catch (error) {
+      expect(error).toEqual(Error('error'));
+    }
+  });
+});
