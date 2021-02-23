@@ -45,6 +45,24 @@ const createTodo = async (title, status) => {
   }
 };
 
+const updateTodo = async (id, title, status) => {
+  try {
+    let tasksObjectArray = await getAllTodos();
+    tasksObjectArray = tasksObjectArray.map((taskObject) => {
+      if (taskObject.id === id) {
+        taskObject.title = title;
+        taskObject.status = status;
+      }
+      return taskObject;
+    });
+
+    const newTasksString = tasksObjectArray.reduce((accumulator, taskObject) => accumulator += `${taskObject.id}|${taskObject.title}|${taskObject.status}\n`, '');
+    await writeUtil.writeFile(filePath, newTasksString);
+  } catch (error) {
+    throw error;
+  }
+};
+
 const deleteTodoByID = async (id) => {
   try {
     let tasksObjectArray = await getAllTodos();
@@ -59,4 +77,6 @@ const deleteTodoByID = async (id) => {
     throw error;
   }
 };
-module.exports = { getAllTodos, createTodo, deleteTodoByID };
+module.exports = {
+  getAllTodos, createTodo, deleteTodoByID, updateTodo,
+};

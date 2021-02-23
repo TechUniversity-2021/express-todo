@@ -26,6 +26,27 @@ describe('deleteTodoByID Service', () => {
   });
 });
 
+describe('updateTodo Service', () => {
+  it('should return nothing with success', async () => {
+    jest.spyOn(writeUtil, 'writeFile').mockResolvedValue();
+    const response = await service.updateTodo();
+    expect(response).toEqual(undefined);
+  });
+
+  it('should go to catch block', async () => {
+    const mockResponse = {
+      status: 500,
+      message: 'invalid file path',
+    };
+    jest.spyOn(writeUtil, 'writeFile').mockImplementation(() => { throw new Error(mockResponse.message); });
+    try {
+      await service.updateTodo();
+    } catch (err) {
+      expect(err).toEqual(Error(mockResponse.message));
+    }
+  });
+});
+
 describe('getAllTodos Service', () => {
   it('should return tasks array', async () => {
     const readTasks = '1|appy|active\n2|vorina|active\n3|priya|active\n';
