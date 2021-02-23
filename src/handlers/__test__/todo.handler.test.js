@@ -5,26 +5,39 @@ const service = require('../../services/todo.service');
 
 describe('getAllTodos Handler', () => {
   it('should return response with todo data', async () => {
+    const mockRequestObject = {
+      app: {
+        locals: {
+          db: {},
+        },
+      },
+    };
     const mockSend = jest.fn();
     const mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
     };
-    const mockReturnObject = {
+    const mockReturnObject = [{
       id: 1,
       title: 'coding',
       staus: 'active',
-    };
+    }];
 
-    const getAllTodosServiceSpy = jest.spyOn(service, 'getAllTodos');
-    getAllTodosServiceSpy.mockImplementation(() => Promise.resolve(mockReturnObject));
+    jest.spyOn(service, 'getAllTodos').mockResolvedValue(mockReturnObject);
 
-    await getAllTodosHandler(null, mockResponse);
+    await getAllTodosHandler(mockRequestObject, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
   });
 
   it('should go to catch block', async () => {
+    const mockRequestObject = {
+      app: {
+        locals: {
+          db: {},
+        },
+      },
+    };
     const mockSend = jest.fn();
     const mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
@@ -33,7 +46,7 @@ describe('getAllTodos Handler', () => {
     const getAllTodosServiceSpy = jest.spyOn(service, 'getAllTodos');
     getAllTodosServiceSpy.mockImplementation(() => { throw new Error('error'); });
 
-    await getAllTodosHandler(null, mockResponse);
+    await getAllTodosHandler(mockRequestObject, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
