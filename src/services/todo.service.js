@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-const { v4: uuidv4 } = require('uuid');
 const fileOps = require('../utilities/fsFunctions.utilities');
 const repoOperations = require('../repository/todo.repository');
 const { TODO_FILE_PATH } = require('../constants/configure');
@@ -10,23 +9,9 @@ const getAllTodo = async (db) => {
   return todoList;
 };
 
-const createTodo = async (todo) => {
-  let id = uuidv4();
-  if (!todo.status) {
-    todo.status = 'incomplete';
-  }
-  if (todo.id) {
-    id = todo.id;
-  }
-  const todoRawData = `${id}|${todo.description}|${todo.status}\n`;
-  const todoObject = {
-    id,
-    description: todo.description,
-    status: todo.status,
-
-  };
-  await fileOps.appendFile(TODO_FILE_PATH, todoRawData);
-  return todoObject;
+const createTodo = async (todo, db) => {
+  const createdTodo = await repoOperations.createTodo(todo, db);
+  return createdTodo;
 };
 
 const getTodo = async (id, db) => {
@@ -34,52 +19,23 @@ const getTodo = async (id, db) => {
   return todo;
 };
 
+const updateTodo = async (id, updateData, db) => {
+  const todo = await repoOperations.updateTodo(id, updateData, db);
+  if (todo === 'Todo not found') throw new NonExistentError('Todo not found');
+  return todo;
+};
+
+const deleteTodo = async (id, db) => {
+  const message = await repoOperations.deleteTodo(id, db);
+  if (message !== 'Success') throw new NonExistentError('Todo not found');
+  return message;
+};
+
 const deleteAllTodo = async () => {
   const message = await fileOps.writeFile(TODO_FILE_PATH, '');
   return message;
 };
 
-const updateTodo = async (id, updateData) => {
-  const allTodo = await getAllTodo();
-  const requiredTodo = allTodo.filter((todo) => todo.id === id);
-  if (requiredTodo.length === 0) {
-    throw new NonExistentError('Todo not found');
-  }
-  const updatedTodoList = allTodo.map((todo) => {
-    const todoCopy = { ...todo };
-    if (todoCopy.id === id) {
-      todoCopy.description = updateData.description;
-      todoCopy.status = updateData.status;
-    }
-    return todoCopy;
-  });
-  await fileOps.writeFile(TODO_FILE_PATH, ''); // empty the file first
-  // eslint-disable-next-line arrow-body-style
-  const writeAllTodoPromiseArr = updatedTodoList.map((todo) => {
-    // console.log(todo);
-    return createTodo(todo);
-  });
-  await Promise.all(writeAllTodoPromiseArr);
-  const updatedTodo = {
-    id,
-    ...updateData,
-  };
-  return updatedTodo;
-};
-
-const deleteTodo = async (id) => {
-  const allTodo = await getAllTodo();
-  const todoToBeDeleted = allTodo.filter((todo) => todo.id === id);
-  if (todoToBeDeleted.length === 0) {
-    throw new NonExistentError('Todo not found');
-  }
-  const updatedTodoList = allTodo.filter((todo) => todo.id !== id);
-  await fileOps.writeFile(TODO_FILE_PATH, ''); // empty the file first
-  const writeAllTodoPromiseArr = updatedTodoList
-    .map((todo) => createTodo(todo));
-  await Promise.all(writeAllTodoPromiseArr);
-  return 'Success';
-};
 const deleteStatusTodo = async (status) => {
   const allTodo = await getAllTodo();
   if (allTodo.length === 0) {

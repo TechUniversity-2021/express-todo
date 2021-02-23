@@ -14,7 +14,11 @@ describe('get(/todo) Handler', () => {
   const mockResponseObject = {
     status: jest.fn(() => ({ send: mockSend })),
   };
-  const mockRequestObject = null;
+  const mockRequestObject = {
+    app: {
+      locals: 'db',
+    },
+  };
   const spyOnGetAllTodo = jest.spyOn(todoServices, 'getAllTodo');
   const MOCK_TODO_OBJECT = [
     {
@@ -28,7 +32,6 @@ describe('get(/todo) Handler', () => {
       status: 'incomplete',
     },
   ];
-  const MOCK_ERROR_FILE_OPS = new FileOperationError('Error accessing file');
   it('should set response status code to 200 on successfull read of todos', async () => {
     spyOnGetAllTodo.mockResolvedValue(MOCK_TODO_OBJECT);
     await getAllTodoHandler(mockRequestObject, mockResponseObject);
@@ -39,20 +42,15 @@ describe('get(/todo) Handler', () => {
     await getAllTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_TODO_OBJECT);
   });
-  it('should set response status code to 500 incase of error in file read', async () => {
-    spyOnGetAllTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
+  it('should set status code to 500 if error in accessing db', async () => {
+    spyOnGetAllTodo.mockRejectedValue(new Error('Error in accessing data'));
     await getAllTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(500);
-  });
-  it('should return error message in case of failure to read todos', async () => {
-    spyOnGetAllTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
-    await getAllTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_FILE_OPS.message);
   });
 });
 
 describe('post(/todo) Handler', () => {
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
   const mockSend = jest.fn();
@@ -61,32 +59,30 @@ describe('post(/todo) Handler', () => {
   };
   const mockRequestObject = {
     body: {
+      description: 'Task 1',
+      status: 'complete',
+    },
+    app: {
+      locals: 'db',
+    },
+  };
+  const MOCK_EXPECT_TODO = [
+    {
       id: '1',
       description: 'Task 1',
       status: 'complete',
     },
-  };
-  const MOCK_ERROR_FILE_OPS = new FileOperationError('Error accessing file');
+  ];
   const spyOnCreateTodo = jest.spyOn(todoServices, 'createTodo');
   it('should set response status code to 201 on successfull append of todo', async () => {
-    spyOnCreateTodo.mockResolvedValue(mockRequestObject.body);
+    spyOnCreateTodo.mockResolvedValue(MOCK_EXPECT_TODO);
     await postTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(201);
   });
-  it('should return the message on successfull append', async () => {
-    spyOnCreateTodo.mockResolvedValue(mockRequestObject.body);
+  it('should return the created todo on successfull append', async () => {
+    spyOnCreateTodo.mockResolvedValue(MOCK_EXPECT_TODO);
     await postTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(mockRequestObject.body);
-  });
-  it('should set response status code to 500 incase of error in accessing files', async () => {
-    spyOnCreateTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
-    await postTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
-  });
-  it('should return error message in case of failure to append todo', async () => {
-    spyOnCreateTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
-    await postTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_FILE_OPS.message);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_EXPECT_TODO[0]);
   });
 });
 
@@ -102,32 +98,27 @@ describe('get(/todo/id) Handler', () => {
     params: {
 
     },
+    app: {
+      locals: 'db',
+    },
   };
-  const MOCK_ERROR_FILE_OPS = new FileOperationError('Error accessing file');
-  const MOCK_ERROR_NON_EXISTENT = new NonExistentError('Todo not found');
   const spyOnGetTodo = jest.spyOn(todoServices, 'getTodo');
   it('should set response status code to 200 and return todo object on successfull fetch of todo', async () => {
-    const MOCK_TODO_OBJECT = {
+    const MOCK_TODO_OBJECT = [{
       id: '1',
       description: 'Task 1',
       status: 'incomplete',
-    };
+    }];
     spyOnGetTodo.mockResolvedValue(MOCK_TODO_OBJECT);
     await getTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(200);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_TODO_OBJECT);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_TODO_OBJECT[0]);
   });
-  it('should return todo not found error message and set status code to 404 if todo not found', async () => {
-    spyOnGetTodo.mockRejectedValue(MOCK_ERROR_NON_EXISTENT);
+  it('should return todo not found message and set status code to 404 if todo not found', async () => {
+    spyOnGetTodo.mockResolvedValue([]);
     await getTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(404);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_NON_EXISTENT.message);
-  });
-  it('should return error accessing file message and set response status code to 500 incase of error in file operations', async () => {
-    spyOnGetTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
-    await getTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_FILE_OPS.message);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith('Todo not found');
   });
 });
 
@@ -148,32 +139,33 @@ describe('put(/todo/id) Handler', () => {
       description: 'Update Task 1',
       status: 'complete',
     },
+    app: {
+      locals: 'db',
+    },
   };
-  const MOCK_ERROR_FILE_OPS = new FileOperationError('Error accessing file');
+  const MOCK_EXPECT_TODO = {
+    id: '1',
+    description: 'Update Task 1',
+    status: 'complete',
+  };
   const MOCK_ERROR_NON_EXISTENT = new NonExistentError('Todo not found');
   const spyOnUpdateTodo = jest.spyOn(todoServices, 'updateTodo');
   it('should set response status code to 200 and return updated todo on successful updation', async () => {
-    const MOCK_RESOLVED_VALUE = {
+    const MOCK_RESOLVED_VALUE = [{
       id: '1',
       description: 'Update Task 1',
       status: 'complete',
-    };
+    }];
     spyOnUpdateTodo.mockResolvedValue(MOCK_RESOLVED_VALUE);
     await updateTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(200);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_RESOLVED_VALUE);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_EXPECT_TODO);
   });
   it('should return todo not found error and set status code to 404 if todo not found', async () => {
     spyOnUpdateTodo.mockRejectedValue(MOCK_ERROR_NON_EXISTENT);
     await updateTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(404);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_NON_EXISTENT.message);
-  });
-  it('should return error aceessing file and set response status code to 500 incase of error in file operations', async () => {
-    spyOnUpdateTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
-    await updateTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_FILE_OPS.message);
   });
 });
 
@@ -185,21 +177,22 @@ describe('delete(/todo/:id) Handler', () => {
   const mockResponseObject = {
     status: jest.fn(() => ({ send: mockSend })),
   };
+  const MOCK_TODO_ID = '1';
   const mockRequestObject = {
     params: {
-
+      id: MOCK_TODO_ID,
     },
-
+    app: {
+      locals: 'db',
+    },
   };
-  const MOCK_ERROR_FILE_OPS = new FileOperationError('Error accessing file');
   const MOCK_ERROR_NON_EXISTENT = new NonExistentError('Todo not found');
   const spyOnDeleteTodo = jest.spyOn(todoServices, 'deleteTodo');
-  it('should set response status code to 200 and return success message on successful deletion', async () => {
-    const EXPECTED_VALUE = 'Success';
+  it('should set response status code to 200 and return success message on successful updation', async () => {
     spyOnDeleteTodo.mockResolvedValue('Success');
     await deleteTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(200);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(EXPECTED_VALUE);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith('Success');
   });
   it('should return todo not found error and set status code to 404 if todo not found', async () => {
     spyOnDeleteTodo.mockRejectedValue(MOCK_ERROR_NON_EXISTENT);
@@ -207,15 +200,9 @@ describe('delete(/todo/:id) Handler', () => {
     expect(mockResponseObject.status).toHaveBeenCalledWith(404);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_NON_EXISTENT.message);
   });
-  it('should return error aceessing file and set response status code to 500 incase of error in file operations', async () => {
-    spyOnDeleteTodo.mockRejectedValue(MOCK_ERROR_FILE_OPS);
-    await deleteTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status).toHaveBeenCalledWith(500);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_ERROR_FILE_OPS.message);
-  });
 });
 
-describe('delete(/todo/all) Handler', () => {
+xdescribe('delete(/todo/all) Handler', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
@@ -241,7 +228,7 @@ describe('delete(/todo/all) Handler', () => {
   });
 });
 
-describe('delete(/todo) Handler', () => {
+xdescribe('delete(/todo) Handler', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
