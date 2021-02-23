@@ -8,7 +8,7 @@ const getTodos = async (req, res) => {
 const getTodo = async (req, res) => {
   const { id } = req.params;
   const todo = await todoService.getTodo(req.app.locals.db, id);
-  if (todo.length === 0) return res.status(404).send(todo);
+  if (todo.length === 0) return res.status(404).send('ID not found');
   return res.status(200).send(todo);
 };
 
@@ -19,11 +19,11 @@ const createTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
   const { id } = req.params;
-  const ack = await todoService.updateTodo(req.app.locals.db, id, req.body);
-  if (ack.length === 0) {
+  const updatedTodo = await todoService.updateTodo(req.app.locals.db, id, req.body);
+  if (updatedTodo.length === 0) {
     return res.status(404).send('ID not found');
   }
-  return res.status(200).send(ack);
+  return res.status(200).send(updatedTodo);
 };
 
 const deleteTodo = async (req, res) => {
