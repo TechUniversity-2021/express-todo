@@ -1,24 +1,12 @@
 /* eslint-disable no-param-reassign */
 const { v4: uuidv4 } = require('uuid');
 const fileOps = require('../utilities/fsFunctions.utilities');
+const repoOperations = require('../repository/todo.repository');
 const { TODO_FILE_PATH } = require('../constants/configure');
 const NonExistentError = require('../errors/nonExistent.errors');
 
-const getAllTodo = async () => {
-  const rawFileData = await fileOps.readFile(TODO_FILE_PATH);
-  if (rawFileData.length === 0) {
-    return [];
-  }
-  const todoRawList = rawFileData.split('\n');
-  const todoList = todoRawList.filter((todo) => todo !== '').map((todo) => {
-    const elements = todo.split('|');
-    const todoObject = {
-      id: elements[0],
-      description: elements[1],
-      status: elements[2],
-    };
-    return todoObject;
-  });
+const getAllTodo = async (db) => {
+  const todoList = await repoOperations.getAllTodo(db);
   return todoList;
 };
 

@@ -3,7 +3,8 @@ const NonExistentError = require('../errors/nonExistent.errors');
 
 const getAllTodoHandler = async (req, res) => {
   try {
-    const allTodos = await todoServices.getAllTodo();
+    const { db } = req.app.locals;
+    const allTodos = await todoServices.getAllTodo(db);
     res.status(200).send(allTodos);
   } catch (error) {
     res.status(500).send(error.message);
