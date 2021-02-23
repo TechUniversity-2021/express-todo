@@ -17,6 +17,14 @@ const getAllTodos = async (db) => {
     throw error;
   }
 };
+const getTodoByID = async (db, id) => {
+  try {
+    const todo = await todoRepository.getTodoByID(db, id);
+    return todo;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const createTodo = async (title, status) => {
   const id = uuidv4();
@@ -68,5 +76,5 @@ const deleteTodoByID = async (id) => {
   }
 };
 module.exports = {
-  getAllTodos, createTodo, deleteTodoByID, updateTodo,
+  getAllTodos, createTodo, deleteTodoByID, updateTodo, getTodoByID,
 };

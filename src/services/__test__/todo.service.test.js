@@ -81,6 +81,32 @@ describe('getAllTodos Service', () => {
   });
 });
 
+describe('getTodoByID Service', () => {
+  it('should return task object', async () => {
+    const mockResponse = [
+      {
+        id: 1,
+        title: 'drink water',
+        status: 'active',
+        craeted_at: '2021-02-22T10:37:11.911Z',
+        updated_at: null,
+      },
+    ];
+    jest.spyOn(todoRepository, 'getTodoByID').mockResolvedValue(mockResponse);
+    const receivedTasks = await service.getTodoByID();
+    expect(receivedTasks).toEqual(mockResponse);
+  });
+
+  it('should return error object ', async () => {
+    jest.spyOn(todoRepository, 'getTodoByID').mockImplementation(() => { throw new Error('error'); });
+    try {
+      const received = await service.getTodoByID();
+    } catch (error) {
+      expect(error).toEqual(Error('error'));
+    }
+  });
+});
+
 // describe('createTodo Service', () => {
 //   it('should return status and  message', async () => {
 //     const mockTitle = 'cook';
