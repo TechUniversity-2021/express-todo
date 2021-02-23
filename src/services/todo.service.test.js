@@ -65,19 +65,6 @@ describe('Update todo service', () => {
   });
 });
 
-describe('Update todo service', () => {
-  const mockResponse = [
-    {
-      id: 1,
-    },
-  ];
-  it('should return Updated id when update todo is successful', async () => {
-    jest.spyOn(todoRepository, 'updateTodo').mockResolvedValue(mockResponse);
-    const response = await todoService.updateTodo('db', '1', { title: 'lala', status: 'active' });
-    expect(response).toStrictEqual(mockResponse);
-  });
-});
-
 describe('Delete todo service', () => {
   const mockResponse = [
     {
