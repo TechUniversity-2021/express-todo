@@ -53,6 +53,23 @@ describe('Todo handler', () => {
     expect(mockResponse.send).toHaveBeenCalledWith(mockValue);
     expect(spyGetTodo).toHaveBeenCalledWith('abc', '3');
   });
+
+  it('should set a status code 400 when invalid id is given', async () => {
+    const mockValue = [];
+    const spyGetTodo = jest.spyOn(todoService, 'getTodoWithId').mockResolvedValue(mockValue);
+    const mockResponse = {
+      status: jest.fn(() => mockResponse),
+      send: jest.fn(),
+    };
+    const mockRequest = {
+      app: { locals: { db: 'abc' } },
+      params: { id: '3' },
+    };
+    await todoHandler.getTodoById(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.send).toHaveBeenCalledWith(mockValue);
+    expect(spyGetTodo).toHaveBeenCalledWith('abc', '3');
+  });
   // it('should set a status code 200 along with todo of respective id', async () => {
   //   const getTodoWithIdSpy = jest.spyOn(todoService, 'getTodoWithId').mockResolvedValue([
   //     { id: '3', todo: 'Buy 1kg rice', status: 'Active' },
