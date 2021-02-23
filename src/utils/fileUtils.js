@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { resolve } = require('path');
+
 
 function getFileData(fileName) {
   return new Promise((resolve, reject) => {
@@ -13,6 +13,7 @@ function getFileData(fileName) {
 }
 
 function appendFile(fileName, data) {
+
   return new Promise((resolve, reject) => {
     fs.appendFile(fileName, data, (err) => {
       if (err) reject(err)
@@ -20,6 +21,16 @@ function appendFile(fileName, data) {
     })
   })
 
+}
+
+function  writeFile(fileName,data) {
+  return new Promise((resolve,reject)=>{
+    fs.writeFile(fileName,data,(err)=>{
+      if (err) reject(err)
+      resolve("delete successfully")
+    })
+  })
+  
 }
 
 function updateFile(fileName, data) {
@@ -32,4 +43,4 @@ function updateFile(fileName, data) {
 }
 //getFileData('resources/todos.txt').then(console.log, console.log);
 
-module.exports = { getFileData, appendFile ,updateFile}
+module.exports = { getFileData, appendFile, updateFile,writeFile }
