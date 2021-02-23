@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {
   readFile, readDir, appendFile, writeFile,
-} = require('../fsFunctions.utilities');
+} = require('../fsFunctions.utils');
 const FileOperationError = require('../../errors/fileOperation.errors');
 
 describe('Promisified Read File function', () => {

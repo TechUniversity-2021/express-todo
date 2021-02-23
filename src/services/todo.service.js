@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-const repoOperations = require('../repository/todo.repository');
+const repoOperations = require('../repo/todo.repo');
 const NonExistentError = require('../errors/nonExistent.errors');
 
 const getAllTodo = async (db) => {

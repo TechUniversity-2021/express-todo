@@ -2,7 +2,7 @@ const express = require('express');
 const env = require('dotenv');
 const { Pool } = require('pg');
 const { dbConfig } = require('./config/db.config');
-const { DEFAULT_PORT } = require('./constants/configure');
+const { DEFAULT_PORT } = require('./config/constants.config');
 const { todoRouter, healthRouter } = require('./routers');
 
 const app = express();
