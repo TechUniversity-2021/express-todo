@@ -5,7 +5,12 @@
 4|make breakfast|Completed
 5|have breakfast|Completed
 
+<<<<<<< Updated upstream
 =======
 1|make tdd|completed
 2|get to work|not completed
 >>>>>>> ec137be... feat: add getTodoById function
+=======
+7|make dinner|Completed
+8|make dinner|Completed
+>>>>>>> Stashed changes

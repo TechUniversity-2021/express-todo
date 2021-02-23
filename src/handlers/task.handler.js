@@ -17,14 +17,14 @@ const getTodoByIdHandler = async (req,res) => {
 <<<<<<< HEAD
   const id=req.params.id;
 
-  // const getTodoByIdSchema = Joi.object().keys({
-  //   id: Joi.number().required(),
+  const getTodoByIdSchema = Joi.object().keys({
+    id: Joi.number().required(),
 
-  // });
-  // const { value, error } = getTodoByIdSchema.validate(id);
-  // if (error) {
-  //   return res.status(400).send('Bad Requests');
-  // }
+  });
+  const { value, error } = getTodoByIdSchema.validate(req.params);
+  if (error) {
+    return res.status(400).send('Bad Requests');
+  }
   todos.forEach((todo) => {
     if(id === todo.id)
 =======
@@ -63,7 +63,7 @@ const postTodoHandler = async (req, res) => {
       }
     const arrayLen =await getTodosService()
     postTodoService(body, arrayLen.length);
-    res.status(200).send('Todo inserted');
+    res.status(201).send('Todo inserted');
 
 
 }
@@ -82,7 +82,7 @@ status: Joi.any().valid('Completed', 'Not completed').required(),
     id: Joi.number().required(),
 
   });
-  const { data, err } = putTodoSchemaTwo.validate(givenId);
+  const { data, err } = putTodoSchemaTwo.validate(req.params);
   if (err) {
     return res.status(400).send('Bad Params');
   }
