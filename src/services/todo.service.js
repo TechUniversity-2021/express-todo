@@ -2,9 +2,20 @@
 const uuid = require('uuid');
 const fileUtils = require('../utils/fileUtils');
 
-const getTodo = async () => {
+// is it ok to pass request as argument in services function?
+const getTodo = async (req) => {
   const fileData = await fileUtils.readAfile('./resources/todos.txt');
   const entry = fileData.split('\n');
+  if (Object.keys(req.query).length === 0) {
+    return entry.map((item) => {
+      const todoData = item.split('|');
+      return {
+        id: todoData[0],
+        todo: todoData[1],
+        status: todoData[2],
+      };
+    });
+  }
   return entry.map((item) => {
     const todoData = item.split('|');
     return {
@@ -12,18 +23,18 @@ const getTodo = async () => {
       todo: todoData[1],
       status: todoData[2],
     };
-  });
+  }).filter((item) => item.todo === req.query.search);
 };
 
-const getTodoWithId = async (id) => {
-  const getdata = await getTodo();
-  return getdata.filter((item) => item.id === id);
+const getTodoWithId = async (req) => {
+  const getdata = await getTodo(req);
+  return getdata.filter((item) => item.id === req.params.id);
 };
 
-const getTodoWithQuery = async (todo) => {
-  const getdata = await getTodo();
-  return getdata.filter((item) => item.todo === todo);
-};
+// const getTodoWithQuery = async (todo) => {
+//   const getdata = await getTodo();
+//   return getdata.filter((item) => item.todo === todo);
+// };
 
 const postTodo = async (data) => {
   const title = data.todo;
@@ -84,7 +95,7 @@ module.exports = {
   postTodo,
   updateTodo,
   getTodoWithId,
-  getTodoWithQuery,
+  // getTodoWithQuery,
   deleteTodoWithId,
   deleteTodoWithStatus,
   deleteAllTodos,

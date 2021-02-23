@@ -1,20 +1,30 @@
 const todoService = require('../services/todo.service');
 
 const getTodos = async (req, res) => {
-  const content = await todoService.getTodo();
-  console.log(req);
+  const content = await todoService.getTodo(req);
+  // console.log(req);
   res.status(200).send(content);
 };
+
+// const getTodos = async (req, res) => {
+//   if (req.query.search) {
+//     const content = await todoService.getTodoWithQuery(req.query.search);
+//     res.status(200).send(content);
+//   } else {
+//     const content = await todoService.getTodo();
+//     res.status(200).send(content);
+//   }
+// };
 
 const getTodoById = async (req, res) => {
-  const content = await todoService.getTodoWithId(req.params.id);
+  const content = await todoService.getTodoWithId(req);
   res.status(200).send(content);
 };
 
-const getTodoByQuery = async (req, res) => {
-  const content = await todoService.getTodoWithQuery(req.query.search);
-  res.status(200).send(content);
-};
+// const getTodoByQuery = async (req, res) => {
+//   const content = await todoService.getTodoWithQuery(req.query.search);
+//   res.status(200).send(content);
+// };
 
 const createTodo = async (req, res) => {
   await todoService.postTodo(req.body);
@@ -49,7 +59,7 @@ module.exports = {
   createTodo,
   updateTodo,
   getTodoById,
-  getTodoByQuery,
+  // getTodoByQuery,
   deleteTodoById,
   deleteTodos,
   deleteTodoByStatus,

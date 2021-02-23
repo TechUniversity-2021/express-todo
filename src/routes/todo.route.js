@@ -4,22 +4,21 @@ const {
   createTodo,
   updateTodo,
   getTodoById,
-  getTodoByQuery,
+  // getTodoByQuery,
   deleteTodoById,
   deleteTodos,
-  deleteTodoByStatus,
+  // deleteTodoByStatus,
 } = require('../handlers/todo.handler');
 
-// const { todoValidator } = require('../validation/todo.validation');
+const { postTodoValidator, updateTodoValidator } = require('../validation/todo.validator');
 
 const todoRouter = express.Router();
 
-todoRouter.get('/', getTodoByQuery);
 todoRouter.get('/', getTodos);
 todoRouter.get('/:id', getTodoById);
-// todoRouter.post('/', todoValidator, createTodo);
-todoRouter.post('/', createTodo);
-todoRouter.put('/:id', updateTodo);
+// todoRouter.get('/', getTodoByQuery);
+todoRouter.post('/', postTodoValidator, createTodo);
+todoRouter.put('/:id', updateTodoValidator, updateTodo);
 todoRouter.delete('/:id', deleteTodoById);
 // todoRouter.delete('/:status', deleteTodoByStatus);
 todoRouter.delete('/', deleteTodos);
