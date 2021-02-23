@@ -12,12 +12,13 @@ const getTodoByIdService = async (db, id) => {
 };
 
 const postTodoService = async (body, db) => {
-  await todoRepository.postTodo(body, db);
-//  return todo;
+ const todo = await todoRepository.postTodo(body, db);
+  return todo;
 };
 
 const putTodoService = async (body, givenId, db) => {
-  await todoRepository.updateTodo(body, givenId, db);
+ const todo= await todoRepository.updateTodo(body, givenId, db);
+ returrn todo;
 };
 
 const deleteTodoService = async (givenId, db) => {

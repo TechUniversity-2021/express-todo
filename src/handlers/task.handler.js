@@ -38,8 +38,8 @@ const postTodoHandler = async (req, res) => {
     return res.status(400).send('Bad Requests');
   }
 
-  await todoService.postTodoService(body, db);
-  res.status(201).send('inserted');
+  const todo =  await todoService.postTodoService(body, db);
+  res.status(201).send(todo);
 };
 
 const putTodoHandler = async (req, res) => {
@@ -64,7 +64,7 @@ const putTodoHandler = async (req, res) => {
   if (error) {
     return res.status(400).send('Bad Requests');
   }
-  await todoService.putTodoService(body, givenId, db);
+  const todo = await todoService.putTodoService(body, givenId, db);
 
   res.status(200).send('todo updated');
 };
