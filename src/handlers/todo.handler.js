@@ -7,7 +7,7 @@ const getAllTodoHandler = async (req, res) => {
     const allTodos = await todoServices.getAllTodo(db);
     res.status(200).send(allTodos);
   } catch (error) {
-    res.status(500);
+    res.status(500).send();
   }
 };
 const postTodoHandler = async (req, res) => {
@@ -17,7 +17,7 @@ const postTodoHandler = async (req, res) => {
     const createdTodo = await todoServices.createTodo(body, db);
     res.status(201).send(createdTodo[0]);
   } catch (error) {
-    res.status(500);
+    res.status(500).send();
   }
 };
 const getTodoHandler = async (req, res) => {
@@ -31,7 +31,8 @@ const getTodoHandler = async (req, res) => {
     }
     return res.status(200).send(todo[0]);
   } catch (error) {
-    return res.status(500);
+    console.log('Here');
+    return res.status(500).send();
   }
 };
 
@@ -44,7 +45,7 @@ const updateTodoHandler = async (req, res) => {
     res.status(200).send(updateTodo[0]);
   } catch (error) {
     if (error instanceof NonExistentError) res.status(404).send(error.message);
-    else res.status(500);
+    else res.status(500).send();
   }
 };
 
@@ -57,7 +58,7 @@ const deleteTodoHandler = async (req, res) => {
     res.status(200).send('Success');
   } catch (error) {
     if (error instanceof NonExistentError) res.status(404).send(error.message);
-    else res.status(500);
+    else res.status(500).send();
   }
 };
 const deleteAllTodoHandler = async (req, res) => {
@@ -66,7 +67,7 @@ const deleteAllTodoHandler = async (req, res) => {
     const message = await todoServices.deleteAllTodo(db);
     res.status(200).send(message);
   } catch (error) {
-    res.status(500);
+    res.status(500).send();
   }
 };
 
@@ -78,7 +79,7 @@ const deleteStatusTodoHandler = async (req, res) => {
     res.status(200).send(message);
   } catch (error) {
     if (error instanceof NonExistentError) res.status(404).send(error.message);
-    else res.status(500);
+    else res.status(500).send();
   }
 };
 module.exports = {
