@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('', getAllTodosHandler);
 router.get('/:id', getTodoByIDHandler);
 router.post('', createTodoHandler);
-router.put('', updateTodoHandler);
-router.delete('', deleteTodoHandler);
+router.put('/:id', updateTodoHandler);
+router.delete('/:id', deleteTodoHandler);
 
 module.exports = { router };
