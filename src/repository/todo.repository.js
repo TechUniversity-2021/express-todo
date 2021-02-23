@@ -8,4 +8,9 @@ const getTodo = async (db, id) => {
   return todos.rows;
 };
 
-module.exports = { getTodos, getTodo };
+const createTodo = async (db, todo, status) => {
+  const id = await db.query(`INSERT INTO todos(title,status) VALUES('${todo}', '${status}') RETURNING id`);
+  return id.rows;
+};
+
+module.exports = { getTodos, getTodo, createTodo };

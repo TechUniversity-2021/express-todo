@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const { v4: uuid } = require('uuid');
 const fileUtils = require('../utils/file.utils');
 const todoRepository = require('../repository/todo.repository');
 
@@ -13,9 +12,9 @@ const getTodo = async (db, id) => {
   return todo;
 };
 
-const createTodo = async (content) => {
-  const newTodo = `\n${uuid()}|${content.todo}|Active`;
-  const ack = await fileUtils.appendFile('resources/todos.txt', newTodo);
+const createTodo = async (db, content) => {
+  console.log(content.todo, content.status);
+  const ack = await todoRepository.createTodo(db, content.todo, content.status);
   return ack;
 };
 
