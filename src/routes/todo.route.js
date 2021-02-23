@@ -1,7 +1,7 @@
 const express = require('express');
 
 const {
-  getToDoHandler, postToDoHandler, getByIdToDoHandler, putToDoHandler, deleteByIdToDoHandler, deleteByStatusToDoHandler,
+  getToDoHandler, postToDoHandler, getByIdToDoHandler, putToDoHandler, deleteByIdToDoHandler,
 } = require('../handlers/todo.handler');
 // const{ deleteByIdToDoHandler}= require('../handlers/todo.handler');
 

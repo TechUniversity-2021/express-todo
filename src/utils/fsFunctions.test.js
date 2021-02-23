@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { promisifyReadFile } = require('./fsFunctions');
 
-describe('PromisifyReadFile ', () => {
+xdescribe('PromisifyReadFile ', () => {
   it('should resolve', () => {
     jest
       .spyOn(fs, 'readFile')
