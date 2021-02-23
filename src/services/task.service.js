@@ -1,35 +1,35 @@
 const fileOps = require('../utils/task.util')
+const todoRepository = require('../repository/todo.repository')
 
-const getTodosService = async () =>
+const getTodosService = async (db) =>
 {
-  const todo = await fileOps.readData("./src/resources/file.txt")
-  const todos = fileOps.convertTodo(todo);
+  const todos = await todoRepository.getTodos(db);
 
   return todos;
+
+}
+const getTodoByIdService = async (db, id) =>
+{
+const todos= await todoRepository.getTodoById(db, id);
+return todos;
+
 }
 
-const postTodoService = async (body,id) => {
-  let convertedTodo=fileOps.convertTodoByUser(body,id);
+const postTodoService = async (body,db) => {
+await todoRepository.postTodo(body,db);
+//  return todo; 
+}
+
+const putTodoService = async (body, givenId, db) => {
+ 
+   await todoRepository.updateTodo( body, givenId, db);
+ 
+}
+
+const deleteTodoService = async ( givenId, db) => {
+ 
+  await todoRepository.deleteTodo(givenId, db);
   
-await  fileOps.writeData('./src/resources/file.txt', convertedTodo);
-
-
-
 }
 
-const putTodoService = async (body, givenId) => {
-  const todos = await fileOps.readData('./src/resources/file.txt');
-  const convertedTodos = fileOps.convertTodo(todos);
-  const newTodo = await fileOps.changeData(convertedTodos, body, givenId);
-  
-  return newTodo;
-}
-
-const deleteTodoService = async ( givenId) => {
-  const todos = await fileOps.readData('./src/resources/file.txt');
-  const convertedTodos = fileOps.convertTodo(todos);
-  const newTodo = await fileOps.changeDeleteData(convertedTodos, givenId);
-  
-}
-
-module.exports = { getTodosService , postTodoService, putTodoService, deleteTodoService};
+module.exports = { getTodosService ,getTodoByIdService, postTodoService,putTodoService, deleteTodoService};
