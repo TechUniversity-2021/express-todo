@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
+                <span class="strong">93.18% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>45/48</span>
+                <span class='fraction'>41/44</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
+                <span class="strong">93.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>45/48</span>
+                <span class='fraction'>41/44</span>
             </div>
         
             
@@ -145,20 +145,15 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,7 +189,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,7 +214,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,14 +237,12 @@
 const todoService = require('../services/task.service');
 &nbsp;
 const getTodosHandler = async (req, res) =&gt; {
-  const { db } = req.app.locals;
   // const todoList = await getTodosService();
-  const todos = await todoService.getTodosService(db);
+  const todos = await todoService.getTodosService();
   res.status(200).send(todos);
 };
 &nbsp;
 const getTodoByIdHandler = async (req, res) =&gt; {
-  const { db } = req.app.locals;
   const { id } = req.params;
 &nbsp;
   const getTodoByIdSchema = Joi.object().keys({
@@ -261,7 +253,7 @@ const getTodoByIdHandler = async (req, res) =&gt; {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (error) {
 <span class="cstat-no" title="statement not covered" >    return res.status(400).send('Bad Requests');</span>
   }
-  const todos = await todoService.getTodoByIdService(db, id);
+  const todos = await todoService.getTodoByIdService(id);
 &nbsp;
   res.status(200).send(todos);
 };
@@ -279,13 +271,13 @@ const postTodoHandler = async (req, res) =&gt; {
     return res.status(400).send('Bad Requests');
   }
 &nbsp;
-  const todo =  await todoService.postTodoService(body, db);
+  const todo = await todoService.postTodoService(body);
   res.status(201).send(todo);
 };
 &nbsp;
 const putTodoHandler = async (req, res) =&gt; {
   const { body } = req;
-  const { db } = req.app.locals;
+&nbsp;
   const givenId = req.params.id;
   const putTodoSchemaOne = Joi.object().keys({
 &nbsp;
@@ -305,13 +297,12 @@ const putTodoHandler = async (req, res) =&gt; {
   if (error) {
     return res.status(400).send('Bad Requests');
   }
-  const todo = await todoService.putTodoService(body, givenId, db);
+  const todo = await todoService.putTodoService(body, givenId);
 &nbsp;
-  res.status(200).send('todo updated');
+  res.status(200).send(todo);
 };
 &nbsp;
 const deleteTodoHandler = async (req, res) =&gt; {
-  const { db } = req.app.locals;
   const { id } = req.params;
 &nbsp;
   const deleteTodoSchema = Joi.object().keys({
@@ -323,7 +314,7 @@ const deleteTodoHandler = async (req, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >    return res.status(400).send('Bad Params');</span>
   }
 &nbsp;
-  await todoService.deleteTodoService(id, db);
+  const todo = await todoService.deleteTodoService(id);
   res.status(200).send('todo deleted');
 };
 &nbsp;
@@ -337,7 +328,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Feb 23 2021 11:46:59 GMT+0530 (India Standard Time)
+                at Wed Feb 24 2021 15:15:24 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../prettify.js"></script>
