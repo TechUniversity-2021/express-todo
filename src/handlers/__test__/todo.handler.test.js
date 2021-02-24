@@ -14,14 +14,7 @@ describe('getAllTodos Handler', () => {
       status: jest.fn(() => ({ send: mockSend })),
     };
   });
-  it('should go to getAllTodos service return response with todo data', async () => {
-    const mockRequestObject = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
-    };
+  it('should  eturn response with todo data', async () => {
     const mockReturnObject = [{
       id: 1,
       title: 'coding',
@@ -35,24 +28,17 @@ describe('getAllTodos Handler', () => {
 
     jest.spyOn(service, 'getAllTodos').mockResolvedValue(mockReturnObject);
 
-    await getAllTodosHandler(mockRequestObject, mockResponse);
+    await getAllTodosHandler(null, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
   });
 
-  it('should go to getAllTodos service and enter catch block', async () => {
-    const mockRequestObject = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
-    };
+  it('should go to catch block', async () => {
     const getAllTodosServiceSpy = jest.spyOn(service, 'getAllTodos');
     getAllTodosServiceSpy.mockImplementation(() => { throw new Error('error'); });
 
-    await getAllTodosHandler(mockRequestObject, mockResponse);
+    await getAllTodosHandler(null, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
