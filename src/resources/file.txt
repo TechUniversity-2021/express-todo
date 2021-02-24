@@ -1,5 +1,6 @@
-2|finish homework|complete
-3|pay bills|incomplete
 4|break|incomplete
 5|go to school|incomplete
 6|go to bank|complete
+7|go shopping|incomplete
+8|undefined|incomplete
+9|undefined|incomplete

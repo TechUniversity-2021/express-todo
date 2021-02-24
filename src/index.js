@@ -21,5 +21,6 @@ app.locals.db = pool; // app contains pool object inside locals
 
 app.use('/todo', todoRouter);
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server listening at http://localhost:${port}`);
 });

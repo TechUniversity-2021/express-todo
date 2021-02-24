@@ -1,11 +1,17 @@
 const queryGetToDos = async (db) => {
+  // const todos = await db.query('SELECT * FROM todos');
   const todos = await db.query('SELECT * FROM todos');
   return todos.rows;
 };
 
 const queryGetTodoById = async (db, id) => {
-  const todo = await db.query(`SELECT * FROM todos WHERE id=${id}`);
-  return todo.rows;
+  try {
+    const todo = await db.query('SELECT * FROM todos WHERE id= $1', [id]);
+    // const todo = await db.query(`SELECT * FROM todos WHERE id=${id}`);
+    return todo.rows;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const queryCreateToDo = async (db, body) => {
