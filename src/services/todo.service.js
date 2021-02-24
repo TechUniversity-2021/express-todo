@@ -14,16 +14,17 @@ const getAllTodos = async () => {
 
 const getTodoByID = async (id) => {
   try {
-    const todo = await Todo.findAll({ where: { id } });
+    const todo = await Todo.findOne({ where: { id } });
     return todo;
   } catch (error) {
     throw error;
   }
 };
 
-const createTodo = async (db, title, status) => {
+const createTodo = async (title, status) => {
   try {
-    await todoRepository.insertTodo(db, title, status);
+    const todo = await Todo.create({ title, status });
+    return todo.dataValues;
   } catch (error) {
     throw error;
   }

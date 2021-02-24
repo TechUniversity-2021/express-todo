@@ -37,6 +37,7 @@ describe('getAllTodos Service', () => {
 
 describe('getTodoByID Service', () => {
   it('should return one task object', async () => {
+    const mockID = 1;
     const mockResponse = [
       {
         id: 1,
@@ -46,9 +47,11 @@ describe('getTodoByID Service', () => {
         updated_at: null,
       },
     ];
-    jest.spyOn(Todo, 'findAll').mockResolvedValue(mockResponse);
-    const receivedTasks = await service.getTodoByID();
+    const findOneSpy = jest.spyOn(Todo, 'findOne');
+    findOneSpy.mockResolvedValue(mockResponse);
+    const receivedTasks = await service.getTodoByID(mockID);
     expect(receivedTasks).toEqual(mockResponse);
+    expect(findOneSpy).toHaveBeenCalledWith({ where: { id: mockID } });
   });
 
   it('should return error object ', async () => {
@@ -63,14 +66,24 @@ describe('getTodoByID Service', () => {
 
 describe('createTodo Service', () => {
   it('should successfully execute', async () => {
-    jest.spyOn(todoRepository, 'insertTodo').mockResolvedValue();
+    const mockResponse = [
+      {
+        id: 1,
+        title: 'drink water',
+        status: 'active',
+        craeted_at: '2021-02-22T10:37:11.911Z',
+        updated_at: null,
+      },
+    ];
+
+    jest.spyOn(Todo, 'create').mockResolvedValue(mockResponse);
 
     const response = await service.createTodo();
-    expect(response).toEqual(undefined);
+    expect(response).toEqual(mockResponse);
   });
 
   it('should go to catch block', async () => {
-    jest.spyOn(todoRepository, 'insertTodo').mockImplementation(() => { throw new Error('error'); });
+    jest.spyOn(Todo, 'create').mockImplementation(() => { throw new Error('error'); });
     try {
       const response = await service.createTodo();
     } catch (error) {
