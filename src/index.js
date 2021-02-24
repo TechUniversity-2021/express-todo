@@ -6,12 +6,12 @@ const { taskRouter } = require('./routes/index.js');
 const { dbConfig } = require('./config/db.config');
 
 const app = express();
-const pool = new Pool(dbConfig);
+
 // env.config();
 const port = 8080;
 
 app.use(express.json());
-app.locals.db = pool;
+
 app.use('/task', taskRouter);
 
 app.listen(port, () => {

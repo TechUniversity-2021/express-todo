@@ -41,14 +41,3 @@ describe('Convert todo by user: ', () => {
   });
 });
 
-describe('ChangeData function should', () => {
-  xit('Should change data in file:', async () => {
-    const oldContent = 'abc';
-    const newContent = 'def';
-    const readSpy = jest.spyOn(fileOps, 'readData').mockResolvedValue('a|b|c\nd|e|f');
-
-    await fileOps.changeData([{ id: 'a' }], { id: 'b' }, 2);
-
-    expect(readSpy).toHaveBeenCalled();
-  });
-});

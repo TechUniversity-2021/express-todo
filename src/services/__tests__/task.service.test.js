@@ -1,6 +1,5 @@
-const fileUtils = require('../../utils/task.util');
+const { Todo } = require('../../models');
 const fileOps = require('../task.service');
-const fileRepo = require('../../repository/todo.repository');
 
 describe('Get todos service:', () => {
   it('should display todos ', async () => {
@@ -10,11 +9,11 @@ describe('Get todos service:', () => {
       status: 'Completed',
     }];
 
-    const getSpy = jest.spyOn(fileRepo, 'getTodos')
+    const getSpy = jest.spyOn(Todo , 'findAll')
       .mockResolvedValue(todos);
 
-    const data = await fileOps.getTodosService('db');
-    expect(getSpy).toHaveBeenCalledWith('db');
+    const data = await fileOps.getTodosService();
+
     expect(data).toEqual(todos);
   });
 });
@@ -25,11 +24,10 @@ describe('Get todo by id service:', () => {
       title: 'abc',
     }];
 
-    const spyOnTodoRepo = jest.spyOn(fileRepo, 'getTodoById').mockResolvedValue(todos);
+    const spyOnTodoRepo = jest.spyOn(Todo, 'findAll').mockResolvedValue(todos);
 
-    const todoList = await fileOps.getTodoByIdService('db', 1);
+    const todoList = await fileOps.getTodoByIdService(1);
     expect(todoList).toEqual(todos);
-    expect(spyOnTodoRepo).toHaveBeenCalledWith('db', 1);
   });
 });
 
@@ -40,25 +38,29 @@ describe('Post todo service:', () => {
       status: 'Complete',
     }];
 
-    const postSpy = jest.spyOn(fileRepo, 'postTodo').mockResolvedValue(todos);
+    const postSpy = jest.spyOn(Todo, 'create').mockResolvedValue(todos);
 
-    await fileOps.postTodoService('db', 'body');
-    expect(postSpy).toHaveBeenCalledWith('db', 'body');
+   const todo= await fileOps.postTodoService('body');
+    expect(todo).toEqual(todos);
   });
 });
 
 describe('Update todo by id service:', () => {
   it('should update todo by id', async () => {
-    const todos = [{
+    const mockResponse = [{
+      id: 1,
       title: 'abc',
       status: 'Completed',
+      createdAt: "2021-02-24T09:40:20.285Z",
+      updatedAt: "2021-02-24T09:40:34.154Z"
     }];
 
-    const putSpy = jest.spyOn(fileRepo, 'updateTodo').mockResolvedValue(todos);
+    const putSpy = jest.spyOn(Todo, 'update').mockResolvedValue(mockResponse);
 
-    await fileOps.putTodoService('body', 1, 'db');
+    const todo = await fileOps.putTodoService('body', 1);
 
-    expect(putSpy).toHaveBeenCalledWith('body', 1, 'db');
+   
+    expect(mockResponse).toEqual(todo);
   });
 });
 
@@ -69,10 +71,10 @@ describe('Delete todo by id service:', () => {
       status: 'Completed',
     }];
 
-    const putSpy = jest.spyOn(fileRepo, 'updateTodo').mockResolvedValue(todos);
+    const putSpy = jest.spyOn(Todo, 'destroy').mockResolvedValue(todos);
 
-    await fileOps.putTodoService('db', 'body', 1);
+    await fileOps.deleteTodoService( 1);
 
-    expect(putSpy).toHaveBeenCalledWith('db', 'body', 1);
+    expect(putSpy).toHaveBeenCalled();
   });
 });

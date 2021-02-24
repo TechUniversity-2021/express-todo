@@ -1,18 +1,23 @@
-const getTodos = async (db) => {
-  const todos = await db.query('SELECT * FROM todos');
+const { Todo } = require('../models');
+
+const getTodos = async () => {
+  const todos = await Todo.findAll();
   return todos.rows;
 };
-const getTodoById = async (db, id) => {
-  const todos = await db.query(`SELECT title FROM todos where id=${id}`);
+const getTodoById = async (id) => {
+  const todos = await Todo.findAll({
+    where: {
+      id: `${id}`,
+    },
+  });
   return todos.rows;
 };
 
-const postTodo = async (body, db) => {
-  const { title } = body;
-  const { status } = body;
+const postTodo = async (body) => {
+  const title  = body.title;
+  const status = body.status;
 
-  const todo = await db.query(`INSERT INTO todos(title, status) VALUES('${title}' , '${status}') RETURNING 
-  *`);
+  const todo = await Todo.create({ title: "isha", lastName: "Doe" })
   //   const todo = await db.query(`SELECT title FROM todos where title=${title}`);
   return todo.rows;
 };
