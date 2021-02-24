@@ -11,9 +11,8 @@ const getAllTodosHandler = async (req, res) => {
 
 const getTodoByIDHandler = async (req, res) => {
   try {
-    const { db } = req.app.locals;
     const { params } = req;
-    const todo = await service.getTodoByID(db, params.id);
+    const todo = await service.getTodoByID(params.id);
     res.status(200).send(todo);
   } catch (error) {
     res.status(500).send();

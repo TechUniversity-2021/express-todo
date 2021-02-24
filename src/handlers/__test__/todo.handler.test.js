@@ -56,13 +56,8 @@ describe(' getTodoByID Handler', () => {
       status: jest.fn(() => ({ send: mockSend })),
     };
   });
-  it('should go to getTodoByID service return response with todo data', async () => {
+  it('should give response with todo data', async () => {
     const mockRequestObject = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       params: {
         id: 1,
       },
@@ -71,6 +66,8 @@ describe(' getTodoByID Handler', () => {
       id: 1,
       title: 'coding',
       staus: 'active',
+      createdAt: '2021-02-24T06:59:54.027Z',
+      updatedAt: '2021-02-24T06:59:54.027Z',
     }];
 
     jest.spyOn(service, 'getTodoByID').mockResolvedValue(mockReturnObject);
@@ -81,13 +78,8 @@ describe(' getTodoByID Handler', () => {
     expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
   });
 
-  it('should go to getTodoByID service and enter catch block', async () => {
+  it('should go to catch block', async () => {
     const mockRequestObject = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       params: {
         id: 1,
       },
@@ -96,21 +88,6 @@ describe(' getTodoByID Handler', () => {
 
     await getTodoByIDHandler(mockRequestObject, mockResponse);
 
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockSend).toHaveBeenCalledWith();
-  });
-
-  it('should go to catch block due to db undefined', async () => {
-    const mockRequestObject = {
-      app: {
-        locals: {
-        },
-      },
-      params: {
-        id: 1,
-      },
-    };
-    await getTodoByIDHandler(mockRequestObject, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
