@@ -2,8 +2,8 @@ const service = require('../services/todo.service');
 
 const getAllTodosHandler = async (req, res) => {
   try {
-    const { db } = req.app.locals;
-    const todos = await service.getAllTodos(db);
+    // const { db } = req.app.locals;
+    const todos = await service.getAllTodos();
     res.status(200).send(todos);
   } catch (error) {
     res.status(500).send();
