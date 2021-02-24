@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "meghanakhuntia",
+    "password": null,
+    "database": "todos_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "meghanakhuntia",
+    "password": null,
+    "database": "todos_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "meghanakhuntia",
+    "password": null,
+    "database": "todos_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}

@@ -4,7 +4,7 @@ const getTodos = async (db) => {
 };
 
 const getTodosById = async (db, id) => {
-  const todos = await db.query(`SELECT * FROM todos WHERE id=${id};`);
+  const todos = await db.query('SELECT * FROM todos WHERE id=$1;', [id]);
   return todos.rows;
 };
 
