@@ -71,20 +71,20 @@ describe('delete todo by id', () => {
     };
 
     const mockResponse = {
-      status: jest.fn(() => mockResponse),
+      sendStatus: jest.fn(() => mockResponse),
       send: jest.fn(),
     };
 
     jest.spyOn(todosService, 'deleteById').mockResolvedValue('xyz');
     await todoHandler.deleteByIdToDoHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.sendStatus).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith('xyz');
     expect(todosService.deleteById).toHaveBeenCalledWith('abc', 1);
   });
 });
 
 describe('delete all todos', () => {
-  it('should return status 200 and delete all the todos in database', async () => {
+  it('should return sendStatus 200 and delete all the todos in database', async () => {
     const mockRequest = {
       params: {
         id: 1,
@@ -98,12 +98,12 @@ describe('delete all todos', () => {
     };
 
     const mockResponse = {
-      status: jest.fn(() => mockResponse),
+      sendStatus: jest.fn(() => mockResponse),
       send: jest.fn(),
     };
     jest.spyOn(todosService, 'deleteAll').mockResolvedValue('xyz');
     await todoHandler.deleteAllToDoHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.sendStatus).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith('xyz');
     expect(todosService.deleteAll).toHaveBeenCalledWith('abc');
   });
