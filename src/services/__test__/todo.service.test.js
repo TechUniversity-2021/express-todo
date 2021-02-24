@@ -66,20 +66,21 @@ describe('getTodoByID Service', () => {
 
 describe('createTodo Service', () => {
   it('should successfully execute', async () => {
-    const mockResponse = [
-      {
-        id: 1,
-        title: 'drink water',
-        status: 'active',
-        craeted_at: '2021-02-22T10:37:11.911Z',
-        updated_at: null,
-      },
-    ];
+    const mockResponse = {
+      dataValues:
+        {
+          id: 1,
+          title: 'drink water',
+          status: 'active',
+          craeted_at: '2021-02-22T10:37:11.911Z',
+          updated_at: '2021-02-22T10:37:11.911Z',
+        },
+    };
 
     jest.spyOn(Todo, 'create').mockResolvedValue(mockResponse);
 
     const response = await service.createTodo();
-    expect(response).toEqual(mockResponse);
+    expect(response).toEqual(mockResponse.dataValues);
   });
 
   it('should go to catch block', async () => {

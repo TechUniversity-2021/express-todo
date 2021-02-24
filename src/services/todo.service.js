@@ -24,6 +24,7 @@ const getTodoByID = async (id) => {
 const createTodo = async (title, status) => {
   try {
     const todo = await Todo.create({ title, status });
+
     return todo.dataValues;
   } catch (error) {
     throw error;
