@@ -43,22 +43,6 @@ describe('getAllTodos Handler', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
-
-  it('should go to catch block due to db undefined', async () => {
-    const mockRequestObject = {
-      app: {
-        locals: {
-        },
-      },
-      params: {
-        id: 1,
-      },
-    };
-    await getAllTodosHandler(mockRequestObject, mockResponse);
-
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockSend).toHaveBeenCalledWith();
-  });
 });
 
 // -------------------- GET TODO BY ID HANDLER------------
