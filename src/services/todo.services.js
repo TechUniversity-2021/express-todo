@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-const fs = require('fs');
+/* eslint-disable no-console */
+
 const { v4: uuidv4 } = require('uuid');
 const fileUtils = require('../utils/fileUtils');
 
@@ -20,20 +20,6 @@ const deleteById = async (req, res) => {
 
   const done = await fileUtils.writeFile('../resources/todos.txt', formattedText);
   return done;
-};
-
-const getTodosById = async (id) => {
-  const fileData = await fileUtils.getFileData('../resources/todos.txt');
-  const todosLines = fileData.split('\n');
-
-  todosLines.forEach((line) => {
-    // console.log(line,id.id);
-    if (line.startsWith(id.id)) {
-      // console.log("Hello")
-      return 'got';
-    }
-    return 'id not found';
-  });
 };
 
 const createTodo = async (content) => {
@@ -74,6 +60,29 @@ const getTodos = async () => {
   });
 
   return todosObject;
+};
+const getTodosById = async (id) => {
+  const fileData = await getTodos();
+
+  const res = fileData.filter((item) => item.id === id);
+  // console.log(res)
+  return res;
+  // const fileData = await fileUtils.getFileData('../resources/todos.txt');
+
+  // const todosLines = fileData.split('\n');
+
+  // let flag = 0;
+  // todosLines.forEach((line) => {
+  //   // console.log(line,id.id);
+  //   if (line.startsWith(id.id)) {
+  //     // console.log("Hello")
+  //     flag = 1;
+
+  //     // return 'got';
+  //   }
+
+  //   return 'id not found';
+  // });
 };
 
 module.exports = {

@@ -47,5 +47,3 @@ describe('update file', () => {
     expect(fileUtils.updateFile('abc.txt')).rejects.toEqual(new Error('error'));
   });
 });
-
-

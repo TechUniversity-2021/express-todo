@@ -1,8 +1,10 @@
-1|Take a break
+
 2|Make tea
 3|Buy 1kg rice
 4|Follow tdd
 
 
-94928f54-08bb-4788-a8a2-4e96b6a44765|undefined|Active
+
 c4611ac5-52f6-47e3-9156-771a7fbf7cd0|painthdff|Active
+4c8d8a95-3b9f-4065-8f39-e03e10ee1221|go shopping|Active
+53e4412d-7e59-4fe3-ac05-84d0fb15b5b8|watch tutorials|complete
