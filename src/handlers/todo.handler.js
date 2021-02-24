@@ -22,9 +22,8 @@ const getTodoByIDHandler = async (req, res) => {
 const createTodoHandler = async (req, res) => {
   try {
     const { body } = req;
-    const { db } = req.app.locals;
-    await service.createTodo(db, body.title, body.status);
-    res.status(201).send('Todo created Succcessfully');
+    const todo = await service.createTodo(body.title, body.status);
+    res.status(201).send(todo);
   } catch (error) {
     res.status(500).send();
   }

@@ -106,46 +106,30 @@ describe('createTodoHandler ', () => {
   });
   it('should return response with status 200 and success message', async () => {
     const mockRequest = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       body: {
       },
     };
-    jest.spyOn(service, 'createTodo').mockResolvedValue();
+    const mockReturnObject = {
+      id: 1,
+      title: 'coding',
+      staus: 'active',
+      createdAt: '2021-02-24T06:59:54.027Z',
+      updatedAt: '2021-02-24T06:59:54.027Z',
+    };
+    jest.spyOn(service, 'createTodo').mockResolvedValue(mockReturnObject);
 
     await createTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(201);
-    expect(mockSend).toHaveBeenCalledWith('Todo created Succcessfully');
+    expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
   });
 
   it('should go to catch block', async () => {
     const mockRequest = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       body: {
       },
     };
     jest.spyOn(service, 'createTodo').mockImplementation(() => { throw new Error('error'); });
 
-    await createTodoHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockSend).toHaveBeenCalledWith();
-  });
-  it('should go to catch block when db is undefined', async () => {
-    const mockRequest = {
-      app: {
-        locals: {
-        },
-      },
-      body: {
-      },
-    };
     await createTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
