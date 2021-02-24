@@ -1,43 +1,33 @@
-const fileRead = require('../utilities/promisifyReadFile');
-const fileAppend = require('../utilities/promisifyAppendFile');
-const fileWrite = require('../utilities/promisifyWriteFile');
-const constFilePath = require('../constants/filePath');
-const repositoryTodo = require('../repository/todo.repository');
+const { Todo } = require('../models');
 
-const getTodos = async (db) => {
-  const todos = await repositoryTodo.getTodos(db);
-  // const fileContent = await fileRead.promisifyFs(constFilePath.filePath());
-  // const todos = fileContent.toString().split('\n');
-  // const todoObjects = todos.map((todo) => {
-  //   const tempTodoObj = todo.split('|');
-  //   return {
-  //     id: tempTodoObj[0],
-  //     todo: tempTodoObj[1],
-  //     status: tempTodoObj[2],
-  //   };
-  // });
+const getTodos = async () => {
+  const todos = await Todo.findAll();
   return todos;
 };
-const getTodoById = async (db, id) => {
-  const todos = await repositoryTodo.getTodosById(db, id);
+const getTodoById = async (id) => {
+  const todos = await Todo.findOne({
+    where: {
+      id,
+    },
+  });
   return todos;
 };
 
-const postTodos = async (db, todoPost) => {
-  const returnedMessage = await repositoryTodo.postTodo(db, todoPost);
-  return returnedMessage;
-  // await fileAppend.promisifyAppendFs(constFilePath.filePath(), todoPost);
+const postTodos = async (todoPost) => {
+  await Todo.create(todoPost);
+  return `New todo has been created: ${todoPost}`;
 };
 
-const putTodos = async (db, updateId, updatedTodo) => {
-  const returnedMessage = await repositoryTodo.putTodo(db, updateId, updatedTodo);
-  return returnedMessage;
-  // await fileWrite.promisifyWriteFs(constFilePath.filePath(), updateTodoPut);
+const putTodos = async (updateId, updatedTodo) => {
+  const updateTodo = await Todo.update(updatedTodo, { where: { id: updateId } });
+  if (updateTodo === 0) return [];
+  return `Updated id ${updatedTodo}`;
 };
 
-const deleteTodo = async (db, deleteId) => {
-  const returnedMessage = await repositoryTodo.deleteTodo(db, deleteId);
-  return returnedMessage;
+const deleteTodo = async (deleteId) => {
+  const deletedTodo = await Todo.destroy({ where: { id: deleteId } });
+  if (deletedTodo === 0) return [];
+  return `Deleted id ${deleteId}`;
 };
 module.exports = {
   getTodos, postTodos, putTodos, getTodoById, deleteTodo,

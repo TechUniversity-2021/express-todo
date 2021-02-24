@@ -1,6 +1,8 @@
-const getTodos = async (db) => {
-  const todos = await db.query('SELECT * FROM todos;');
-  return todos.rows;
+const { Todo } = require('../models');
+
+const getTodos = async () => {
+  const todos = await Todo.findAll();
+  return todos;
 };
 
 const getTodosById = async (db, id) => {
@@ -8,7 +10,7 @@ const getTodosById = async (db, id) => {
   return todos.rows;
 };
 
-const postTodo = async (db, todoObj) => {
+const postTodo = async (todoObj) => {
   await db.query(`INSERT INTO todos(title, status) VALUES('${todoObj.todo}','${todoObj.status};'); RETURNING *`);
   return 'New todo got added!';
 };

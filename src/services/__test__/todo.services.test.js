@@ -1,17 +1,10 @@
-const { response } = require('express');
-const fileRead = require('../../utilities/promisifyReadFile');
-const fileAppend = require('../../utilities/promisifyAppendFile');
-const fileWrite = require('../../utilities/promisifyWriteFile');
+const { Todo } = require('../../models');
 const {
-  getTodos, postTodos, putTodos, getTodoById,
+  getTodos, postTodos, putTodos, getTodoById, deleteTodo,
 } = require('../todo.services');
-const constFilePath = require('../../constants/filePath');
-const repositoryTodo = require('../../repository/todo.repository');
 
 describe('Get Todo', () => {
   it('should return the list of todos', async () => {
-    // const spyOnFileReadContent = jest.spyOn(fileRead, 'promisifyFs').mockImplementation(('abc.txt'));
-    // spyOnFileReadContent.mockResolvedValue('1|lala|active');
     const mockResponse = [
       {
         id: 1,
@@ -21,26 +14,22 @@ describe('Get Todo', () => {
         updated_at: null,
       },
     ];
-    const spyOnTodoRepo = jest.spyOn(repositoryTodo, 'getTodos').mockResolvedValue(mockResponse);
-    const todoObjects = await getTodos('db', '1');
-    expect(spyOnTodoRepo).toHaveBeenCalledWith('db');
+    jest.spyOn(Todo, 'findAll').mockResolvedValue(mockResponse);
+    const todoObjects = await getTodos();
     expect(todoObjects).toEqual(mockResponse);
   });
 });
 
 describe('Post Todo', () => {
   it('should add to the list of todos', async () => {
-    // const mockFilePath = jest.fn().mockReturnValue('abc.txt');
-    // const spyOnAppendContent = jest.spyOn(fileAppend, 'promisifyAppendFs').mockImplementation(mockFilePath, '1|a|c\n2|b|c');
     const mockValue = {
-      id: '1',
       todo: 'll',
       status: 'Inactive',
     };
-    const spyOnPostTodoRepo = jest.spyOn(repositoryTodo, 'postTodo').mockResolvedValue(mockValue);
-    const responseValue = await postTodos('db', mockValue);
-    expect(spyOnPostTodoRepo).toHaveBeenCalledWith('db', mockValue);
-    expect(responseValue).toStrictEqual(mockValue);
+    const spyOnPostTodoModdel = jest.spyOn(Todo, 'create').mockResolvedValue(mockValue);
+    const responseMessage = await postTodos(mockValue);
+    expect(spyOnPostTodoModdel).toHaveBeenCalledWith(mockValue);
+    expect(responseMessage).toStrictEqual(`New todo has been created: ${mockValue}`);
   });
 });
 
@@ -50,12 +39,15 @@ describe('Put Todo', () => {
       todo: 'll',
       status: 'Inactive',
     };
-    const spyOnPutTodoRepo = jest.spyOn(repositoryTodo, 'putTodo').mockResolvedValue(mockValue);
-    const responseValue = await putTodos('db', '1', mockValue);
-    // const mockFilePath = jest.fn().mockReturnValue('abc.txt');
-    // const spyOnAppendContent = jest.spyOn(fileAppend, 'promisifyAppendFs').mockImplementation(mockFilePath, '1|a|c\n2|b|c');
-    expect(spyOnPutTodoRepo).toHaveBeenCalledWith('db', '1', mockValue);
-    expect(responseValue).toStrictEqual(mockValue);
+    const query = {
+      where: {
+        id: '1',
+      },
+    };
+    const spyOnPutTodoModel = jest.spyOn(Todo, 'update').mockResolvedValue(mockValue);
+    const responseValue = await putTodos('1', mockValue);
+    expect(spyOnPutTodoModel).toHaveBeenCalledWith(mockValue, query);
+    expect(responseValue).toStrictEqual(`Updated id ${mockValue}`);
   });
 });
 
@@ -70,9 +62,39 @@ describe('Get Todo By Id', () => {
         updated_at: null,
       },
     ];
-    const spyOnTodoRepo = jest.spyOn(repositoryTodo, 'getTodosById').mockResolvedValue(mockResponse);
-    const todoByIdResult = await getTodoById('db', '1');
+    const query = {
+      where: {
+        id: 1,
+      },
+    };
+    const spyOnTodoModel = jest.spyOn(Todo, 'findOne').mockResolvedValue(mockResponse);
+    const todoByIdResult = await getTodoById(1);
     expect(todoByIdResult).toStrictEqual(mockResponse);
-    expect(spyOnTodoRepo).toHaveBeenCalledWith('db', '1');
+    expect(spyOnTodoModel).toHaveBeenCalledWith(query);
+  });
+});
+
+describe('Delete By todo id', () => {
+  it('should return the deleted id', async () => {
+    const query = {
+      where: {
+        id: 1,
+      },
+    };
+    const spyOnPutTodoModel = jest.spyOn(Todo, 'destroy').mockResolvedValue(1);
+    const responseValue = await deleteTodo(1);
+    expect(spyOnPutTodoModel).toHaveBeenCalledWith(query);
+    expect(responseValue).toStrictEqual('Deleted id 1');
+  });
+  it('should return an empty array if id not found', async () => {
+    const query = {
+      where: {
+        id: 'abc',
+      },
+    };
+    const spyOnPutTodoModel = jest.spyOn(Todo, 'destroy').mockResolvedValue(0);
+    const responseValue = await deleteTodo('abc');
+    expect(spyOnPutTodoModel).toHaveBeenCalledWith(query);
+    expect(responseValue).toStrictEqual([]);
   });
 });

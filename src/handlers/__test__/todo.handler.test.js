@@ -9,27 +9,13 @@ describe('Todo GetHandler', () => {
     const mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
     };
-    const mockReq = {
-      app: { locals: { db: 'db' } },
-    };
     const mockValue = [{ id: 'abc', todo: 'xyz', status: 'Completed' }];
     const spyOnTodoServices = jest.spyOn(todoServices, 'getTodos');
     spyOnTodoServices.mockResolvedValue(mockValue);
-    await todoGetHandler(mockReq, mockResponse);
+    await todoGetHandler(null, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
-    expect(spyOnTodoServices).toHaveBeenCalledWith('db');
   });
-  // it('should set response send data', async () => {
-  //   const mockSend = jest.fn();
-  //   const mockResponse = {
-  //     status: jest.fn(() => ({ send: mockSend })),
-  //   };
-  //   const spyOnTodoServices = jest.spyOn(todoServices, 'getTodos');
-  //   spyOnTodoServices.mockResolvedValue('{id: abc todo: xyz status: Completed}');
-  //   await todoGetHandler(mockReq, mockResponse);
-  //   expect(mockSend).toHaveBeenCalledWith('{id: abc todo: xyz status: Completed}');
-  // });
 });
 
 describe('Todo GetByIdHandler', () => {
@@ -37,9 +23,6 @@ describe('Todo GetByIdHandler', () => {
     const mockSend = {
       params: {
         id: '1',
-      },
-      app: {
-        locals: { db: 'db' },
       },
     };
     const mock = jest.fn();
@@ -52,7 +35,7 @@ describe('Todo GetByIdHandler', () => {
     await todoGetByIdHandler(mockSend, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
-    expect(spyOnTodoServices).toHaveBeenCalledWith('db', '1');
+    expect(spyOnTodoServices).toHaveBeenCalledWith('1');
   });
 });
 
@@ -61,9 +44,6 @@ describe('Todo DeleteByIdHandler', () => {
     const mockReq = {
       params: {
         id: '1',
-      },
-      app: {
-        locals: { db: 'db' },
       },
     };
     const mock = jest.fn();
@@ -74,9 +54,25 @@ describe('Todo DeleteByIdHandler', () => {
     const spyOnTodoServices = jest.spyOn(todoServices, 'deleteTodo');
     spyOnTodoServices.mockResolvedValue(mockValue);
     await todoDeleteByIdHandler(mockReq, mockResponse);
-    expect(spyOnTodoServices).toHaveBeenCalledWith('db', '1');
+    expect(spyOnTodoServices).toHaveBeenCalledWith('1');
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
+  });
+  it('should set the status code 404', async () => {
+    const mockReq = {
+      params: {
+        id: '200',
+      },
+    };
+    const mock = jest.fn();
+    const mockResponse = {
+      status: jest.fn(() => ({ send: mock })),
+    };
+    const spyOnTodoServices = jest.spyOn(todoServices, 'deleteTodo');
+    spyOnTodoServices.mockResolvedValue([]);
+    await todoDeleteByIdHandler(mockReq, mockResponse);
+    expect(spyOnTodoServices).toHaveBeenCalledWith('200');
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
   });
 });
 
@@ -86,9 +82,6 @@ describe('Todo PostHandler', () => {
       body: {
         todo: 'test todo activity',
         status: 'incomplete',
-      },
-      app: {
-        locals: { db: 'db' },
       },
     };
     const mock = jest.fn();
@@ -100,7 +93,7 @@ describe('Todo PostHandler', () => {
     const spyOnTodoServices = jest.spyOn(todoServices, 'postTodos');
     spyOnTodoServices.mockResolvedValue(mockValue);
     await todoPostHandler(mockReq, mockResponse);
-    expect(spyOnTodoServices).toHaveBeenCalledWith('db', mockReq.body);
+    expect(spyOnTodoServices).toHaveBeenCalledWith(mockReq.body);
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
   });
@@ -116,9 +109,6 @@ describe('Todo PutHandler', () => {
       params: {
         id: '1',
       },
-      app: {
-        locals: { db: 'db' },
-      },
     };
     const mock = jest.fn();
     const mockResponse = {
@@ -128,7 +118,7 @@ describe('Todo PutHandler', () => {
     const spyOnTodoServices = jest.spyOn(todoServices, 'putTodos');
     spyOnTodoServices.mockResolvedValue(mockValue);
     await todoPutHandler(mockReq, mockResponse);
-    expect(spyOnTodoServices).toHaveBeenCalledWith('db', '1', mockReq.body);
+    expect(spyOnTodoServices).toHaveBeenCalledWith('1', mockReq.body);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
   });
