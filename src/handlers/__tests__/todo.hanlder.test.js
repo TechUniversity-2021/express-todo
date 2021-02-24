@@ -65,23 +65,21 @@ describe('post(/todo) Handler', () => {
       locals: 'db',
     },
   };
-  const MOCK_EXPECT_TODO = [
-    {
-      id: '1',
-      description: 'Task 1',
-      status: 'complete',
-    },
-  ];
+  const MOCK_EXPECT_TODO = {
+    id: '1',
+    description: 'Task 1',
+    status: 'complete',
+  };
   const spyOnCreateTodo = jest.spyOn(todoServices, 'createTodo');
-  it('should set response status code to 201 on successfull append of todo', async () => {
+  it('should set response status code to 201 on successful append of todo', async () => {
     spyOnCreateTodo.mockResolvedValue(MOCK_EXPECT_TODO);
     await postTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(201);
   });
-  it('should return the created todo on successfull append', async () => {
+  it('should return the created todo on successful append', async () => {
     spyOnCreateTodo.mockResolvedValue(MOCK_EXPECT_TODO);
     await postTodoHandler(mockRequestObject, mockResponseObject);
-    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_EXPECT_TODO[0]);
+    expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_EXPECT_TODO);
   });
   it('should set status code to 500 if any error occurs in accessing db', async () => {
     spyOnCreateTodo.mockRejectedValue(new Error('Error accessing db'));
@@ -107,7 +105,7 @@ describe('get(/todo/id) Handler', () => {
     },
   };
   const spyOnGetTodo = jest.spyOn(todoServices, 'getTodo');
-  it('should set response status code to 200 and return todo object on successfull fetch of todo', async () => {
+  it('should set response status code to 200 and return todo object on successful fetch of todo', async () => {
     const MOCK_TODO_OBJECT = [{
       id: '1',
       description: 'Task 1',
@@ -119,7 +117,7 @@ describe('get(/todo/id) Handler', () => {
     expect(mockResponseObject.status().send).toHaveBeenCalledWith(MOCK_TODO_OBJECT[0]);
   });
   it('should return todo not found message and set status code to 404 if todo not found', async () => {
-    spyOnGetTodo.mockResolvedValue([]);
+    spyOnGetTodo.mockRejectedValue(new NonExistentError('Todo not found'));
     await getTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(404);
     expect(mockResponseObject.status().send).toHaveBeenCalledWith('Todo not found');
@@ -160,11 +158,11 @@ describe('put(/todo/id) Handler', () => {
   const MOCK_ERROR_NON_EXISTENT = new NonExistentError('Todo not found');
   const spyOnUpdateTodo = jest.spyOn(todoServices, 'updateTodo');
   it('should set response status code to 200 and return updated todo on successful updation', async () => {
-    const MOCK_RESOLVED_VALUE = [{
+    const MOCK_RESOLVED_VALUE = {
       id: '1',
       description: 'Update Task 1',
       status: 'complete',
-    }];
+    };
     spyOnUpdateTodo.mockResolvedValue(MOCK_RESOLVED_VALUE);
     await updateTodoHandler(mockRequestObject, mockResponseObject);
     expect(mockResponseObject.status).toHaveBeenCalledWith(200);

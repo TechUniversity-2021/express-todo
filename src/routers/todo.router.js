@@ -11,8 +11,8 @@ router.get('', handlers.getAllTodoHandler);
 router.post('', postValidator, handlers.postTodoHandler);
 router.get('/:id', paramsValidator, handlers.getTodoHandler);
 router.put('/:id', paramsValidator, updateValidator, handlers.updateTodoHandler);
-router.delete('/:id', paramsValidator, handlers.deleteTodoHandler);
 router.delete('/all', handlers.deleteAllTodoHandler);
+router.delete('/:id', paramsValidator, handlers.deleteTodoHandler);
 router.delete('/', deleteValidator, handlers.deleteStatusTodoHandler);
 module.exports = {
   router,
