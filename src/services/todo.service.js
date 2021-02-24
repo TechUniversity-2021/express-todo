@@ -1,28 +1,28 @@
 /* eslint-disable consistent-return */
 const todoRepository = require('../repository/todo.repository');
 
-const getTodos = async (db) => {
-  const todos = await todoRepository.getTodos(db);
+const getTodos = async () => {
+  const todos = await todoRepository.getTodos();
   return todos;
 };
 
-const getTodo = async (db, id) => {
-  const todo = await todoRepository.getTodo(db, id);
+const getTodo = async (id) => {
+  const todo = await todoRepository.getTodo(id);
   return todo;
 };
 
-const createTodo = async (db, content) => {
-  const ack = await todoRepository.createTodo(db, content.todo, content.status);
+const createTodo = async (content) => {
+  const ack = await todoRepository.createTodo(content.todo, content.status);
   return ack;
 };
 
-const updateTodo = async (db, id, content) => {
-  const ack = await todoRepository.updateTodo(db, id, content.todo, content.status);
+const updateTodo = async (id, content) => {
+  const ack = await todoRepository.updateTodo(id, content.todo, content.status);
   return ack;
 };
 
-const deleteTodo = async (db, id) => {
-  const ack = await todoRepository.deleteTodo(db, id);
+const deleteTodo = async (id) => {
+  const ack = await todoRepository.deleteTodo(id);
   return ack;
 };
 
