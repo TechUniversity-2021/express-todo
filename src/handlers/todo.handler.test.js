@@ -21,7 +21,7 @@ describe('Get Todos handler', () => {
     await todoHandler.getTodos({ app: { locals: { db: 'abc' } } }, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.getTodos).toHaveBeenCalledWith('abc');
+    expect(todoService.getTodos).toHaveBeenCalledWith();
   });
 });
 
@@ -47,7 +47,7 @@ describe('Get Todo By Id handler', () => {
     await todoHandler.getTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.getTodo).toHaveBeenCalledWith('abc', 1);
+    expect(todoService.getTodo).toHaveBeenCalledWith(1);
   });
 
   // service []
@@ -64,7 +64,7 @@ describe('Get Todo By Id handler', () => {
     await todoHandler.getTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(404);
     expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.getTodo).toHaveBeenCalledWith('abc', mockRequest.params.id);
+    expect(todoService.getTodo).toHaveBeenCalledWith(mockRequest.params.id);
   });
 });
 
@@ -86,7 +86,7 @@ describe('Post Todo handler', () => {
     await todoHandler.createTodo({ app: { locals: { db: 'abc' } }, params: 1, body: { todo: 'lala', status: 'active' } }, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.createTodo).toHaveBeenCalledWith('abc', { todo: 'lala', status: 'active' });
+    expect(todoService.createTodo).toHaveBeenCalledWith({ todo: 'lala', status: 'active' });
   });
 });
 
@@ -109,7 +109,7 @@ describe('Update Todo handler', () => {
     await todoHandler.updateTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.updateTodo).toHaveBeenCalledWith('abc', 1, { todo: 'lala', status: 'active' });
+    expect(todoService.updateTodo).toHaveBeenCalledWith(1, { todo: 'lala', status: 'active' });
   });
 
   // serrvice []
@@ -124,7 +124,7 @@ describe('Update Todo handler', () => {
     await todoHandler.updateTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(404);
     expect(mockResponse.send).toHaveBeenCalledWith('ID not found');
-    expect(todoService.updateTodo).toHaveBeenCalledWith('abc', 98, { todo: 'lala', status: 'active' });
+    expect(todoService.updateTodo).toHaveBeenCalledWith(98, { todo: 'lala', status: 'active' });
   });
 });
 
@@ -147,7 +147,7 @@ describe('Delete Todo handler', () => {
     await todoHandler.deleteTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.deleteTodo).toHaveBeenCalledWith('abc', 1);
+    expect(todoService.deleteTodo).toHaveBeenCalledWith(1);
   });
 
   it('should set a status code of 404 when id doesnt exist', async () => {
@@ -160,6 +160,6 @@ describe('Delete Todo handler', () => {
     await todoHandler.deleteTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(404);
     expect(mockResponse.send).toHaveBeenCalledWith('ID not found');
-    expect(todoService.deleteTodo).toHaveBeenCalledWith('abc', 98);
+    expect(todoService.deleteTodo).toHaveBeenCalledWith(98);
   });
 });
