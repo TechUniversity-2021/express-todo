@@ -1,9 +1,9 @@
 const service = require('../todo.service');
-
+const { Todo } = require('../../models');
 const todoRepository = require('../../repository/todo.repository');
 
 describe('getAllTodos Service', () => {
-  it('should return tasks array', async () => {
+  it('should return todos object array', async () => {
     const mockResponse = [
       {
         id: 1,
@@ -20,15 +20,15 @@ describe('getAllTodos Service', () => {
         updated_at: null,
       },
     ];
-    jest.spyOn(todoRepository, 'getAllTodos').mockResolvedValue(mockResponse);
+    jest.spyOn(Todo, 'findAll').mockResolvedValue(mockResponse);
     const receivedTasks = await service.getAllTodos();
     expect(receivedTasks).toEqual(mockResponse);
   });
 
-  it('should return error object message with incorrect file path ', async () => {
-    jest.spyOn(todoRepository, 'getAllTodos').mockImplementation(() => { throw new Error('error'); });
+  it('should go to catch block ', async () => {
+    jest.spyOn(Todo, 'findAll').mockImplementation(() => { throw new Error('error'); });
     try {
-      const received = await service.getAllTodos();
+      const receivedTasks = await service.getAllTodos();
     } catch (error) {
       expect(error).toEqual(Error('error'));
     }

@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-catch */
 
 const todoRepository = require('../repository/todo.repository');
-const sequelizeQuery = require('../repository/todo.query');
+const { Todo } = require('../models');
 
 const getAllTodos = async () => {
   try {
-    const todos = await sequelizeQuery.getAllTodos();
-    return todos;
+    const data = await Todo.findAll();
+    return data;
   } catch (error) {
     throw error;
   }
