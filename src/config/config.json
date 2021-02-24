@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
+    "username": "Apoorva_Choudhary",
     "password": null,
-    "database": "database_development",
+    "database": "todo_dev",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
+    "username": "Apoorva_Choudhary",
     "password": null,
-    "database": "database_test",
+    "database": "todo_test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "production": {
-    "username": "root",
+    "username": "Apoorva_Choudhary",
     "password": null,
-    "database": "database_production",
+    "database": "todo_prod",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   }
 }
