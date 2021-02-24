@@ -53,18 +53,18 @@ describe('Get Todo By Id handler', () => {
   // service []
   // handler "ID not found" 404
   it('should set a status code of 404 when id doesnt exist', async () => {
-    const mockResponseValue = 'ID not found';
+    const mockResponseValue = null;
     const mockRequest = { app: { locals: { db: 'abc' } }, params: { id: 130 } };
 
-    jest.spyOn(todoService, 'getTodo').mockResolvedValue([]);
+    jest.spyOn(todoService, 'getTodo').mockResolvedValue(mockResponseValue);
     const mockResponse = {
       status: jest.fn(() => mockResponse),
       send: jest.fn(),
     };
     await todoHandler.getTodo(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.send).toHaveBeenCalledWith(mockResponseValue);
-    expect(todoService.getTodo).toHaveBeenCalledWith(mockRequest.params.id);
+    expect(mockResponse.send).toHaveBeenCalledWith('ID not found');
+    expect(todoService.getTodo).toHaveBeenCalledWith(130);
   });
 });
 

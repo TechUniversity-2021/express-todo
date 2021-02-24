@@ -8,7 +8,7 @@ const getTodos = async (req, res) => {
 const getTodo = async (req, res) => {
   const { id } = req.params;
   const todo = await todoService.getTodo(id);
-  if (todo.length === 0) return res.status(404).send('ID not found');
+  if (todo === null) return res.status(404).send('ID not found');
   return res.status(200).send(todo);
 };
 
