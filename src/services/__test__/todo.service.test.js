@@ -36,7 +36,7 @@ describe('getAllTodos Service', () => {
 });
 
 describe('getTodoByID Service', () => {
-  it('should return task object', async () => {
+  it('should return one task object', async () => {
     const mockResponse = [
       {
         id: 1,
@@ -46,15 +46,15 @@ describe('getTodoByID Service', () => {
         updated_at: null,
       },
     ];
-    jest.spyOn(todoRepository, 'getTodoByID').mockResolvedValue(mockResponse);
+    jest.spyOn(Todo, 'findAll').mockResolvedValue(mockResponse);
     const receivedTasks = await service.getTodoByID();
     expect(receivedTasks).toEqual(mockResponse);
   });
 
   it('should return error object ', async () => {
-    jest.spyOn(todoRepository, 'getTodoByID').mockImplementation(() => { throw new Error('error'); });
+    jest.spyOn(Todo, 'findAll').mockImplementation(() => { throw new Error('error'); });
     try {
-      const received = await service.getTodoByID();
+      const receivedTasks = await service.getTodoByID();
     } catch (error) {
       expect(error).toEqual(Error('error'));
     }

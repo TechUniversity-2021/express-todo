@@ -11,9 +11,10 @@ const getAllTodos = async () => {
     throw error;
   }
 };
-const getTodoByID = async (db, id) => {
+
+const getTodoByID = async (id) => {
   try {
-    const todo = await todoRepository.getTodoByID(db, id);
+    const todo = await Todo.findAll({ where: { id } });
     return todo;
   } catch (error) {
     throw error;
