@@ -139,18 +139,37 @@ describe('updateTodo Service', () => {
 
 describe('deleteTodo Service', () => {
   it('should successfully execute', async () => {
-    jest.spyOn(todoRepository, 'deleteTodoByID').mockResolvedValue();
+    const mockID = 2;
+    const destroySpy = jest.spyOn(Todo, 'destroy');
+    destroySpy.mockResolvedValue([1]);
 
-    const response = await service.deleteTodo();
-    expect(response).toEqual(undefined);
+    const response = await service.deleteTodo(mockID);
+
+    expect(response).toEqual('1 todo deleted');
+    expect(destroySpy).toHaveBeenCalledWith({
+      where: {
+        id: mockID,
+      },
+    });
   });
 
-  it('should go to catch block', async () => {
+  it('should go to catch block with error', async () => {
     jest.spyOn(todoRepository, 'deleteTodoByID').mockImplementation(() => { throw new Error('error'); });
     try {
       const response = await service.deleteTodo();
     } catch (error) {
       expect(error).toEqual(Error('error'));
+    }
+  });
+
+  it('should go to catch block with Range error ', async () => {
+    const mockID = 15;
+    const destroySpy = jest.spyOn(Todo, 'destroy');
+    destroySpy.mockResolvedValue([0]);
+    try {
+      const response = await service.deleteTodo(mockID);
+    } catch (error) {
+      expect(error).toEqual(RangeError('Todo not found'));
     }
   });
 });

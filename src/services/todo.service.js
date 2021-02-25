@@ -50,9 +50,17 @@ const updateTodo = async (id, title, status) => {
   }
 };
 
-const deleteTodo = async (db, id) => {
+const deleteTodo = async (id) => {
   try {
-    await todoRepository.deleteTodoByID(db, id);
+    const countOfTodo = await Todo.destroy({
+      where: {
+        id,
+      },
+    });
+    if (countOfTodo === 0) {
+      throw new RangeError('Todo not found');
+    }
+    return `${countOfTodo} todo deleted`;
   } catch (error) {
     throw error;
   }
