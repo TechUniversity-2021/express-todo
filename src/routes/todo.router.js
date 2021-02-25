@@ -3,14 +3,14 @@ const {
   getAllTodosHandler, getTodoByIDHandler, createTodoHandler, updateTodoHandler, deleteTodoHandler,
 } = require('../handlers/todo.handler');
 const {
-  getTodoValidaton,
+  getTodoValidaton, createTodoValidaton,
 } = require('../validatons/todo.validatons');
 
 const router = express.Router();
 
 router.get('', getAllTodosHandler);
 router.get('/:id', getTodoValidaton, getTodoByIDHandler);
-router.post('', createTodoHandler);
+router.post('', createTodoValidaton, createTodoHandler);
 router.put('/:id', updateTodoHandler);
 router.delete('/:id', deleteTodoHandler);
 

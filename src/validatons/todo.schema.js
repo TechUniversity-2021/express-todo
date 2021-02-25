@@ -4,4 +4,9 @@ const getTodoSchema = joi.object().keys({
   id: joi.number().required(),
 });
 
-module.exports = { getTodoSchema };
+const createTodoSchema = joi.object().keys({
+  title: joi.string().required(),
+  status: joi.string().required().valid('active', 'inactive').required(),
+});
+
+module.exports = { getTodoSchema, createTodoSchema };
