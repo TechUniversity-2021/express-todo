@@ -66,21 +66,24 @@ describe('getTodoByID Service', () => {
 
 describe('createTodo Service', () => {
   it('should successfully execute', async () => {
+    const mockTitle = 'drink water';
+    const mockStatus = 'active';
     const mockResponse = {
       dataValues:
         {
           id: 1,
-          title: 'drink water',
-          status: 'active',
+          title: mockTitle,
+          status: mockStatus,
           craeted_at: '2021-02-22T10:37:11.911Z',
           updated_at: '2021-02-22T10:37:11.911Z',
         },
     };
 
-    jest.spyOn(Todo, 'create').mockResolvedValue(mockResponse);
-
-    const response = await service.createTodo();
+    const createSpy = jest.spyOn(Todo, 'create');
+    createSpy.mockResolvedValue(mockResponse);
+    const response = await service.createTodo(mockTitle, mockStatus);
     expect(response).toEqual(mockResponse.dataValues);
+    expect(createSpy).toHaveBeenCalledWith({ title: mockTitle, status: mockStatus });
   });
 
   it('should go to catch block', async () => {
@@ -95,18 +98,41 @@ describe('createTodo Service', () => {
 
 describe('updateTodo Service', () => {
   it('should successfully execute', async () => {
-    jest.spyOn(todoRepository, 'updateTodo').mockResolvedValue();
+    const mockID = 1;
+    const mockTitle = 'drink water';
+    const mockStatus = 'active';
+    const mockResponse = [
+      1,
+      [{
+        id: mockID,
+        title: mockTitle,
+        status: mockStatus,
+        craeted_at: '2021-02-22T10:37:11.911Z',
+        updated_at: '2021-02-22T10:37:11.911Z',
+      }],
+    ];
 
-    const response = await service.updateTodo();
-    expect(response).toEqual(undefined);
+    const updateSpy = jest.spyOn(Todo, 'update');
+    updateSpy.mockResolvedValue(mockResponse);
+    const response = await service.updateTodo(mockID, mockTitle, mockStatus);
+    expect(response).toEqual(mockResponse[1]);
+    expect(updateSpy).toHaveBeenCalledWith({ title: mockTitle, status: mockStatus }, {
+      where: {
+        id: mockID,
+      },
+      returning: true,
+    });
   });
 
-  it('should go to catch block', async () => {
-    jest.spyOn(todoRepository, 'updateTodo').mockImplementation(() => { throw new Error('error'); });
+  it('should go to catch block with RangeError', async () => {
+    const mockID = 1;
+    const mockTitle = 'drink water';
+    const mockStatus = 'active';
+    jest.spyOn(Todo, 'update').mockResolvedValue([0]);
     try {
-      const response = await service.updateTodo();
+      const response = await service.updateTodo(mockID, mockTitle, mockStatus);
     } catch (error) {
-      expect(error).toEqual(Error('error'));
+      expect(error).toEqual(RangeError('Todo not found'));
     }
   });
 });

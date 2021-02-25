@@ -15,6 +15,9 @@ const getAllTodos = async () => {
 const getTodoByID = async (id) => {
   try {
     const todo = await Todo.findOne({ where: { id } });
+    if (todo.length === 0) {
+      throw new RangeError('Todo not found');
+    }
     return todo;
   } catch (error) {
     throw error;
@@ -24,16 +27,24 @@ const getTodoByID = async (id) => {
 const createTodo = async (title, status) => {
   try {
     const todo = await Todo.create({ title, status });
-
     return todo.dataValues;
   } catch (error) {
     throw error;
   }
 };
 
-const updateTodo = async (db, id, title, status) => {
+const updateTodo = async (id, title, status) => {
   try {
-    await todoRepository.updateTodo(db, id, title, status);
+    const todo = await Todo.update({ title, status }, {
+      where: {
+        id,
+      },
+      returning: true,
+    });
+    if (todo[0] === 0) {
+      throw new RangeError('Todo not found');
+    }
+    return todo[1];
   } catch (error) {
     throw error;
   }
