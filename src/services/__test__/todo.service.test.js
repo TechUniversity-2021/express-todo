@@ -1,17 +1,18 @@
 const todoService = require('../todo.service');
 const todoRepository = require('../../repository/todo.repository');
+const { Todo } = require('../../models');
 
 describe('should get todos from db', () => {
   it('should get all todos', async () => {
     const mockResult = [{
-      id: 1,
-      title: 'Fake Task',
+      id: 3,
+      title: 'Adding Task',
       status: 'Incomplete',
-      created_at: '2021-02-22T10:30:42.990Z',
-      updated_at: null,
+      createdAt: '2021-02-24T18:26:18.104Z',
+      updatedAt: '2021-02-24T18:26:18.104Z',
     }];
-    jest.spyOn(todoRepository, 'getTodos').mockResolvedValue(mockResult);
-    const result = await todoService.getAllTodo(null);
+    jest.spyOn(Todo, 'findAll').mockResolvedValue(mockResult);
+    const result = await todoService.getAllTodo();
     expect(result).toEqual(mockResult);
   });
 });
@@ -19,50 +20,38 @@ describe('should get todos from db', () => {
 describe('get todo by ID', () => {
   it('should get todo', async () => {
     const mockResult = [{
-      id: 1,
-      title: 'Fake Task',
+      id: 3,
+      title: 'Adding Task',
       status: 'Incomplete',
-      created_at: '2021-02-22T10:30:42.990Z',
-      updated_at: null,
-    }, {
-      id: 2,
-      title: 'Another Fake Task',
-      status: 'Complete',
-      created_at: '2021-02-22T11:59:18.848Z',
-      updated_at: null,
+      createdAt: '2021-02-24T18:26:18.104Z',
+      updatedAt: '2021-02-24T18:26:18.104Z',
     }];
-    jest.spyOn(todoRepository, 'getTodos').mockResolvedValue(mockResult);
-    const result = await todoService.getTodoById(null, 1);
-    const fail = await todoService.getTodoById(null, 3);
-    expect(fail).toEqual('No Such ID');
-    expect(result).toEqual(mockResult[0]);
+    jest.spyOn(Todo, 'findAll').mockResolvedValue(mockResult);
+    const result = await todoService.getTodoById(3);
+    expect(result).toEqual(mockResult);
   });
 });
 
 describe('Add new TODO', () => {
   it('should add a new todo to list, 1 for updated and 0 for failure', async () => {
-    jest.spyOn(todoRepository, 'createTodo').mockResolvedValue(1);
-    const result = await todoService.addTodo(null, 'New Todo');
+    jest.spyOn(Todo, 'create').mockResolvedValue(1);
+    const result = await todoService.addTodo('New Todo', 'Incomplete');
     expect(result).toBe(1);
   });
 });
 
 describe('Update todo title and status', () => {
   it('should update todo', async () => {
-    const body = {
-      todo: 'Update a Todo',
-      status: 'Incomplete',
-    };
-    jest.spyOn(todoRepository, 'updateTodo').mockResolvedValue(1);
-    const result = await todoService.updateTodo(null, 1, body);
+    jest.spyOn(Todo, 'update').mockResolvedValue(1);
+    const result = await todoService.updateTodo(1, 'Update a Todo', 'Incomplete');
     expect(result).toBe(1);
   });
 });
 
 describe('Delete todo', () => {
   it('should delete todo', async () => {
-    jest.spyOn(todoRepository, 'deleteTodo').mockResolvedValue(1);
-    const result = await todoService.deleteTodo(null, 1);
+    jest.spyOn(Todo, 'destroy').mockResolvedValue(1);
+    const result = await todoService.deleteTodo(1);
     expect(result).toBe(1);
   });
 });

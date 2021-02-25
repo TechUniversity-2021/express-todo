@@ -1,30 +1,24 @@
-const todoRepository = require('../repository/todo.repository');
+const { Todo } = require('../models');
 
-const getAllTodo = async (db) => {
-  const result = await todoRepository.getTodos(db);
+const getAllTodo = async () => {
+  const result = await Todo.findAll();
   return result;
 };
-// const getTodoById = async (db, id) => {
-//   const fileData = await todoRepository.getTodos(db);
-//   let reqTodo = fileData.find((todo) => todo.id === id);
-//   if (!reqTodo) reqTodo = 'No Such ID';
-//   return reqTodo;
-// };
-const getTodoById = async (db, id) => {
-  const result = await todoRepository.getTodoById(db, id);
+const getTodoById = async (reqId) => {
+  const result = await Todo.findAll({ where: { id: reqId } });
   return result;
 };
-const addTodo = async (task, db) => {
-  const fileData = await todoRepository.createTodo(db, task);
-  return fileData;
+const addTodo = async (todo, reqStatus) => {
+  const result = await Todo.create({ title: todo, status: reqStatus });
+  return result;
 };
-const updateTodo = async (db, id, body) => {
-  const updating = await todoRepository.updateTodo(db, id, body);
-  return updating;
+const updateTodo = async (reqId, todo, reqStatus) => {
+  const result = await Todo.update({ title: todo, status: reqStatus }, { where: { id: reqId } });
+  return result;
 };
-const deleteTodo = async (db, id) => {
-  const fileData = await todoRepository.deleteTodo(db, id);
-  return fileData;
+const deleteTodo = async (reqId) => {
+  const result = await Todo.destroy({ where: { id: reqId } });
+  return result;
 };
 
 module.exports = {

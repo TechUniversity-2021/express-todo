@@ -1,23 +1,24 @@
-const getTodos = async (db) => {
-  const result = await db.query('SELECT * FROM todos;');
-  return result.rows;
+const { Todo } = require('../models');
+
+const getTodos = async () => {
+  const result = await Todo.findAll();
+  return result;
 };
-const getTodoById = async (db, id) => {
-  const result = await db.query('SELECT * FROM todos where id = $1', [id]);
-  return result.rows;
+const getTodoById = async (id) => {
+  const result = await Todo.findAll({ where: { id } });
+  return result;
 };
-const createTodo = async (db, task) => {
-  const result = await db.query(`INSERT INTO todos (title, status) VALUES ('${task}', 'Incomplete')`);// RETURNING * for returning the updated
-  // const result = await db.query('SELECT * FROM todos;');
-  return result.rowCount;
+const createTodo = async (todo, status) => {
+  const result = await Todo.create({ title: todo, status });
+  return result;
 };
-const updateTodo = async (db, id, body) => {
-  const result = await db.query(`UPDATE todos SET title='${body.todo}', status='${body.status}' where id=${id};`);
-  return result.rowCount;
+const updateTodo = async (id, todo, status) => {
+  const result = await Todo.update({ title: todo, status }, { where: { id } });
+  return result;
 };
-const deleteTodo = async (db, id) => {
-  const result = await db.query(`DELETE FROM todos WHERE id=${id}`);
-  return result.rowCount;
+const deleteTodo = async (id) => {
+  const result = await Todo.destroy({ where: { id } });
+  return result;
 };
 module.exports = {
   getTodos,

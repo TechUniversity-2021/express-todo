@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "priya_gupta",
+    "password": null,
+    "database": "todos_dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "priya_gupta",
+    "password": null,
+    "database": "todos_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "priya_gupta",
+    "password": null,
+    "database": "todos_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
