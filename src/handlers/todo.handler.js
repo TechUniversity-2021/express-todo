@@ -15,7 +15,9 @@ const getTodoByIDHandler = async (req, res) => {
     const todo = await service.getTodoByID(params.id);
     res.status(200).send(todo);
   } catch (error) {
-    res.status(500).send();
+    if (error instanceof RangeError) {
+      res.status(404).send(error.message);
+    } else res.status(500).send();
   }
 };
 
@@ -30,14 +32,15 @@ const createTodoHandler = async (req, res) => {
 };
 
 const updateTodoHandler = async (req, res) => {
-  const { body } = req;
   try {
-    const { db } = req.app.locals;
+    const { body } = req;
     const { params } = req;
-    await service.updateTodo(db, params.id, body.title, body.status);
-    res.status(200).send('Todo updated Successfully');
+    const todo = await service.updateTodo(params.id, body.title, body.status);
+    res.status(200).send(todo);
   } catch (error) {
-    res.status(500).send();
+    if (error instanceof RangeError) {
+      res.status(404).send(error.message);
+    } else res.status(500).send();
   }
 };
 
@@ -47,9 +50,10 @@ const deleteTodoHandler = async (req, res) => {
     const { params } = req;
     await service.deleteTodo(db, params.id);
     res.status(200).send('Todo deleted Successfully');
-  } catch (err) {
-    console.log(err);
-    res.status(500).send();
+  } catch (error) {
+    if (error instanceof RangeError) {
+      res.status(404).send(error.message);
+    } else res.status(500).send();
   }
 };
 

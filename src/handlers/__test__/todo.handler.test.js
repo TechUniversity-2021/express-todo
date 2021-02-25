@@ -78,7 +78,7 @@ describe(' getTodoByID Handler', () => {
     expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
   });
 
-  it('should go to catch block', async () => {
+  it('should go to catch block return status 500', async () => {
     const mockRequestObject = {
       params: {
         id: 1,
@@ -90,6 +90,19 @@ describe(' getTodoByID Handler', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
+  });
+  it('should go to catch blockand return status 404 with error message ', async () => {
+    const mockRequestObject = {
+      params: {
+        id: 1,
+      },
+    };
+    jest.spyOn(service, 'getTodoByID').mockImplementation(() => { throw new RangeError('Todo not found'); });
+
+    await getTodoByIDHandler(mockRequestObject, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockSend).toHaveBeenCalledWith('Todo not found');
   });
 });
 
@@ -123,7 +136,7 @@ describe('createTodoHandler ', () => {
     expect(mockSend).toHaveBeenCalledWith(mockReturnObject);
   });
 
-  it('should go to catch block', async () => {
+  it('should go to catch block and return  with status 500', async () => {
     const mockRequest = {
       body: {
       },
@@ -149,28 +162,30 @@ describe('updateTodoHandler ', () => {
   });
   it('should return response with status 200 and success message', async () => {
     const mockRequest = {
-      app: {
-        locals: {
-          db: {},
-        },
+      body: {
+        title: 'drink water',
+        status: 'active',
       },
-      body: {},
-      params: {},
+      params: {
+        id: 1,
+      },
     };
-    jest.spyOn(service, 'updateTodo').mockResolvedValue();
+    const mockValue = [{
+      id: 1,
+      title: 'drink water',
+      status: 'active',
+      craeted_at: '2021-02-22T10:37:11.911Z',
+      updated_at: '2021-02-22T10:37:11.911Z',
+    }];
+    jest.spyOn(service, 'updateTodo').mockResolvedValue(mockValue);
 
     await updateTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockSend).toHaveBeenCalledWith('Todo updated Successfully');
+    expect(mockSend).toHaveBeenCalledWith(mockValue);
   });
 
-  it('should go to catch block', async () => {
+  it('should go to catch block and return with status 500', async () => {
     const mockRequest = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       body: {},
       params: {},
     };
@@ -180,17 +195,16 @@ describe('updateTodoHandler ', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
-  it('should go to catch block when db is undefined', async () => {
+
+  it('should go to catch block and return with status 404 and error message', async () => {
     const mockRequest = {
-      app: {
-        locals: {},
-      },
       body: {},
       params: {},
     };
+    jest.spyOn(service, 'updateTodo').mockImplementation(() => { throw new RangeError('Todo not found'); });
     await updateTodoHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockSend).toHaveBeenCalledWith();
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockSend).toHaveBeenCalledWith('Todo not found');
   });
 });
 
