@@ -46,10 +46,9 @@ const updateTodoHandler = async (req, res) => {
 
 const deleteTodoHandler = async (req, res) => {
   try {
-    const { db } = req.app.locals;
     const { params } = req;
-    await service.deleteTodo(db, params.id);
-    res.status(200).send('Todo deleted Successfully');
+    const response = await service.deleteTodo(params.id);
+    res.status(200).send(response);
   } catch (error) {
     if (error instanceof RangeError) {
       res.status(404).send(error.message);

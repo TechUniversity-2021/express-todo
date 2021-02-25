@@ -220,52 +220,39 @@ describe('deleteTodoHandler ', () => {
     };
   });
   it('should return response with status 200 and success message', async () => {
+    const mockValue = '1 todo deleted';
     const mockRequest = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       params: {
-        id: 1,
+        id: 2,
       },
     };
-    jest.spyOn(service, 'deleteTodo').mockResolvedValue();
-
+    jest.spyOn(service, 'deleteTodo').mockResolvedValue(mockValue);
     await deleteTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockSend).toHaveBeenCalledWith('Todo deleted Successfully');
+    expect(mockSend).toHaveBeenCalledWith(mockValue);
   });
 
-  it('should go to catch block', async () => {
+  it('should go to catch block and return status 500', async () => {
     const mockRequest = {
-      app: {
-        locals: {
-          db: {},
-        },
-      },
       params: {
         id: 1,
       },
     };
     jest.spyOn(service, 'deleteTodo').mockImplementation(() => { throw new Error('error'); });
 
-    await updateTodoHandler(mockRequest, mockResponse);
+    await deleteTodoHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockSend).toHaveBeenCalledWith();
   });
-  it('should go to catch block due to db undefined', async () => {
+  it('should go to catch block and return status 404 and error message', async () => {
     const mockRequest = {
-      app: {
-        locals: {
-        },
-      },
       params: {
         id: 1,
       },
     };
-    await updateTodoHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockSend).toHaveBeenCalledWith();
+    jest.spyOn(service, 'deleteTodo').mockImplementation(() => { throw new RangeError('Todo not found'); });
+    await deleteTodoHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(404);
+    expect(mockSend).toHaveBeenCalledWith('Todo not found');
   });
 });
