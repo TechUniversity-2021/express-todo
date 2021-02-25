@@ -3,8 +3,8 @@ const {
 } = require('./todo.schema');
 
 const getTodoValidaton = (req, res, next) => {
-  const { body } = req;
-  const { value, error } = getTodoSchema.validate(body);
+  const { params } = req;
+  const { value, error } = getTodoSchema.validate(params);
   if (error) {
     res.status(400).send('Bad Request!');
     return;
@@ -23,8 +23,13 @@ const createTodoValidaton = (req, res, next) => {
 };
 
 const updateTodoValidaton = (req, res, next) => {
-  const { body } = req;
-  const { value, error } = updateTodoSchema.validate(body);
+  const { params, body } = req;
+  const test = {
+    id: params.id,
+    title: body.title,
+    status: body.status,
+  };
+  const { value, error } = updateTodoSchema.validate(test);
   if (error) {
     res.status(400).send('Bad Request!');
     return;
