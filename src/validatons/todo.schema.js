@@ -9,4 +9,10 @@ const createTodoSchema = joi.object().keys({
   status: joi.string().required().valid('active', 'inactive').required(),
 });
 
-module.exports = { getTodoSchema, createTodoSchema };
+const updateTodoSchema = joi.object().keys({
+  id: joi.number().required(),
+  title: joi.string().required(),
+  status: joi.string().required().valid('active', 'inactive').required(),
+});
+
+module.exports = { getTodoSchema, createTodoSchema, updateTodoSchema };
